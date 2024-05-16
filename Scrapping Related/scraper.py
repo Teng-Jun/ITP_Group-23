@@ -6,28 +6,41 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException, TimeoutException, ElementClickInterceptedException
 import time
 import pandas as pd
+from os.path import exists
 
 def setup_driver():
     options = Options()
-    #options.add_argument("--headless")  # Run in headless mode
+    options.add_argument("--headless")  # Run in headless mode
     driver = webdriver.Firefox(options=options)
     return driver
+
+
+def hide_onesignal_prompt(driver):
+    try:
+        # Wait until the OneSignal dialog is likely to have loaded
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, 'onesignal-slidedown-container')))
+        # Execute JavaScript to hide the OneSignal dialog container
+        driver.execute_script("document.getElementById('onesignal-slidedown-container').style.display = 'none';")
+        print("OneSignal prompt hidden.")
+    except Exception as e:
+        print(f"Error hiding OneSignal prompt: {str(e)}")
+
 
 def scrape_with_selenium():
     driver = setup_driver()
     driver.get("https://airdrops.io/latest/")
+    hide_onesignal_prompt(driver)
     all_data = []
 
     try:
         WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.TAG_NAME, "article")))
 
-        for _ in range(102):  # Ensure you're clicking 'Show More' as many times as you need
+        for _ in range(1):  # Ensure you're clicking 'Show More' as many times as you need
             try:
                 show_more_button = WebDriverWait(driver, 10).until(
                     EC.element_to_be_clickable((By.CSS_SELECTOR, "div.showmore > span"))
                 )
                 driver.execute_script("arguments[0].scrollIntoView(true);", show_more_button)
-                time.sleep(1)
                 show_more_button.click()
                 print("Clicked 'Show More'")
                 time.sleep(2)
@@ -37,6 +50,7 @@ def scrape_with_selenium():
 
         articles = driver.find_elements(By.TAG_NAME, 'article')
         article_links = []
+
         for article in articles:
             try:
                 div = article.find_element(By.CSS_SELECTOR, 'div.inside-article')
@@ -147,11 +161,17 @@ def scrape_with_selenium():
 
     return all_data
 
-scraped_data = scrape_with_selenium()
-df = pd.DataFrame(scraped_data)
-csv_file_path = 'airdrops_data.csv'
-df.to_csv(csv_file_path, index=False, encoding='utf-8-sig')
+def merge_and_update_data(new_data, filename='airdrops_data.csv'):
+    new_df = pd.DataFrame(new_data)
+    if exists(filename):
+        existing_df = pd.read_csv(filename)
+        updated_df = pd.concat([existing_df, new_df]).drop_duplicates(subset=['title'], keep='last')
+    else:
+        updated_df = new_df
+    updated_df.to_csv(filename, index=False, encoding='utf-8-sig')
+    print(f"Data saved/updated in '{filename}'.")
 
-print(f"Data saved to '{csv_file_path}' using pandas.")
+scraped_data = scrape_with_selenium()
+merge_and_update_data(scraped_data)
 
 
