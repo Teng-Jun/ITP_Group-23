@@ -10,7 +10,7 @@ from os.path import exists
 
 def setup_driver():
     options = Options()
-    options.add_argument("--headless")  # Run in headless mode
+    #options.add_argument("--headless")  # Run in headless mode
     driver = webdriver.Firefox(options=options)
     return driver
 
@@ -28,14 +28,15 @@ def hide_onesignal_prompt(driver):
 
 def scrape_with_selenium():
     driver = setup_driver()
-    driver.get("https://airdrops.io/latest/")
+    driver.get("https://airdrops.io/speculative/")
+    #driver.get("https://airdrops.io/latest/")
     hide_onesignal_prompt(driver)
     all_data = []
 
     try:
         WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.TAG_NAME, "article")))
 
-        for _ in range(1):  # Ensure you're clicking 'Show More' as many times as you need
+        for _ in range(16):  # Ensure you're clicking 'Show More' as many times as you need
             try:
                 show_more_button = WebDriverWait(driver, 10).until(
                     EC.element_to_be_clickable((By.CSS_SELECTOR, "div.showmore > span"))
@@ -113,25 +114,16 @@ def scrape_with_selenium():
                         # Removing the trailing 'required'
                         req_title = req_title.replace(" required", "")
                         req_items = section.find_elements(By.TAG_NAME, "li")
-                        req_details = []
-                        for idx, item in enumerate(req_items):
-                            item_text = item.text.strip()
-                            if item_text:  # Only add if there's text
-                                req_details.append(f"{idx + 1}) {item_text}")
+                        req_details = [item.text.strip() for item in req_items if item.text.strip()]  # List comprehension for clean code
                         if req_details:
                             formatted_details = ", ".join(req_details)
                             requirements.append(f"{req_title}: {formatted_details}")
                         else:
                             requirements.append(req_title)  # Add without colon if no details
-                else:
-                    print("No requirement sections found.")
-            except Exception as e:
-                print(f"Error processing requirements: {str(e)}")
+            except NoSuchElementException:
+                formatted_requirements = "n/a"  
 
-            formatted_requirements = "; ".join(requirements) if requirements else "n/a"
-            print(f"Requirements for {url}: {formatted_requirements}")
-
-
+            formatted_requirements = " | ".join(requirements) if requirements else "n/a"
 
             # Handling various status scenarios
             status = "n/a"  # Default status
@@ -146,14 +138,93 @@ def scrape_with_selenium():
             if is_expired:
                 status = "Expired"
 
+            try:
+                previous_drops_elements = driver.find_elements(By.CSS_SELECTOR, "div.airdrop-previous-round")
+                num_of_previous_drops = len(previous_drops_elements)
+            except NoSuchElementException:
+                num_of_previous_drops = 0
+
+            try:
+               website = driver.find_element(By.XPATH, "//li[contains(text(), 'Website:')]/a").text
+            except NoSuchElementException:
+                website = "n/a"
+            
+            try:
+                ticker = driver.find_element(By.XPATH, "//li[contains(text(), 'Ticker:')]").text.split(': ')[1]
+            except NoSuchElementException:
+                ticker = "n/a"
+            
+            try:
+                total_supply = driver.find_element(By.XPATH, "//li[contains(text(), 'Total Supply:')]").text.split(': ')[1]
+            except NoSuchElementException:
+                total_supply = "n/a"
+            
+            try:
+                whitepaper_link = driver.find_element(By.XPATH, "//li[contains(text(), 'Whitepaper:')]/a").get_attribute('href')
+            except NoSuchElementException:
+                whitepaper_link= "n/a"
+
+            try:
+                exchange_elements = driver.find_elements(By.XPATH, "//li[contains(text(), 'Exchanges:')]/a")
+                if exchange_elements:
+                    exchanges = ', '.join([elem.get_attribute('href') for elem in exchange_elements])
+                else:
+                    exchanges = "n/a"  # Set to 'n/a' if no elements are found
+            except Exception as e:
+                print(f"An error occurred: {e}")
+                exchanges = "n/a"  # Fallback to 'n/a' if an unexpected error occurs
+
+
+            try:
+                youtube_iframe = driver.find_element(By.XPATH, "//iframe[contains(@src, 'youtube')]")
+                youtube = youtube_iframe.get_attribute('src')
+            except NoSuchElementException:
+                youtube = "n/a"
+
+
+            
+            social_links = {
+                'Facebook': 'n/a', 'Telegram Group': 'n/a', 'Telegram Channel': 'n/a',
+                'Discord': 'n/a', 'Twitter': 'n/a', 'Medium': 'n/a', 'CoinGecko': 'n/a',
+                'GitHub': 'n/a', 'Coinmarketcap': 'n/a', 'Reddit': 'n/a'
+            }
+
+            social_elements = {
+                'Facebook': "//li[contains(text(), 'Facebook:')]/a",
+                'Telegram Group': "//li[contains(text(), 'Telegram Group:')]/a",
+                'Telegram Channel': "//li[contains(text(), 'Telegram Channel:')]/a",
+                'Discord': "//li[contains(text(), 'Discord Chat:')]/a",
+                'Twitter': "//li[contains(text(), 'Twitter:')]/a",
+                'Medium': "//li[contains(text(), 'Medium:')]/a",
+                'CoinGecko': "//li[contains(text(), 'Coingecko:')]/a",
+                'GitHub': "//li[contains(text(), 'Github Repository:')]/a",
+                'Coinmarketcap': "//li[contains(text(), 'Coinmarketcap:')]/a",
+                'Reddit': "//li[contains(text(), 'Reddit:')]/a"
+            }
+
+            for key, xpath in social_elements.items():
+                try:
+                    social_links[key] = driver.find_element(By.XPATH, xpath).get_attribute('href')
+                except NoSuchElementException:
+                    continue
+
+
             all_data.append({
-                "title": title,
-                "features": features,
-                "guide": guide,
-                "total_value": total_value,
-                "status": status,
-                "platform": platform,
-                "requirements": formatted_requirements
+                "Title": title,
+                "Features": features,
+                "Guide": guide,
+                "Total_Value": total_value,
+                "Status": status,
+                "Platform": platform,
+                "Requirements": formatted_requirements,
+                "Num_Of_Prev_Drops": num_of_previous_drops,
+                "Website": website,
+                "Ticker": ticker,
+                "Total_Supply": total_supply,
+                "Whitepaper": whitepaper_link,
+                **social_links,
+                "Exchanges": exchanges,
+                "Youtube": youtube
             })
 
     finally:
@@ -161,11 +232,11 @@ def scrape_with_selenium():
 
     return all_data
 
-def merge_and_update_data(new_data, filename='airdrops_data.csv'):
+def merge_and_update_data(new_data, filename='airdrops_data_speculative.csv'):
     new_df = pd.DataFrame(new_data)
     if exists(filename):
         existing_df = pd.read_csv(filename)
-        updated_df = pd.concat([existing_df, new_df]).drop_duplicates(subset=['title'], keep='last')
+        updated_df = pd.concat([existing_df, new_df]).drop_duplicates(subset=['Title'], keep='last')
     else:
         updated_df = new_df
     updated_df.to_csv(filename, index=False, encoding='utf-8-sig')
@@ -173,5 +244,3 @@ def merge_and_update_data(new_data, filename='airdrops_data.csv'):
 
 scraped_data = scrape_with_selenium()
 merge_and_update_data(scraped_data)
-
-

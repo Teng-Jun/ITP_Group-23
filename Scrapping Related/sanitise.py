@@ -13,13 +13,20 @@ with open(file_path, mode='r', newline='', encoding='utf-8-sig') as file:
     
     # Process each row in the CSV
     for row in reader:
-        # Check if the 'Exchanges' field is empty and replace it with 'n/a'
-        if not row['Exchanges'].strip():
-            row['Exchanges'] = 'n/a'
-        
-        # Similarly, check if the 'Requirements' field is empty and replace it with 'n/a'
-        if not row['Requirements'].strip():
-            row['Requirements'] = 'n/a'
+        # Check and replace 'Exchanges' and 'Requirements' fields if they are empty
+        for field in ['Exchanges', 'Requirements']:
+            if not row[field].strip():
+                row[field] = 'n/a'
+
+        # Clean up the 'Requirements' field
+        if row['Requirements'] != 'n/a':
+            # Split on '|' and strip whitespace, then remove empty items
+            parts = [part.strip() for part in row['Requirements'].split('|') if part.strip()]
+            if not parts:
+                row['Requirements'] = 'n/a'
+            else:
+                # Join the parts back together with '|', only between items
+                row['Requirements'] = ' | '.join(parts)
 
         updated_rows.append(row)
 
