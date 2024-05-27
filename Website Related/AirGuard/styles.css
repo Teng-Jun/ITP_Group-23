@@ -1,0 +1,92 @@
+/* General body styles */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    color: #333;
+    background-color: #f4f4f4;
+}
+
+/* Header styles */
+header {
+    background-color: #007BFF;
+    color: #ffffff;
+    padding: 20px 40px;
+    text-align: center;
+}
+header h1 {
+    margin: 0;
+}
+
+/* Navigation styles */
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+nav ul li {
+    display: inline;
+    margin-right: 10px;
+}
+nav ul li a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+/* Search section */
+#search {
+    margin: 20px;
+    text-align: center;
+}
+input[type="text"] {
+    width: 50%;
+    padding: 10px;
+}
+button[type="submit"] {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+/* Airdrop container styles */
+.airdrop-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    padding: 20px;
+}
+.airdrop-item {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    margin: 10px;
+    padding: 10px;
+    width: 300px;
+}
+.airdrop-logo {
+    width: 100px;
+    height: 100px;
+}
+.airdrop-info h3 {
+    margin-top: 0;
+}
+
+/* Status label styles */
+.status-safe {
+    color: #28a745;
+}
+.status-pending {
+    color: #ffc107;
+}
+
+/* Footer styles */
+footer {
+    background-color: #343a40;
+    color: #ffffff;
+    text-align: center;
+    padding: 20px;
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+}
