@@ -11,10 +11,11 @@
     <h1>Airdrop Tracker</h1>
     <nav>
         <ul>
-            <li><a href="#current">Current Airdrops</a></li>
-            <li><a href="#upcoming">Upcoming Airdrops</a></li>
-            <li><a href="#guide">How to Claim</a></li>
-            <li><a href="tips.php">Safety Tips</a></li>
+            <li><a class="nav-link" href="index.php">Home</a></li>
+            <li><a class="nav-link" href="#current">Current Airdrops</a></li>
+            <li><a class="nav-link" href="#upcoming">Upcoming Airdrops</a></li>
+            <li><a class="nav-link" href="#guide">How to Claim</a></li>
+            <li><a class="nav-link" href="tips.php">Safety Tips</a></li>
         </ul>
     </nav>
 </header>
@@ -55,5 +56,6 @@
 <footer>
     <p>Contact us at <a href="mailto:info@airdroptool.com">info@airdroptool.com</a></p>
 </footer>
+<script src="script.js"></script>
 </body>
 </html>
