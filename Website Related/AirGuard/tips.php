@@ -36,9 +36,6 @@
         </article>
     </section>
 </main>
-<footer>
-    <p>Contact us at <a href="mailto:info@airdroptool.com">info@airdroptool.com</a></p>
-</footer>
 <script src="script.js"></script>
 </body>
 </html>
