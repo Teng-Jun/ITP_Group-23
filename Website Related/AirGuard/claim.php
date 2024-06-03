@@ -10,7 +10,7 @@
     <div class="wrapper">
         <?php include 'header.php'; ?>
         <main>
-            <h2>How to claim Airdrops</h2>
+            <h2>How To Claim Airdrops</h2>
             <section id="search">
                 <form action="claim.php" method="GET" align="center">
                     <input type="text" name="search" placeholder="Search for airdrops..." aria-label="Search Airdrops">
