@@ -4,12 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Airdrop Tracker</title>
+    <title>AirGuard</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <header>
-    <h1>Airdrop Tracker</h1>
+    <h1>AirGuard</h1>
+    <p>Your Airdrop Security Checkpoint</p>
     <nav>
         <ul>
             <li><a class="nav-link" href="index.php">Home</a></li>

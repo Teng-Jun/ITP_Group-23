@@ -9,7 +9,6 @@
     <body>
         <div class="wrapper">
             <?php include 'header.php'; ?>
-
             <main>
                 <section id="safety">
                     <h2>Safety Tips for Airdrop Participants</h2>
