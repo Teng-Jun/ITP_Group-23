@@ -1,4 +1,3 @@
-// JavaScript to handle adding the active class and resetting form
 document.addEventListener('DOMContentLoaded', function () {
     var navLinks = document.querySelectorAll('.nav-link');
 
@@ -21,7 +20,8 @@ document.addEventListener('DOMContentLoaded', function () {
     var resetButton = document.getElementById('resetButton');
     if (resetButton) {
         resetButton.addEventListener('click', function() {
-            window.location.href = 'upcoming.php'; // Redirects back to upcoming.php without any parameters
+            // Redirect to the current page without any query parameters
+            window.location.href = window.location.pathname;
         });
     }
 });

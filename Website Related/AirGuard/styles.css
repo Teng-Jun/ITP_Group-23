@@ -11,6 +11,7 @@ body {
     min-height: 100vh; /* Ensures the footer can stick to the bottom */
 }
 
+
 /* Wrapper style */
 .wrapper {
     max-width: 800px; /* Sets a maximum width for the content area */
@@ -22,6 +23,7 @@ body {
     flex-grow: 1; /* Allows the wrapper to expand */
 }
 
+
 /* Header styles */
 header {
     background-color: #007BFF;
@@ -31,6 +33,10 @@ header {
 }
 header h1 {
     margin: 0;
+}
+
+h2 {
+    text-align: center;
 }
 
 /* Navigation styles */
