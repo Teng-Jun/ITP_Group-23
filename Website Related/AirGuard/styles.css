@@ -6,6 +6,20 @@ body {
     box-sizing: border-box;
     color: #333;
     background-color: #f4f4f4;
+    display: flex;
+    justify-content: center; /* Centers the entire content horizontally */
+    min-height: 100vh; /* Ensures the footer can stick to the bottom */
+}
+
+/* Wrapper style */
+.wrapper {
+    max-width: 800px; /* Sets a maximum width for the content area */
+    width: 100%;
+    margin: 20px;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1); /* Adds a subtle shadow around the content area */
+    flex-grow: 1; /* Allows the wrapper to expand */
 }
 
 /* Header styles */
@@ -13,7 +27,7 @@ header {
     background-color: #007BFF;
     color: #ffffff;
     padding: 1rem 2rem;
-    text-align: center;                    
+    text-align: center;
 }
 header h1 {
     margin: 0;
@@ -41,27 +55,10 @@ nav ul li a {
 
 nav ul li:hover, nav ul li:active {
     font-weight: bold;
-    }
+}
     
 nav ul li.active {
     font-weight: bold; /* Keep the li bold when it has the active class */
-    }
-
-/* Search section */
-#search {
-    margin: 20px;
-    text-align: center;
-}
-input[type="text"] {
-    width: 50%;
-    padding: 10px;
-}
-button[type="submit"] {
-    padding: 10px 20px;
-    background-color: #28a745;
-    color: white;
-    border: none;
-    cursor: pointer;
 }
 
 /* Airdrop container styles */
@@ -100,7 +97,37 @@ footer {
     color: #ffffff;
     text-align: center;
     padding: 20px;
-    position: absolute;
+    position: relative; /* Changed from absolute to relative */
     width: 100%;
-    bottom: 0;
 }
+
+/* Button styles */
+.button {
+    padding: 8px 15px;
+    background-color: #28a745; /* Green background */
+    color: white; /* White text */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: center;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px; /* Slight margin for spacing between buttons */
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.button:hover {
+    background-color: #1f6a30; /* Darker green on hover */
+}
+
+.button-reset {
+    background-color: #777; /* Gray background for reset button */
+    color: white;
+    border-radius: 4px;
+    padding: 8px 15px;
+}
+
+.button-reset:hover {
+    background-color: #555; /* Darker gray on hover */
+}
+

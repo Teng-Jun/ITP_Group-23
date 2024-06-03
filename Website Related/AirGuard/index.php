@@ -7,73 +7,37 @@
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<header>
-    <h1>Airdrop Tracker</h1>
-    <nav>
-        <ul>
-            <li><a class="nav-link" href="index.php">Home</a></li>
-            <li><a class="nav-link" href="#current">Current Airdrops</a></li>
-            <li><a class="nav-link" href="#upcoming">Upcoming Airdrops</a></li>
-            <li><a class="nav-link" href="#guide">How to Claim</a></li>
-            <li><a class="nav-link" href="tips.php">Safety Tips</a></li>
-        </ul>
-    </nav>
-</header>
-<main>
-    <section id="search">
-        <input type="text" placeholder="Search for airdrops..." aria-label="Search Airdrops">
-        <button type="submit">Search</button>
-    </section>
-    <section id="current">
-        <h2>Current Airdrops</h2>
-        <div class="airdrop-container">
-            <!-- Example of a current airdrop item -->
-            <div class="airdrop-item">
-                <img src="placeholder.jpg" alt="Token Logo" class="airdrop-logo">
-                <div class="airdrop-info">
-                    <h3>Token Name</h3>
-                    <p>Drop Date: YYYY-MM-DD</p>
-                    <p>Status: <span class="status-safe">Safe</span></p>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section id="upcoming">
-        <h2>Upcoming Airdrops</h2>
-        <div class="airdrop-container">
-            <?php
-            include 'dbconnection.php';
-            $sql = "SELECT tle, Platform, Status FROM airdrops_data_speculative";
-            $result = $conn->query($sql);
-            
-            if ($result->num_rows > 0) {
-                while($row = $result->fetch_assoc()) {
-                    echo '<div class="airdrop-item">';
-                    echo '<img src="placeholder.jpg" alt="Token Logo" class="airdrop-logo">';
-                    echo '<div class="airdrop-info">';
-                    echo '<h3>' . htmlspecialchars($row['tle']) . '</h3>';
-                    echo '<p>Platform: ' . htmlspecialchars($row['Platform']) . '</p>';
-                    echo '<p>Status: <span class="' . ($row['Status'] == 'Airdrop Confirmed' ? 'status-confirmed' : ($row['Status'] == 'Airdrop Unconfirmed' ? 'status-pending' : 'status-expired')) . '">' . htmlspecialchars($row['Status']) . '</span></p>';
-                    echo '</div>';
-                    echo '</div>';
-                }
-            }else{
-                echo "No upcoming airdrops";
-            }
-            $conn->close();
-            ?>
-<!--             Example of an upcoming airdrop item 
-            <div class="airdrop-item">
-                <img src="placeholder.jpg" alt="Token Logo" class="airdrop-logo">
-                <div class="airdrop-info">
-                    <h3>Token Name</h3>
-                    <p>Expected Drop: YYYY-MM-DD</p>
-                    <p>Status: <span class="status-pending">Pending Verification</span></p>
-                </div>
-            </div>-->
-        </div>
-    </section>
-</main>
-<script src="script.js"></script>
+<div class="wrapper"> <!-- Wrapper added to encapsulate the entire content for better styling and alignment -->
+    <header>
+        <h1>Airdrop Tracker</h1>
+        <nav>
+            <ul>
+                <li><a class="nav-link" href="index.php">Home</a></li>
+                <li><a class="nav-link" href="current.php">Current Airdrops</a></li>
+                <li><a class="nav-link" href="upcoming.php">Upcoming Airdrops</a></li>
+                <li><a class="nav-link" href="tips.php">Safety Tips</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section id="about">
+            <h2>What are Airdrop Tokens?</h2>
+            <p>
+                Airdrop tokens are a type of cryptocurrency distribution strategy used primarily by startups in the blockchain and crypto space. Companies distribute these tokens for free or as a reward for small tasks to a large number of wallet addresses, which often helps in promoting their new token, creating a community, and increasing the token's circulation.
+            </p>
+            <h3>Why Participate in Airdrops?</h3>
+            <p>
+                Participating in airdrops can be a beneficial way for users to acquire new tokens without purchasing them. This method can lead to gaining early access to potentially valuable tokens as the project grows and develops. Additionally, it's a way to engage with new blockchain projects and understand their underlying technologies and goals.
+            </p>
+            <h3>How to Safely Participate in Airdrops</h3>
+            <p>
+                While airdrops can offer significant rewards, they also come with risks, often associated with privacy and security. It's crucial to assess each airdrop carefully, ensuring it's from a trustworthy source. Always avoid sharing private keys or any other sensitive personal information.
+            </p>
+            <p>
+                Visit our <a href="tips.php">Safety Tips</a> section to learn more about ensuring your security while participating in airdrops.
+            </p>
+        </section>
+    </main>
+</div>
 </body>
 </html>
