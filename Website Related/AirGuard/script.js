@@ -1,4 +1,4 @@
-// JavaScript to handle adding the active class
+// JavaScript to handle adding the active class and resetting form
 document.addEventListener('DOMContentLoaded', function () {
     var navLinks = document.querySelectorAll('.nav-link');
 
@@ -16,4 +16,12 @@ document.addEventListener('DOMContentLoaded', function () {
             link.parentElement.classList.add('active');
         }
     });
+
+    // Handle reset button click
+    var resetButton = document.getElementById('resetButton');
+    if (resetButton) {
+        resetButton.addEventListener('click', function() {
+            window.location.href = 'upcoming.php'; // Redirects back to upcoming.php without any parameters
+        });
+    }
 });

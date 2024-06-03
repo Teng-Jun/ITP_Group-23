@@ -89,10 +89,6 @@
         ?>
     </div>
 </main>
-<script>
-    document.getElementById('resetButton').addEventListener('click', function() {
-        window.location.href = 'upcoming.php'; // Redirects back to upcoming.php without any parameters
-    });
-</script>
+<script src="script.js"></script>
 </body>
 </html>
