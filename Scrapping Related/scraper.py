@@ -36,7 +36,7 @@ def scrape_with_selenium():
     try:
         WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.TAG_NAME, "article")))
 
-        for _ in range(16):  # Ensure you're clicking 'Show More' as many times as you need
+        for _ in range(18):  # Ensure you're clicking 'Show More' as many times as you need
             try:
                 show_more_button = WebDriverWait(driver, 10).until(
                     EC.element_to_be_clickable((By.CSS_SELECTOR, "div.showmore > span"))
@@ -73,6 +73,11 @@ def scrape_with_selenium():
             except NoSuchElementException:
                 print(f"Article div not found for URL {link}, may be expired or not available.")
                 continue
+
+            try:
+                thumbnail_url = driver.find_element(By.CSS_SELECTOR, 'div.airdrop-logo-thumbnail img').get_attribute('src')
+            except NoSuchElementException:
+                thumbnail_url = "n/a"
 
             try:
                 title = driver.find_element(By.TAG_NAME, 'h1').text 
@@ -222,6 +227,7 @@ def scrape_with_selenium():
                 "Ticker": ticker,
                 "Total_Supply": total_supply,
                 "Whitepaper": whitepaper_link,
+                "Thumbnail": thumbnail_url,
                 **social_links,
                 "Exchanges": exchanges,
                 "Youtube": youtube

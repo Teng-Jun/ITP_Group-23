@@ -1,4 +1,3 @@
-// JavaScript to handle adding the active class
 document.addEventListener('DOMContentLoaded', function () {
     var navLinks = document.querySelectorAll('.nav-link');
 
@@ -16,6 +15,13 @@ document.addEventListener('DOMContentLoaded', function () {
             link.parentElement.classList.add('active');
         }
     });
+
+    // Handle reset button click
+    var resetButton = document.getElementById('resetButton');
+    if (resetButton) {
+        resetButton.addEventListener('click', function() {
+            // Redirect to the current page without any query parameters
+            window.location.href = window.location.pathname;
+        });
+    }
 });
-
-
