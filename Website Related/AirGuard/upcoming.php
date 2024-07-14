@@ -31,7 +31,7 @@
                 $search = isset($_GET['search']) ? $_GET['search'] : '';
                 $status = isset($_GET['status']) ? $_GET['status'] : '';
 
-                $sql = "SELECT tle, Platform, Status, Thumbnail FROM airdrops_data_speculative";
+                $sql = "SELECT id, tle, Platform, Status, Thumbnail FROM airdrops_data_speculative";
                 $conditions = [];
                 $params = [];
                 $types = '';
@@ -63,6 +63,7 @@
 
                 if ($result->num_rows > 0) {
                     while($row = $result->fetch_assoc()) {
+                        echo '<a href="upcoming_details.php?id=' . htmlspecialchars($row['id']) . '" class="airdrop-item-link">';
                         echo '<div class="airdrop-item">';
                         echo '<img src="' . htmlspecialchars($row['Thumbnail']) . '" alt="Token Logo" class="airdrop-logo">';
                         echo '<div class="airdrop-info">';

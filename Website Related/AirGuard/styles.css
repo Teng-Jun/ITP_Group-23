@@ -133,3 +133,24 @@ footer {
 .status-pending {
     color: #ffc107;
 }
+
+.detail-item {
+    text-align: center
+}
+
+.detail-logo {
+    width: 150px;
+    height: auto;
+    margin: 0 auto;
+}
+
+.back-button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px 0;
+    background-color: #0056b3; /* Choose a color that fits your design */
+    color: white;
+    text-decoration: none; /* Removes underline */
+    border-radius: 5px; /* Optional: adds rounded corners */
+    text-align: center;
+}
