@@ -18,7 +18,7 @@
             <li><a class="nav-link" href="upcoming.php">Upcoming Airdrops</a></li>
             <li><a class="nav-link" href="claim.php">How to Claim</a></li>
             <li><a class="nav-link" href="tips.php">Safety Tips</a></li>
-            <li><a class="nav-link" href="Learn_Avoid.php">Learn & Avoid Airdrop Scams</a></li>
+            <li><a class="nav-link" href="learn_avoid.php">Learn & Avoid Airdrop Scams</a></li>
         </ul>
     </nav>
 </header>
