@@ -135,70 +135,84 @@
         }
 
         function showChart(airdropName, button) {
-            fetch('data/sentiment_results.json')  
+            fetch('data/sentiment_results.json')
                 .then(response => response.json())
                 .then(data => {
                     const airdrop = data.find(item => item.airdrop_name === airdropName);
                     const chartContainer = button.nextElementSibling;
                     const noDataContainer = chartContainer.nextElementSibling;
                     const legendContainer = noDataContainer.nextElementSibling;
+                    const cardContainer = button.closest('.airdrop-item');  // Get the card container
 
-                    if (airdrop && (airdrop.positive > 0 || airdrop.neutral > 0 || airdrop.negative > 0)) {
-                        chartContainer.style.display = 'block';
-                        noDataContainer.style.display = 'none';
-                        legendContainer.style.display = 'flex';
-                        const ctx = chartContainer.querySelector('canvas').getContext('2d');
-
-                        if (chartContainer.chartInstance) {
-                            chartContainer.chartInstance.destroy();
-                        }
-
-                        chartContainer.chartInstance = new Chart(ctx, {
-                            type: 'pie',
-                            data: {
-                                labels: ['Positive', 'Neutral', 'Negative'],
-                                datasets: [{
-                                    data: [airdrop.positive, airdrop.neutral, airdrop.negative],
-                                    backgroundColor: ['#36a2eb', '#ffcd56', '#ff6384']
-                                }]
-                            },
-                            options: {
-                                responsive: true,
-                                title: {
-                                    display: true,
-                                    text: `Sentiment Distribution for ${airdropName}`
-                                },
-                                plugins: {
-                                    datalabels: {
-                                        formatter: (value, context) => {
-                                            return value; 
-                                        },
-                                        color: '#fff',
-                                        font: {
-                                            weight: 'bold'
-                                        }
-                                    }
-                                },
-                                legend: {
-                                    display: true  
-                                },
-                                onClick: function(e, legendItem) {
-                                    const chart = this;
-                                    const index = legendItem[0].index;
-                                    chart.getDatasetMeta(0).data[index].hidden = !chart.getDatasetMeta(0).data[index].hidden;
-                                    chart.update();
-                                    updateCustomLegend(chart, legendContainer);
-                                }
-                            }
-                        });
-
-                        // Custom legend
-                        updateCustomLegend(chartContainer.chartInstance, legendContainer);
-
-                    } else {
+                    // Toggle expanded class
+                    if (cardContainer.classList.contains('expanded')) {
                         chartContainer.style.display = 'none';
-                        noDataContainer.style.display = 'block';
+                        noDataContainer.style.display = 'none';
                         legendContainer.style.display = 'none';
+                        cardContainer.classList.remove('expanded');
+                    } else {
+                        if (airdrop && (airdrop.positive > 0 || airdrop.neutral > 0 || airdrop.negative > 0)) {
+                            chartContainer.style.display = 'block';
+                            noDataContainer.style.display = 'none';
+                            legendContainer.style.display = 'flex';
+                            const ctx = chartContainer.querySelector('canvas').getContext('2d');
+
+                            if (chartContainer.chartInstance) {
+                                chartContainer.chartInstance.destroy();
+                            }
+
+                            chartContainer.chartInstance = new Chart(ctx, {
+                                type: 'pie',
+                                data: {
+                                    labels: ['Positive', 'Neutral', 'Negative'],
+                                    datasets: [{
+                                        data: [airdrop.positive, airdrop.neutral, airdrop.negative],
+                                        backgroundColor: ['#36a2eb', '#ffcd56', '#ff6384']
+                                    }]
+                                },
+                                options: {
+                                    responsive: true,
+                                    title: {
+                                        display: true,
+                                        text: `Sentiment Distribution for ${airdropName}`
+                                    },
+                                    plugins: {
+                                        datalabels: {
+                                            formatter: (value, context) => {
+                                                return value;
+                                            },
+                                            color: '#fff',
+                                            font: {
+                                                weight: 'bold'
+                                            }
+                                        }
+                                    },
+                                    legend: {
+                                        display: true
+                                    },
+                                    onClick: function(e, legendItem) {
+                                        const chart = this;
+                                        const index = legendItem[0].index;
+                                        chart.getDatasetMeta(0).data[index].hidden = !chart.getDatasetMeta(0).data[index].hidden;
+                                        chart.update();
+                                        updateCustomLegend(chart, legendContainer);
+                                    }
+                                }
+                            });
+
+                            // Custom legend
+                            updateCustomLegend(chartContainer.chartInstance, legendContainer);
+
+                            // Add the expanded class to the card container
+                            cardContainer.classList.add('expanded');
+                        } else {
+                            chartContainer.style.display = 'none';
+                            noDataContainer.style.display = 'block';
+                            legendContainer.style.display = 'none';
+
+                            // Remove the expanded class if no data is available
+                            cardContainer.classList.remove('expanded');
+                        }
                     }
                 })
                 .catch(error => {
