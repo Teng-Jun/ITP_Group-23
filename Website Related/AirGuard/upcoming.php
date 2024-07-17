@@ -51,7 +51,20 @@
                     <button type="button" id="resetButton">Reset</button>
                 </form>
             </section>
+            <div class="tabs">
+                <button class="tab-button active">Tokens: Most Scanned</button>
+                <button class="tab-button">Tokens: Dangerous Threats</button>
+                <button class="tab-button">Tokens: by Market Cap</button>
+            </div>
             <div class="airdrop-container">
+                <h2>Tokens List</h2>
+                <div class="airdrop-container">
+                    <table>
+                        <thead>
+                            
+                        </thead>
+                    </table>
+                </div>
                 <?php
                 include 'dbconnection.php';
 
