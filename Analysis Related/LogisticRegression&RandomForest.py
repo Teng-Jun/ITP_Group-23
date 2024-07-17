@@ -6,6 +6,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 import joblib
+from imblearn.pipeline import Pipeline 
 
 # Load the labeled data
 data_path = 'processed_airdrops_data_with_more_scam_labelled.csv'
@@ -23,21 +24,21 @@ X_scaled = scaler.fit_transform(X)
 # Split the data into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.3, random_state=42)
 
-# total_samples = 1842 + 1001
-# num_classes = 2
-# count_class_0 = 1842
-# count_class_1 = 1001
+total_samples = 1842 + 1001
+num_classes = 2
+count_class_0 = 1842
+count_class_1 = 1001
 
-# weight_for_0 = total_samples / (num_classes * count_class_0)
-# weight_for_1 = total_samples / (num_classes * count_class_1)
+weight_for_0 = total_samples / (num_classes * count_class_0)
+weight_for_1 = total_samples / (num_classes * count_class_1)
 
-# class_weights = {0: weight_for_0, 1: weight_for_1}
+class_weights = {0: weight_for_0, 1: weight_for_1}
 
 # Apply SMOTE to the training data
 # smote = SMOTE(random_state=42)
 # X_train_smote, y_train_smote = smote.fit_resample(X_train, y_train)
 
-# Apply ADASYN to the training data
+# # Apply ADASYN to the training data
 # adasyn = ADASYN(random_state=42)
 # X_train_ada, y_train_ada = adasyn.fit_resample(X_train, y_train)
 
@@ -63,60 +64,102 @@ X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.3, 
 
 # class_weights = {0: weight_for_0, 1: weight_for_1}
 
+#Define parameter grids
+param_grid_lr = {
+    'C': [0.001, 0.01, 0.1, 1, 10],
+    'solver': ['liblinear', 'saga']  # solvers suitable for small datasets
+}
+
+param_grid_rf = {
+    'n_estimators': [100, 200, 300],
+    'max_depth': [None, 10, 20, 30],
+    'min_samples_split': [2, 5, 10],
+    'min_samples_leaf': [1, 2, 4]
+}
+
+# Setup GridSearchCV for Logistic Regression
+grid_lr = GridSearchCV(
+    LogisticRegression(random_state=42),
+    param_grid=param_grid_lr,
+    scoring=None,
+    cv=3,
+    verbose=2
+)
+
+# Setup GridSearchCV for Random Forest
+grid_rf = GridSearchCV(
+    RandomForestClassifier(random_state=42),
+    param_grid=param_grid_rf,
+    scoring=None,
+    cv=3,
+    verbose=2
+)
+
 # # Define parameter grids
 # param_grid_lr = {
-#     'C': [0.001, 0.01, 0.1, 1, 10],
-#     'solver': ['liblinear', 'saga']  # solvers suitable for small datasets
+#     'classifier__C': [0.001, 0.01, 0.1, 1, 10],
+#     'classifier__solver': ['liblinear', 'saga']
 # }
 
 # param_grid_rf = {
-#     'n_estimators': [100, 200, 300],
-#     'max_depth': [None, 10, 20, 30],
-#     'min_samples_split': [2, 5, 10],
-#     'min_samples_leaf': [1, 2, 4]
+#     'classifier__n_estimators': [100, 200, 300],
+#     'classifier__max_depth': [None, 10, 20, 30],
+#     'classifier__min_samples_split': [2, 5, 10],
+#     'classifier__min_samples_leaf': [1, 2, 4]
 # }
+
+# # Create pipelines with SMOTE
+# pipeline_lr = Pipeline([
+#     ('smote', SMOTE(random_state=42)),
+#     ('classifier', LogisticRegression(random_state=42, class_weight=class_weights))
+# ])
+
+# pipeline_rf = Pipeline([
+#     ('smote', SMOTE(random_state=42)),
+#     ('classifier', RandomForestClassifier(random_state=42, class_weight=class_weights))
+# ])
 
 # # Setup GridSearchCV for Logistic Regression
 # grid_lr = GridSearchCV(
-#     LogisticRegression(random_state=42),
+#     pipeline_lr,
 #     param_grid=param_grid_lr,
-#     scoring='f1',
+#     scoring=None,
 #     cv=3,
 #     verbose=2
 # )
 
 # # Setup GridSearchCV for Random Forest
 # grid_rf = GridSearchCV(
-#     RandomForestClassifier(random_state=42),
+#     pipeline_rf,
 #     param_grid=param_grid_rf,
-#     scoring='f1',
+#     scoring=None,
 #     cv=3,
 #     verbose=2
 # )
 
-# # Fit the models
-# grid_lr.fit(X_train, y_train)
-# grid_rf.fit(X_train, y_train)
+# Fit the models
+grid_lr.fit(X_train, y_train)
+grid_rf.fit(X_train, y_train)
 
-# # Get the best models
-# lr_model = grid_lr.best_estimator_
-# rf_model = grid_rf.best_estimator_
+# Get the best models
+lr_model = grid_lr.best_estimator_
+rf_model = grid_rf.best_estimator_
 
-# # Assuming X_test is available
-# lr_probs = lr_model.predict_proba(X_test)[:, 1]
-# rf_probs = rf_model.predict_proba(X_test)[:, 1]
-
-# Initialize and train the logistic regression model
-lr_model = LogisticRegression()
-lr_model.fit(X_train, y_train)
-
-# Initialize and train the random forest model
-rf_model = RandomForestClassifier(random_state=42)
-rf_model.fit(X_train, y_train)
-
-# Predict probabilities on the test set
+# Assuming X_test is available
 lr_probs = lr_model.predict_proba(X_test)[:, 1]
 rf_probs = rf_model.predict_proba(X_test)[:, 1]
+
+# # Initialize and train the logistic regression model
+# lr_model = LogisticRegression(class_weight=class_weights)
+# lr_model.fit(X_train_ada, y_train_ada)
+
+# # Initialize and train the random forest model
+# rf_model = RandomForestClassifier(random_state=42, class_weight=class_weights)
+# rf_model.fit(X_train_ada, y_train_ada)
+
+# # Predict probabilities on the test set
+# lr_probs = lr_model.predict_proba(X_test)[:, 1]
+# rf_probs = rf_model.predict_proba(X_test)[:, 1]
 
 
 # Combine the probabilities: Let's say we trust LR a bit less, we give it a weight of 0.4 and RF a weight of 0.6
@@ -126,7 +169,7 @@ combined_pred = [1 if prob > 0.5 else 0 for prob in combined_probs]
 
 # Save the trained logistic regression model
 model_filename = 'logistic_regression_model.joblib'
-joblib.dump(rf_model, model_filename)
+joblib.dump(lr_model, model_filename)
 print(f"Model saved to {model_filename}")
 
 # Save the trained logistic regression model

@@ -137,7 +137,7 @@ precision = precision_score(y_test, gbm_pred)
 recall = recall_score(y_test, gbm_pred)
 
 # Save the trained logistic regression model
-model_filename = 'gradient_boosting_classifier.joblib'
+model_filename = 'gradient_boosting_model.joblib'
 joblib.dump(gbm_model, model_filename)
 print(f"Model saved to {model_filename}")
 

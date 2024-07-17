@@ -47,27 +47,27 @@ X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.3, 
 # X_train_ada, y_train_ada = adasyn.fit_resample(X_train, y_train)
 
 # Define the parameter grid for Logistic Regression
-param_grid = {
+param_grid_lr = {
     'C': [0.001, 0.01, 0.1, 1, 10],  # Regularization strength
     'solver': ['liblinear', 'saga'],  # Optimization algorithms
     'penalty': ['l1', 'l2']  # Norms for penalization
 }
 
 # Initialize GridSearchCV
-grid = GridSearchCV(
+grid_lr = GridSearchCV(
     LogisticRegression(max_iter=1000),
-    param_grid,
-    scoring='f1',  # You can also use a custom scorer dictionary or multiple scorers
+    param_grid_lr,
+    scoring=None,  # You can also use a custom scorer dictionary or multiple scorers
     cv=5,
     verbose=1,
     n_jobs=-1  # Use all available cores
 )
 
 # Fit GridSearchCV on the training data
-grid.fit(X_train, y_train)
+grid_lr.fit(X_train, y_train)
 
 # Extract the best model
-best_model = grid.best_estimator_
+lr_model = grid_lr.best_estimator_
 
 # Calculate class weights based on the imbalance
 # total_samples = len(y_train_smote)
@@ -100,7 +100,7 @@ best_model = grid.best_estimator_
 # lr_pred = lr_model.predict(X_test)
 
 # Predictions on the test set
-lr_pred = best_model.predict(X_test)
+lr_pred = lr_model.predict(X_test)
 
 # Calculate accuracy, F1-score, precision, and recall
 accuracy = accuracy_score(y_test, lr_pred)
@@ -114,22 +114,22 @@ print(f"Model accuracy: {accuracy*100:.2f}%")
 print(f"Model F1-score: {f1:.2f}")
 print(f"Model Precision: {precision:.2f}")
 print(f"Model Recall: {recall:.2f}")
-print("Best parameters found by GridSearchCV:", grid.best_params_)
+print("Best parameters found by GridSearchCV:", grid_lr.best_params_)
 
 # Save the trained logistic regression model
 model_filename = 'logistic_regression_model_best_parameter.joblib'
 # joblib.dump(lr_model, model_filename)
-joblib.dump(best_model, model_filename)
+joblib.dump(lr_model, model_filename)
 print(f"Model saved to {model_filename}")
 
-# Predict and combine probabilities on the entire dataset for output consistency
+# # Predict and combine probabilities on the entire dataset for output consistency
+# # data['scam_possibility'] = lr_model.predict_proba(X_scaled)[:, 1]
 # data['scam_possibility'] = lr_model.predict_proba(X_scaled)[:, 1]
-data['scam_possibility'] = best_model.predict_proba(X_scaled)[:, 1]
-data['scam_possibility'] = data['scam_possibility'].round(2)
+# data['scam_possibility'] = data['scam_possibility'].round(2)
 
-# Save the updated dataframe to a new file
-output_path = 'processed_airdrops_data_with_more_scam_labelled_probabilities.csv'
-data.to_csv(output_path, index=False)
-print(f"Updated data with scam possibility saved to {output_path}.")
+# # Save the updated dataframe to a new file
+# output_path = 'processed_airdrops_data_with_more_scam_labelled_probabilities.csv'
+# data.to_csv(output_path, index=False)
+# print(f"Updated data with scam possibility saved to {output_path}.")
 
 
