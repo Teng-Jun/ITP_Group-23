@@ -8,12 +8,26 @@
         <link rel="icon" type="image/png" href="image/airguard-favicon-color-32.png">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
          <style>
+            body {
+                font-family: 'Arial', sans-serif;
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                background-color: white;
+            }
+            .container {
+                text-align: center;
+            }     
+             
             .text-box {
                 width: 60vw;
                 height: 10vh;
                 padding: 3em;
                 border: 1em transparent;
-                border-radius: 5em;
                 position: relative;
                 overflow: hidden;
                 transition: all 0.5s ease-in-out;
@@ -28,11 +42,9 @@
                 background-color: white;
                 transform: translateX(-100%);
                 transition: transform 0.5s ease-in-out;
-                text-align: center;
-                justify-content: center;
                 padding: 1em;
                 background-color: #f5f5f5;
-                font-size: 1.5em;
+                font-size: 1.2em;
             }
 
             .text-box:hover .more-text {
@@ -40,15 +52,11 @@
                 text-align: center;
                 justify-content: center;
             }
-
-            .content {
-                padding: 20px;
-            }
             
             .initial-text {
-                font-size: 2em;
+                font-size: 1.5em;
                 font-style: inherit;
-                padding: 1em;
+                padding: 1em 0;
                 justify-content: center;
                 text-align: center;
             }
@@ -60,8 +68,8 @@
                 <?php include 'header.php'; ?>
             </div>
             <main>
+                <h2>Safety Tips for Airdrop Participants</h2>
                 <section id="safety">
-                    <h2>Safety Tips for Airdrop Participants</h2>
                     <div class="container">
                         <div class="text-box">
                             <span class="initial-text">Always Verify the Source</span>
