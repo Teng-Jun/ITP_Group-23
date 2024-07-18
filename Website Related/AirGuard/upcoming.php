@@ -130,11 +130,11 @@
                                     while($row = $result->fetch_assoc()) {
                                         echo '<tr>';
                                         echo '<td>' . $index++ . '</td>';
-                                         echo '<td><a href="upcoming_details.php?id=' . htmlspecialchars($row['id']) . '" class="airdrop-item-link"><img src="' . htmlspecialchars($row['Thumbnail']) . '" alt="Token Logo" class="token-logo"> ' . htmlspecialchars($row['tle']) . '</a></td>';
+                                        echo '<td><a href="upcoming_details.php?id=' . htmlspecialchars($row['id']) . '" class="airdrop-item-link"><img src="' . htmlspecialchars($row['Thumbnail']) . '" alt="Token Logo" class="token-logo"> ' . htmlspecialchars($row['tle']) . '</a></td>';
                                         echo '<td>' . htmlspecialchars($row['Platform']) . '</td>';
                                         echo '<td>' . htmlspecialchars($row['RiskScore']) . '</td>';
                                         echo '<td class="' . ($row['Status'] == 'Airdrop Confirmed' ? 'status-confirmed' : ($row['Status'] == 'Airdrop Unconfirmed' ? 'status-pending' : 'status-expired')) . '">' . htmlspecialchars($row['Status']) . '</td>';
-                                        echo '<td><button type="button" onclick="showChart(\'' . htmlspecialchars($row['tle']) . '\', this)">Show Sentiment</button>';
+                                        echo '<td><button type="button" class="btn" onclick="showChart(\'' . htmlspecialchars($row['tle']) . '\', this)">Show Sentiment</button>';
                                         echo '<div class="chart-container" style="display:none;"><canvas></canvas></div>';
                                         echo '<div class="no-data" style="display:none;">No data from Reddit forum.</div>';
                                         echo '<div class="custom-legend" style="display:none;"></div>';
