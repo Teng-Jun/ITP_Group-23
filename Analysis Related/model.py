@@ -50,15 +50,20 @@ import pandas as pd
 from sklearn.preprocessing import StandardScaler
 import joblib
 
-# Load the saved Logistic Regression model
-lr_model_filename = 'logistic_regression_model.joblib'
-lr_model = joblib.load(lr_model_filename)
-print("Logistic Regression model loaded successfully.")
+# # Load the saved Logistic Regression model
+# lr_model_filename = 'logistic_regression_model.joblib'
+# lr_model = joblib.load(lr_model_filename)
+# print("Logistic Regression model loaded successfully.")
 
 # Load the saved Random Forest model
 rf_model_filename = 'random_forest_model.joblib'
 rf_model = joblib.load(rf_model_filename)
 print("Random Forest model loaded successfully.")
+
+# Save the trained gradient boosting model
+gbm_model_filename = 'gradient_boosting_model.joblib'
+gbm_model= joblib.load(gbm_model_filename)
+print("Gradient Boosting Model loaded successfully")
 
 # Load the previously saved scaler
 scaler_filename = 'scaler.joblib'
@@ -80,16 +85,23 @@ else:
 # Scale the features using the loaded scaler
 X_real_scaled = scaler.transform(X_real)
 
-# Make predictions with Logistic Regression
-lr_predictions = lr_model.predict(X_real_scaled)
-lr_probabilities = lr_model.predict_proba(X_real_scaled)[:, 1]
+# # Make predictions with Logistic Regression
+# lr_predictions = lr_model.predict(X_real_scaled)
+# lr_probabilities = lr_model.predict_proba(X_real_scaled)[:, 1]
 
 # Make predictions with Random Forest
 rf_predictions = rf_model.predict(X_real_scaled)
 rf_probabilities = rf_model.predict_proba(X_real_scaled)[:, 1]
 
+# Make predictions with Gradient Boosting
+gbm_predictions = gbm_model.predict(X_real_scaled)
+gbm_probabilities = gbm_model.predict_proba(X_real_scaled)[:, 1]
+
 # Combine the probabilities (example: average)
-combined_probabilities = (0.4 * lr_probabilities + 0.6 * rf_probabilities)
+# combined_probabilities = (0.4 * lr_probabilities + 0.6 * rf_probabilities)
+# combined_probabilities = (0.3 * lr_probabilities + 0.4 * rf_probabilities + 0.3 * gbm_probabilities)
+# combined_probabilities = (0.5 * lr_probabilities + 0.5 * gbm_probabilities)
+combined_probabilities = (0.5 * gbm_probabilities + 0.5 * rf_probabilities)
 combined_predictions = [1 if prob > 0.5 else 0 for prob in combined_probabilities]
 
 # Add predictions to the data frame
@@ -97,6 +109,6 @@ real_data['Combined_Prediction'] = combined_predictions
 real_data['Combined_Probability'] = combined_probabilities.round(2)
 
 # Save or display the results
-output_path = 'real_data_with_predictions_LR_RF.csv'
+output_path = 'real_data_with_predictions_RF_GBM.csv'
 real_data.to_csv(output_path, index=False)
 print(f"Predictions added and saved to {output_path}.")

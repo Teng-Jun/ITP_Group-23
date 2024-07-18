@@ -57,73 +57,118 @@
                 <button class="tab-button">Tokens: by Market Cap</button>
             </div>
             <div class="airdrop-container">
-                <h2>Tokens List</h2>
                 <div class="airdrop-container">
                     <table>
                         <thead>
-                            
+                            <h2>Tokens List</h2>
+                            <tr>
+                                <th>#</th>
+                                <th>Asset</th>
+                                <th>Chain</th>
+                                <th>Risk Score</th>
+                                <th>Status</th>
+                                <th>Sentiments</th>
+                                <th>Requirements</th>
+                                <th>Whitepaper</th>
+                                <th>Social</th>
+                                <th>Media</th>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th>Facebook</th>
+                                <th>Instagram</th>
+                                <th>Website</th>
+                            </tr>
                         </thead>
+                        <tbody>
+                            <?php
+                                include 'dbconnection.php';
+
+                                $search = isset($_GET['search']) ? $_GET['search'] : '';
+                                $status = isset($_GET['status']) ? $_GET['status'] : '';
+
+                                $sql = "SELECT * FROM airdrops_data_speculative";
+                                $conditions = [];
+                                $params = [];
+                                $types = '';
+
+                                if ($search !== '') {
+                                    $conditions[] = "LOWER(tle) LIKE LOWER(?)";
+                                    $params[] = '%' . strtolower($search) . '%';
+                                    $types .= 's';  // string
+                                }
+
+                                if ($status !== '') {
+                                    $conditions[] = "Status = ?";
+                                    $params[] = $status;
+                                    $types .= 's';  // string
+                                }
+
+                                if (!empty($conditions)) {
+                                    $sql .= " WHERE " . join(" AND ", $conditions);
+                                }
+
+                                $stmt = $conn->prepare($sql);
+
+                                if (!empty($params)) {
+                                    $stmt->bind_param($types, ...$params);
+                                }
+
+                                $stmt->execute();
+                                $result = $stmt->get_result();
+
+                                if ($result->num_rows > 0) {
+                                    $index = 1;
+                                    while($row = $result->fetch_assoc()) {
+                                        echo '<tr>';
+                                        echo '<td>' . $index++ . '</td>';
+                                         echo '<td><a href="upcoming_details.php?id=' . htmlspecialchars($row['id']) . '" class="airdrop-item-link"><img src="' . htmlspecialchars($row['Thumbnail']) . '" alt="Token Logo" class="token-logo"> ' . htmlspecialchars($row['tle']) . '</a></td>';
+                                        echo '<td>' . htmlspecialchars($row['Platform']) . '</td>';
+                                        echo '<td>' . htmlspecialchars($row['RiskScore']) . '</td>';
+                                        echo '<td class="' . ($row['Status'] == 'Airdrop Confirmed' ? 'status-confirmed' : ($row['Status'] == 'Airdrop Unconfirmed' ? 'status-pending' : 'status-expired')) . '">' . htmlspecialchars($row['Status']) . '</td>';
+                                        echo '<td><button type="button" onclick="showChart(\'' . htmlspecialchars($row['tle']) . '\', this)">Show Sentiment</button>';
+                                        echo '<div class="chart-container" style="display:none;"><canvas></canvas></div>';
+                                        echo '<div class="no-data" style="display:none;">No data from Reddit forum.</div>';
+                                        echo '<div class="custom-legend" style="display:none;"></div>';
+                                        echo '</td>';
+                                        
+                                        $requirementStatus = htmlspecialchars($row['Requirements']);
+                                        $requirementsymbol = ($requirementStatus != 'n/a') ? '✔' : '✘';
+                                        echo '<td><span class="requirementsymbol">' . $requirementsymbol . '</span>' . '</td>';
+                                        
+                                        $whitepaperStatus = htmlspecialchars($row['Whitepaper']);
+                                        $whitepaperClass = ($whitepaperStatus != 'n/a') ? '✔' : '✘';
+                                        echo '<td><span class="whitepaperClass">' . $whitepaperClass . '</span>' . '</td>';
+
+                                        $facebookStatus = htmlspecialchars($row['Facebook']);
+                                        $facebookClass = ($facebookStatus != 'n/a') ? '✔' : '✘';
+                                        echo '<td><span class="facebookClass">' . $facebookClass . '</span>' . '</td>';
+                                        
+                                        $instagramStatus = htmlspecialchars($row['Instagram']);
+                                        $instagramClass = ($instagramStatus != 'n/a') ? '✔' : '✘';
+                                        echo '<td><span class="instagramClass">' . $instagramClass . '</span>' . '</td>';
+                                        
+                                        $websiteStatus = htmlspecialchars($row['Website']);
+                                        $websiteClass = ($websiteStatus != 'n/a') ? '✔' : '✘';
+                                        echo '<td><span class="websiteClass">' . $websiteClass . '</span>' . '</td>';
+                                        echo '</tr>';
+                                    }
+                                } else {
+                                        echo '<tr><td colspan="7">No upcoming airdrops found</td></tr>';
+                                }
+                                $stmt->close();
+                                $conn->close();
+                            ?>
+                        </tbody>
                     </table>
                 </div>
-                <?php
-                include 'dbconnection.php';
-
-                $search = isset($_GET['search']) ? $_GET['search'] : '';
-                $status = isset($_GET['status']) ? $_GET['status'] : '';
-
-                $sql = "SELECT id, tle, Platform, Status, Thumbnail FROM airdrops_data_speculative";
-                $conditions = [];
-                $params = [];
-                $types = '';
-
-                if ($search !== '') {
-                    $conditions[] = "LOWER(tle) LIKE LOWER(?)";
-                    $params[] = '%' . strtolower($search) . '%';
-                    $types .= 's';  // string
-                }
-
-                if ($status !== '') {
-                    $conditions[] = "Status = ?";
-                    $params[] = $status;
-                    $types .= 's';  // string
-                }
-
-                if (!empty($conditions)) {
-                    $sql .= " WHERE " . join(" AND ", $conditions);
-                }
-
-                $stmt = $conn->prepare($sql);
-
-                if (!empty($params)) {
-                    $stmt->bind_param($types, ...$params);
-                }
-
-                $stmt->execute();
-                $result = $stmt->get_result();
-
-                if ($result->num_rows > 0) {
-                    while($row = $result->fetch_assoc()) {
-                        echo '<div class="airdrop-item">';
-                        echo '<a href="upcoming_details.php?id=' . htmlspecialchars($row['id']) . '" class="airdrop-item-link">';
-                        echo '<img src="' . htmlspecialchars($row['Thumbnail']) . '" alt="Token Logo" class="airdrop-logo">';
-                        echo '<div class="airdrop-info">';
-                        echo '<h3>' . htmlspecialchars($row['tle']) . '</h3>';
-                        echo '<p>Platform: ' . htmlspecialchars($row['Platform']) . '</p>';
-                        echo '<p>Status: <span class="' . ($row['Status'] == 'Airdrop Confirmed' ? 'status-confirmed' : ($row['Status'] == 'Airdrop Unconfirmed' ? 'status-pending' : 'status-expired')) . '">' . htmlspecialchars($row['Status']) . '</span></p>';
-                        echo '</a>'; // Closing the anchor tag here
-                        echo '<button type="button" onclick="showChart(\'' . htmlspecialchars($row['tle']) . '\', this)">Show Sentiment</button>';
-                        echo '<div class="chart-container" style="display:none;"><canvas></canvas></div>';
-                        echo '<div class="no-data" style="display:none;">No data from Reddit forum.</div>';
-                        echo '<div class="custom-legend" style="display:none;"></div>'; // Updated custom legend for showing the numbers
-                        echo '</div>';
-                        echo '</div>';
-                    }
-                } else {
-                    echo "No upcoming airdrops found";
-                }
-                $stmt->close();
-                $conn->close();
-                ?>
             </div>
         </main>
     </div>
@@ -148,90 +193,82 @@
         }
 
         function showChart(airdropName, button) {
-            fetch('data/sentiment_results.json')
-                .then(response => response.json())
-                .then(data => {
-                    const airdrop = data.find(item => item.airdrop_name === airdropName);
-                    const chartContainer = button.nextElementSibling;
-                    const noDataContainer = chartContainer.nextElementSibling;
-                    const legendContainer = noDataContainer.nextElementSibling;
-                    const cardContainer = button.closest('.airdrop-item');  // Get the card container
+        fetch('data/sentiment_results.json')
+            .then(response => response.json())
+            .then(data => {
+                const airdrop = data.find(item => item.airdrop_name === airdropName);
+                const chartContainer = button.nextElementSibling;
+                const noDataContainer = chartContainer.nextElementSibling;
+                const legendContainer = noDataContainer.nextElementSibling;
 
-                    // Toggle expanded class
-                    if (cardContainer.classList.contains('expanded')) {
-                        chartContainer.style.display = 'none';
+                if (chartContainer.style.display === 'none' || chartContainer.style.display === '') {
+                    if (airdrop && (airdrop.positive > 0 || airdrop.neutral > 0 || airdrop.negative > 0)) {
+                        chartContainer.style.display = 'block';
                         noDataContainer.style.display = 'none';
-                        legendContainer.style.display = 'none';
-                        cardContainer.classList.remove('expanded');
-                    } else {
-                        if (airdrop && (airdrop.positive > 0 || airdrop.neutral > 0 || airdrop.negative > 0)) {
-                            chartContainer.style.display = 'block';
-                            noDataContainer.style.display = 'none';
-                            legendContainer.style.display = 'flex';
-                            const ctx = chartContainer.querySelector('canvas').getContext('2d');
+                        legendContainer.style.display = 'flex';
+                        const ctx = chartContainer.querySelector('canvas').getContext('2d');
 
-                            if (chartContainer.chartInstance) {
-                                chartContainer.chartInstance.destroy();
-                            }
-
-                            chartContainer.chartInstance = new Chart(ctx, {
-                                type: 'pie',
-                                data: {
-                                    labels: ['Positive', 'Neutral', 'Negative'],
-                                    datasets: [{
-                                        data: [airdrop.positive, airdrop.neutral, airdrop.negative],
-                                        backgroundColor: ['#36a2eb', '#ffcd56', '#ff6384']
-                                    }]
-                                },
-                                options: {
-                                    responsive: true,
-                                    title: {
-                                        display: true,
-                                        text: `Sentiment Distribution for ${airdropName}`
-                                    },
-                                    plugins: {
-                                        datalabels: {
-                                            formatter: (value, context) => {
-                                                return value;
-                                            },
-                                            color: '#fff',
-                                            font: {
-                                                weight: 'bold'
-                                            }
-                                        }
-                                    },
-                                    legend: {
-                                        display: true
-                                    },
-                                    onClick: function(e, legendItem) {
-                                        const chart = this;
-                                        const index = legendItem[0].index;
-                                        chart.getDatasetMeta(0).data[index].hidden = !chart.getDatasetMeta(0).data[index].hidden;
-                                        chart.update();
-                                        updateCustomLegend(chart, legendContainer);
-                                    }
-                                }
-                            });
-
-                            // Custom legend
-                            updateCustomLegend(chartContainer.chartInstance, legendContainer);
-
-                            // Add the expanded class to the card container
-                            cardContainer.classList.add('expanded');
-                        } else {
-                            chartContainer.style.display = 'none';
-                            noDataContainer.style.display = 'block';
-                            legendContainer.style.display = 'none';
-
-                            // Remove the expanded class if no data is available
-                            cardContainer.classList.remove('expanded');
+                        if (chartContainer.chartInstance) {
+                            chartContainer.chartInstance.destroy();
                         }
+
+                        chartContainer.chartInstance = new Chart(ctx, {
+                            type: 'pie',
+                            data: {
+                                labels: ['Positive', 'Neutral', 'Negative'],
+                                datasets: [{
+                                    data: [airdrop.positive, airdrop.neutral, airdrop.negative],
+                                    backgroundColor: ['#36a2eb', '#ffcd56', '#ff6384']
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                title: {
+                                    display: true,
+                                    text: `Sentiment Distribution for ${airdropName}`
+                                },
+                                plugins: {
+                                    datalabels: {
+                                        formatter: (value, context) => {
+                                            return value;
+                                        },
+                                        color: '#fff',
+                                        font: {
+                                            weight: 'bold'
+                                        }
+                                    }
+                                },
+                                legend: {
+                                    display: true
+                                },
+                                onClick: function(e, legendItem) {
+                                    const chart = this;
+                                    const index = legendItem[0].index;
+                                    chart.getDatasetMeta(0).data[index].hidden = !chart.getDatasetMeta(0).data[index].hidden;
+                                    chart.update();
+                                    updateCustomLegend(chart, legendContainer);
+                                }
+                            }
+                        });
+
+                        // Custom legend
+                        updateCustomLegend(chartContainer.chartInstance, legendContainer);
+
+                    } else {
+                        chartContainer.style.display = 'none';
+                        noDataContainer.style.display = 'block';
+                        legendContainer.style.display = 'none';
                     }
-                })
-                .catch(error => {
-                    console.error('Error fetching sentiment data:', error);
-                    alert('Failed to load sentiment data.');
-                });
+                } else {
+                    chartContainer.style.display = 'none';
+                    noDataContainer.style.display = 'none';
+                    legendContainer.style.display = 'none';
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching sentiment data:', error);
+                alert('Failed to load sentiment data.');
+            });
         }
     </script>
 </body>

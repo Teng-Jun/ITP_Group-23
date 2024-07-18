@@ -65,6 +65,71 @@ h2{
     background-color: #0056b3;
 }
 
+.token-list {
+    width: 90%;
+    max-width: 1200px;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    margin-top: 20px;
+}
+
+.token-list h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    background-color: #f8f8f8;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #666;
+    font-size: 12px;
+    position: relative;
+    cursor: pointer;
+}
+
+th::after {
+    content: '▼';
+    font-size: 10px;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+    display: none;
+}
+
+th.sortable:hover::after {
+    display: block;
+}
+
+td img {
+    width: 5em;
+    height: 5em;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+.symbol {
+    margin-right: 20px;
+}
+
+
 /* Navigation styles */
 nav ul {
     list-style-type: none;
