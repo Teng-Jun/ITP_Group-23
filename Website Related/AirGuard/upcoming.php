@@ -248,14 +248,9 @@
                                 legend: {
                                     display: true
                                 },
-                                onClick: function(e, legendItem) {
-                                    const chart = this;
-                                    const index = legendItem[0].index;
-                                    chart.getDatasetMeta(0).data[index].hidden = !chart.getDatasetMeta(0).data[index].hidden;
-                                    chart.update();
-                                    updateCustomLegend(chart, legendContainer);
-                                }
+                                events: ['mousemove'] 
                             }
+                            
                         });
 
                         // Custom legend
