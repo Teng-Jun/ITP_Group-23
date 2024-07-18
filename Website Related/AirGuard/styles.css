@@ -1,33 +1,34 @@
 /* General body styles */
 body {
     font-family: 'Arial', sans-serif;
-    margin: 0;
     padding: 0;
+    margin: 0;
     box-sizing: border-box;
-    color: #333; /* Light gray text color for visibility */
+    color: #333; /* Text color for visibility */
     background-color: white; /* White background */
     display: flex;
-    justify-content: center; /* Centers the entire content horizontally */
-    min-height: 100vh; /* Ensures the footer can stick to the bottom */
+    flex-direction: column; /* Ensure content flows vertically */
+    min-height: 50vh; /* Ensure the body covers at least the full viewport height */
+    min-width: 100vw;
 }
 
-/* Wrapper style */
 .wrapper {
-    max-width: 95em; /* Sets a maximum width for the content area */
     width: 85%;
-    margin: 3em;
-    padding: 2em;
-    background-color: #f8f8f8;
-    box-shadow: 0 0 2em rgba(255, 255, 255, 0.1); /* Subtle white shadow for depth */
-    flex-grow: 1; /* Allows the wrapper to expand */
+    max-width: 95em; /* Sets a maximum width for the content area */
+    margin: 2em auto; /* Centers the wrapper horizontally */
+    padding: 1em;
+    background-color: #f5f5f5; /* Light gray background for the wrapper */
+    box-shadow: 0 0 2em rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    flex-grow: 1; /* Allows the wrapper to grow and fill available space */
 }
 
 /* Header styles */
 header {
-    background-color: #007BFF; /* Keep as is if visibility is fine, or adjust as needed */
-    color: #ffffff; /* White text for visibility */
+    background-color: #007BFF; 
+    color: black;
     padding: 1rem 2rem;
     text-align: center;
+    min-height: 20vh;
 }
 
  header p {
@@ -254,3 +255,10 @@ footer {
     border-radius: 5px; /* Optional: adds rounded corners */
     text-align: center;
 }
+
+.container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+    }

@@ -21,4 +21,3 @@
             <li><a class="nav-link" href="learn_avoid.php">Learn & Avoid Airdrop Scams</a></li>
         </ul>
     </nav>
-</header>

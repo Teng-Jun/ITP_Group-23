@@ -38,10 +38,13 @@
 </head>
 <body>
     <div class="wrapper">
-        <?php include 'header.php'; ?>
+        <div class="header-container">
+            <?php include 'header.php'; ?>
+        </div>
         <main>
             <a href="upcoming.php" class="back-button">Back to Upcoming Airdrops</a>
             <h2>Airdrop Details</h2>
+            <div class="container">
             <div class="airdrop-details">
                 <?php
                 include 'dbconnection.php';
@@ -84,6 +87,7 @@
                 $stmt->close();
                 $conn->close();
                 ?>
+            </div>
             </div>
         </main>
     </div>

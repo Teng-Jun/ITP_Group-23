@@ -58,7 +58,9 @@
 </head>
 <body>
     <div class="wrapper">
-        <?php include 'header.php'; ?>
+        <div class="header-container">
+            <?php include 'header.php'; ?>
+        </div>
         <main>
             <h2>Airdrop Scam Victims from Reddit Forum Threads</h2>
             <div class="container">

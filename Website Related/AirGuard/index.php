@@ -8,9 +8,12 @@
 </head>
 <body>
     <div class="wrapper">
-        <?php include 'header.php'; ?>
+        <div class="header-container">
+            <?php include 'header.php'; ?>
+        </div>
         <main>
             <h1 align="center">Welcome to AirGuard!</h1>
+            <div class="container">
             <section id="about">
                 <h3>What are Airdrop Tokens?</h3>
                 <p>
@@ -28,6 +31,7 @@
                     Visit our <a href="tips.php">Safety Tips</a> section to learn more about ensuring your security while participating in airdrops.
                 </p>
             </section>
+            </div>
         </main>
     </div>
 </body>

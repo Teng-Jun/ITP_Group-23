@@ -35,9 +35,12 @@
 </head>
 <body>
     <div class="wrapper">
-        <?php include 'header.php'; ?>
+        <div class="header-container">
+            <?php include 'header.php'; ?>
+        </div>
         <main>
             <h2>Upcoming Airdrops</h2>
+            <div class="container">
             <section id="search">
                 <form action="upcoming.php" method="GET" align="center">
                     <input type="text" name="search" placeholder="Search for airdrops..." aria-label="Search Airdrops">
@@ -72,6 +75,7 @@
                                 <th>Whitepaper</th>
                                 <th>Social</th>
                                 <th>Media</th>
+                                <th></th>
                             </tr>
                             <tr>
                                 <th></th>
@@ -169,6 +173,7 @@
                         </tbody>
                     </table>
                 </div>
+            </div>
             </div>
         </main>
     </div>

@@ -8,9 +8,12 @@
 </head>
 <body>
     <div class="wrapper">
-        <?php include 'header.php'; ?>
+        <div class="header-container">
+            <?php include 'header.php'; ?>
+        </div>
         <main>
             <h2>About Us</h2>
+            <div class="container">
             <section id="about-us">
                 <div class="about-us-content">
                     <h3>Who We Are</h3>
@@ -26,6 +29,7 @@
                     <p>If you have any questions or comments, please don't hesitate to contact us. We are here to help and support you in your journey through the world of cryptocurrency.</p>
                 </div>
             </section>
+            </div>
         </main>
     </div>
     <script src="script.js"></script>

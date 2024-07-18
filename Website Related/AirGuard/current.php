@@ -8,9 +8,12 @@
 </head>
 <body>
     <div class="wrapper">
-        <?php include 'header.php'; ?>
+        <div class="header-container">
+            <?php include 'header.php'; ?>
+        </div>
         <main>
             <h2>Current Airdrops</h2>
+            <div class="container">
             <section id="search">
                 <form action="claim.php" method="GET" align="center">
                     <input type="text" name="search" placeholder="Search for airdrops..." aria-label="Search Airdrops">
@@ -32,6 +35,7 @@
                     </div>
                 </div>
             </section>
+            </div>
         </main>
         <script src="script.js"></script>
     </div>

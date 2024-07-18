@@ -8,10 +8,13 @@
     </head>
     <body>
         <div class="wrapper">
-            <?php include 'header.php'; ?>
+            <div class="header-container">
+                <?php include 'header.php'; ?>
+            </div>
             <main>
                 <section id="safety">
                     <h2>Safety Tips for Airdrop Participants</h2>
+                    <div class="container">
                     <article>
                         <h3>Always Verify the Source</h3>
                         <p>Make sure the airdrop is from a reputable source. Check official websites or trusted platforms before participating.</p>
@@ -24,6 +27,7 @@
                         <h3>Look for Signs of Scams</h3>
                         <p>Be wary of airdrops asking for an upfront payment or those promising unrealistic returns. These are likely scams.</p>
                     </article>
+                    </div>
                 </section>
             </main>
             <script src="script.js"></script>
