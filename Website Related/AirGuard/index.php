@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Airdrop Tracker</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
     <div class="wrapper">
@@ -12,7 +13,7 @@
             <?php include 'header.php'; ?>
         </div>
         <main>
-            <h1 align="center">Welcome to AirGuard!</h1>
+            <h2 align="center">Welcome to AirGuard!</h2>
             <div class="container">
             <section id="about">
                 <h3>What are Airdrop Tokens?</h3>
