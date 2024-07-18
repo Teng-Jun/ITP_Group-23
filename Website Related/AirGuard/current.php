@@ -9,10 +9,10 @@
     <link rel="icon" type="image/png" href="image/airguard-favicon-color-32.png">
 </head>
 <body>
+    <div class="header-container">
+        <?php include 'header.php'; ?>
+    </div>
     <div class="wrapper">
-        <div class="header-container">
-            <?php include 'header.php'; ?>
-        </div>
         <main>
             <h2>Current Airdrops</h2>
             <div class="container">

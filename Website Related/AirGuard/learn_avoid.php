@@ -59,10 +59,10 @@
     </style>
 </head>
 <body>
+    <div class="header-container">
+        <?php include 'header.php'; ?>
+    </div>
     <div class="wrapper">
-        <div class="header-container">
-            <?php include 'header.php'; ?>
-        </div>
         <main>
             <h2>Airdrop Scam Victims from Reddit Forum Threads</h2>
             <div class="container">

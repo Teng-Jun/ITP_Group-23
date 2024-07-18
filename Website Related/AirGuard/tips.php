@@ -8,10 +8,10 @@
         <link rel="icon" type="image/png" href="image/airguard-favicon-color-32.png">
     </head>
     <body>
+        <div class="header-container">
+            <?php include 'header.php'; ?>
+        </div>
         <div class="wrapper">
-            <div class="header-container">
-                <?php include 'header.php'; ?>
-            </div>
             <main>
                 <section id="safety">
                     <h2>Safety Tips for Airdrop Participants</h2>

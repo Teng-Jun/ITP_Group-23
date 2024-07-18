@@ -39,10 +39,10 @@
     </style>
 </head>
 <body>
+    <div class="header-container">
+        <?php include 'header.php'; ?>
+    </div>
     <div class="wrapper">
-        <div class="header-container">
-            <?php include 'header.php'; ?>
-        </div>
         <main>
             <a href="upcoming.php" class="back-button">Back to Upcoming Airdrops</a>
             <h2>Airdrop Details</h2>
