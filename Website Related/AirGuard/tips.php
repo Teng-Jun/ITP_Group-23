@@ -6,7 +6,7 @@
         <title>Safety Tips - Airdrop Tracker</title>
         <link rel="stylesheet" href="styles.css">
         <link rel="icon" type="image/png" href="image/airguard-favicon-color-32.png">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link rel="stylesh  eet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
          <style>
             body {
                 font-family: 'Arial', sans-serif;
@@ -15,7 +15,7 @@
                 box-sizing: border-box;
                 display: flex;
                 justify-content: center;
-                align-items: center;
+/*                align-items: center;*/
                 height: 100vh;
                 background-color: white;
             }
@@ -63,10 +63,10 @@
     </style>
     </head>
     <body>
+        <div class="header-container">
+            <?php include 'header.php'; ?>
+        </div>
         <div class="wrapper">
-            <div class="header-container">
-                <?php include 'header.php'; ?>
-            </div>
             <main>
                 <h2>Safety Tips for Airdrop Participants</h2>
                 <section id="safety">
