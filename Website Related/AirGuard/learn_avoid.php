@@ -95,6 +95,30 @@
             margin: 20px;
             text-align: center;
         }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .pagination a {
+            color: black;
+            padding: 8px 16px;
+            text-decoration: none;
+            transition: background-color .3s;
+        }
+
+        .pagination a.active {
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 5px;
+        }
+
+        .pagination a:hover:not(.active) {
+            background-color: #ddd;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -110,10 +134,22 @@
             <div class="container">
                 <?php
                 include 'dbconnection.php';
-                $sql = "SELECT * FROM learnandavoid";
+
+                $results_per_page = 15;
+                $sql = "SELECT COUNT(*) AS total FROM learnandavoid";
                 $result = $conn->query($sql);
+                $row = $result->fetch_assoc();
+                $total_results = $row['total'];
+                $total_pages = ceil($total_results / $results_per_page);
+
+                $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+                $start_from = ($page - 1) * $results_per_page;
+
+                $sql = "SELECT * FROM learnandavoid LIMIT $start_from, $results_per_page";
+                $result = $conn->query($sql);
+
                 if ($result->num_rows > 0) {
-                    while($row = $result->fetch_assoc()) {
+                    while ($row = $result->fetch_assoc()) {
                         echo '<div class="card">';
                         echo '<img src="' . htmlspecialchars($row['image']) . '" alt="' . htmlspecialchars($row['name']) . '">';
                         echo '<div class="card-content">';
@@ -131,7 +167,63 @@
                 } else {
                     echo '<p>No scam data available.</p>';
                 }
-                $conn->close();
+                ?>
+            </div>
+            <div class="pagination">
+                <?php
+                if ($page > 1) {
+                    echo "<a href='learn_avoid.php?page=1'>&laquo; First</a>";
+                    echo "<a href='learn_avoid.php?page=" . ($page - 1) . "'>&lsaquo; " . ($page - 1) . "</a>";
+                }
+
+                if ($total_pages <= 5) {
+                    for ($i = 1; $i <= $total_pages; $i++) {
+                        if ($i == $page) {
+                            echo "<a class='active' href='learn_avoid.php?page=" . $i . "'>" . $i . "</a>";
+                        } else {
+                            echo "<a href='learn_avoid.php?page=" . $i . "'>" . $i . "</a>";
+                        }
+                    }
+                } else {
+                    if ($page <= 3) {
+                        for ($i = 1; $i <= 5; $i++) {
+                            if ($i == $page) {
+                                echo "<a class='active' href='learn_avoid.php?page=" . $i . "'>" . $i . "</a>";
+                            } else {
+                                echo "<a href='learn_avoid.php?page=" . $i . "'>" . $i . "</a>";
+                            }
+                        }
+                        echo "<a class='disabled'>...</a>";
+                        echo "<a href='learn_avoid.php?page=" . $total_pages . "'>" . $total_pages . "</a>";
+                    } elseif ($page > 3 && $page < $total_pages - 2) {
+                        echo "<a href='learn_avoid.php?page=1'>1</a>";
+                        echo "<a class='disabled'>...</a>";
+                        for ($i = $page - 2; $i <= $page + 2; $i++) {
+                            if ($i == $page) {
+                                echo "<a class='active' href='learn_avoid.php?page=" . $i . "'>" . $i . "</a>";
+                            } else {
+                                echo "<a href='learn_avoid.php?page=" . $i . "'>" . $i . "</a>";
+                            }
+                        }
+                        echo "<a class='disabled'>...</a>";
+                        echo "<a href='learn_avoid.php?page=" . $total_pages . "'>" . $total_pages . "</a>";
+                    } else {
+                        echo "<a href='learn_avoid.php?page=1'>1</a>";
+                        echo "<a class='disabled'>...</a>";
+                        for ($i = $total_pages - 4; $i <= $total_pages; $i++) {
+                            if ($i == $page) {
+                                echo "<a class='active' href='learn_avoid.php?page=" . $i . "'>" . $i . "</a>";
+                            } else {
+                                echo "<a href='learn_avoid.php?page=" . $i . "'>" . $i . "</a>";
+                            }
+                        }
+                    }
+                }
+
+                if ($page < $total_pages) {
+                    echo "<a href='learn_avoid.php?page=" . ($page + 1) . "'>" . ($page + 1) . " &rsaquo;</a>";
+                    echo "<a href='learn_avoid.php?page=" . $total_pages . "'>Last &raquo;</a>";
+                }
                 ?>
             </div>
         </main>
