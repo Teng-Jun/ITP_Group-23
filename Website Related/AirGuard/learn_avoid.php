@@ -119,6 +119,34 @@
             background-color: #ddd;
             border-radius: 5px;
         }
+
+        .search-bar {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        .search-bar input[type="text"] {
+            width: 300px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        .search-bar button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+        }
+
+        .search-bar button:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
@@ -131,12 +159,19 @@
             <p class="disclaimer">
                 Disclaimer: Users must exercise due diligence to determine the reliability of free airdrops or Web3 project tokens. We are not responsible for your actions taken based on this information. Be aware of the common saying about "rug pulls" in crypto, especially for new projects using airdrops to distribute free tokens. This data is provided based on Reddit discussions and vetted websites.
             </p>
+            <div class="search-bar">
+                <form action="learn_avoid.php" method="GET">
+                    <input type="text" name="search" placeholder="Search by name..." value="<?php echo htmlspecialchars(isset($_GET['search']) ? $_GET['search'] : ''); ?>">
+                    <button type="submit">Search</button>
+                </form>
+            </div>
             <div class="container">
                 <?php
                 include 'dbconnection.php';
 
                 $results_per_page = 15;
-                $sql = "SELECT COUNT(*) AS total FROM learnandavoid";
+                $search = isset($_GET['search']) ? $conn->real_escape_string($_GET['search']) : '';
+                $sql = "SELECT COUNT(*) AS total FROM learnandavoid WHERE name LIKE '%$search%'";
                 $result = $conn->query($sql);
                 $row = $result->fetch_assoc();
                 $total_results = $row['total'];
@@ -145,7 +180,7 @@
                 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
                 $start_from = ($page - 1) * $results_per_page;
 
-                $sql = "SELECT * FROM learnandavoid LIMIT $start_from, $results_per_page";
+                $sql = "SELECT * FROM learnandavoid WHERE name LIKE '%$search%' LIMIT $start_from, $results_per_page";
                 $result = $conn->query($sql);
 
                 if ($result->num_rows > 0) {
@@ -172,57 +207,57 @@
             <div class="pagination">
                 <?php
                 if ($page > 1) {
-                    echo "<a href='learn_avoid.php?page=1'>&laquo; First</a>";
-                    echo "<a href='learn_avoid.php?page=" . ($page - 1) . "'>&lsaquo; " . ($page - 1) . "</a>";
+                    echo "<a href='learn_avoid.php?page=1&search=" . urlencode($search) . "'>&laquo; First</a>";
+                    echo "<a href='learn_avoid.php?page=" . ($page - 1) . "&search=" . urlencode($search) . "'>&lsaquo; Previous</a>";
                 }
 
                 if ($total_pages <= 5) {
                     for ($i = 1; $i <= $total_pages; $i++) {
                         if ($i == $page) {
-                            echo "<a class='active' href='learn_avoid.php?page=" . $i . "'>" . $i . "</a>";
+                            echo "<a class='active' href='learn_avoid.php?page=" . $i . "&search=" . urlencode($search) . "'>" . $i . "</a>";
                         } else {
-                            echo "<a href='learn_avoid.php?page=" . $i . "'>" . $i . "</a>";
+                            echo "<a href='learn_avoid.php?page=" . $i . "&search=" . urlencode($search) . "'>" . $i . "</a>";
                         }
                     }
                 } else {
                     if ($page <= 3) {
                         for ($i = 1; $i <= 5; $i++) {
                             if ($i == $page) {
-                                echo "<a class='active' href='learn_avoid.php?page=" . $i . "'>" . $i . "</a>";
+                                echo "<a class='active' href='learn_avoid.php?page=" . $i . "&search=" . urlencode($search) . "'>" . $i . "</a>";
                             } else {
-                                echo "<a href='learn_avoid.php?page=" . $i . "'>" . $i . "</a>";
+                                echo "<a href='learn_avoid.php?page=" . $i . "&search=" . urlencode($search)     . "'>" . $i . "</a>";
                             }
                         }
                         echo "<a class='disabled'>...</a>";
-                        echo "<a href='learn_avoid.php?page=" . $total_pages . "'>" . $total_pages . "</a>";
+                        echo "<a href='learn_avoid.php?page=" . $total_pages . "&search=" . urlencode($search) . "'>" . $total_pages . "</a>";
                     } elseif ($page > 3 && $page < $total_pages - 2) {
-                        echo "<a href='learn_avoid.php?page=1'>1</a>";
+                        echo "<a href='learn_avoid.php?page=1&search=" . urlencode($search) . "'>1</a>";
                         echo "<a class='disabled'>...</a>";
                         for ($i = $page - 2; $i <= $page + 2; $i++) {
                             if ($i == $page) {
-                                echo "<a class='active' href='learn_avoid.php?page=" . $i . "'>" . $i . "</a>";
+                                echo "<a class='active' href='learn_avoid.php?page=" . $i . "&search=" . urlencode($search) . "'>" . $i . "</a>";
                             } else {
-                                echo "<a href='learn_avoid.php?page=" . $i . "'>" . $i . "</a>";
+                                echo "<a href='learn_avoid.php?page=" . $i . "&search=" . urlencode($search) . "'>" . $i . "</a>";
                             }
                         }
                         echo "<a class='disabled'>...</a>";
-                        echo "<a href='learn_avoid.php?page=" . $total_pages . "'>" . $total_pages . "</a>";
+                        echo "<a href='learn_avoid.php?page=" . $total_pages . "&search=" . urlencode($search) . "'>" . $total_pages . "</a>";
                     } else {
-                        echo "<a href='learn_avoid.php?page=1'>1</a>";
+                        echo "<a href='learn_avoid.php?page=1&search=" . urlencode($search) . "'>1</a>";
                         echo "<a class='disabled'>...</a>";
                         for ($i = $total_pages - 4; $i <= $total_pages; $i++) {
                             if ($i == $page) {
-                                echo "<a class='active' href='learn_avoid.php?page=" . $i . "'>" . $i . "</a>";
+                                echo "<a class='active' href='learn_avoid.php?page=" . $i . "&search=" . urlencode($search) . "'>" . $i . "</a>";
                             } else {
-                                echo "<a href='learn_avoid.php?page=" . $i . "'>" . $i . "</a>";
+                                echo "<a href='learn_avoid.php?page=" . $i . "&search=" . urlencode($search) . "'>" . $i . "</a>";
                             }
                         }
                     }
                 }
 
                 if ($page < $total_pages) {
-                    echo "<a href='learn_avoid.php?page=" . ($page + 1) . "'>" . ($page + 1) . " &rsaquo;</a>";
-                    echo "<a href='learn_avoid.php?page=" . $total_pages . "'>Last &raquo;</a>";
+                    echo "<a href='learn_avoid.php?page=" . ($page + 1) . "&search=" . urlencode($search) . "'>Next &rsaquo;</a>";
+                    echo "<a href='learn_avoid.php?page=" . $total_pages . "&search=" . urlencode($search) . "'>Last &raquo;</a>";
                 }
                 ?>
             </div>
