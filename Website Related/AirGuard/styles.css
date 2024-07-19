@@ -9,7 +9,6 @@ body {
     display: flex;
     flex-direction: column; /* Ensure content flows vertically */
     min-height: 50vh; /* Ensure the body covers at least the full viewport height */
-    min-width: 100vw;
 }
 
 .wrapper {

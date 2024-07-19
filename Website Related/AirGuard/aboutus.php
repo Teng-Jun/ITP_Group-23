@@ -7,33 +7,121 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="icon" type="image/png" href="image/airguard-favicon-color-32.png">
+    <style>
+        /* Enhancements for aboutus.php */
+        .about-section {
+            padding: 60px 0;
+        }
+
+        .about-section h2 {
+            color: #007BFF;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .about-item {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .about-item img {
+            max-width: 80px;
+            margin-bottom: 20px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .about-item h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .about-item p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #333;
+        }
+        
+        .card {
+            border: none;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+            height: 100%;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+        }
+
+        .card-body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .card img {
+            max-width: 80px;
+            margin-bottom: 20px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .card-title {
+            margin-top: auto;
+            margin-bottom: auto;
+        }
+
+        .card-text {
+            margin-top: auto;
+            margin-bottom: auto;
+        }
+    </style>
 </head>
 <body>
     <div class="header-container">
         <?php include 'header.php'; ?>
     </div>
     <div class="wrapper"> 
-        <main>
-            <h2>About Us</h2>
+        <main class="about-section">
             <div class="container">
-            <section id="about-us">
-                <div class="about-us-content">
-                    <h3>Who We Are</h3>
-                    <p>Welcome to Airdrop Tracker, your number one source for tracking cryptocurrency airdrops. We are dedicated to giving you the very best of information, with a focus on reliability, user experience, and uniqueness.</p>
-                    
-                    <h3>Our Mission</h3>
-                    <p>Our mission is to make the process of discovering and claiming airdrops easier and more accessible to everyone. We aim to provide detailed guides and up-to-date information to help you navigate the exciting world of cryptocurrency airdrops.</p>
-                    
-                    <h3>Our Team</h3>
-                    <p>Founded in 2024, Airdrop Tracker has come a long way from its beginnings. When we first started out, our passion for simplifying cryptocurrency airdrops drove us to do intense research so that Airdrop Tracker can offer you the best information available. We now serve users all over the world and are thrilled that we're able to turn our passion into our own website.</p>
-
-                    <h3>Contact Us</h3>
-                    <p>If you have any questions or comments, please don't hesitate to contact us. We are here to help and support you in your journey through the world of cryptocurrency.</p>
+                <h1>About Us</h1>
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <div class="card about-item">
+                            <div class="card-body">
+                                <img src="image/who.png" alt="Who We Are">
+                                <h3 class="card-title">Who We Are</h3>
+                                <p class="card-text">AirGuard is your top source for tracking cryptocurrency airdrops, focusing on reliability, user experience, and uniqueness.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card about-item">
+                            <div class="card-body">
+                                <img src="image/mission.png" alt="Our Mission">
+                                <h3 class="card-title">Our Mission</h3>
+                                <p class="card-text">To simplify discovering and claiming airdrops, making it accessible for everyone with detailed guides and up-to-date information.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-4">
+                        <div class="card about-item">
+                            <div class="card-body">
+                                <img src="image/team.png" alt="Our Team">
+                                <h3 class="card-title">Our Team</h3>
+                                <p class="card-text">Founded in 2024, our passion for simplifying airdrops drives us to offer the best information. We now serve users worldwide.</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </section>
             </div>
         </main>
     </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

@@ -33,6 +33,17 @@
             height: 12px;
             margin-right: 5px;
         }
+        .button-container {
+            margin-top: 20px; /* Add some space above the buttons */
+            text-align: center; /* Center the buttons */
+        }
+        .btn {
+            margin: 5px; /* Add some margin between buttons */
+        }
+        #search form {
+            display: block;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -53,13 +64,13 @@
                         <option value="Airdrop Expired">Expired</option>
                     </select>
                     <button type="submit">Search</button>
-                    <button type="button" id="resetButton">Reset</button>
+                    <button class="btn btn-primary" id="resetButton">Reset</button>
                 </form>
             </section>
             <div class="tabs">
-                <button class="tab-button active">Tokens: Most Scanned</button>
-                <button class="tab-button">Tokens: Dangerous Threats</button>
-                <button class="tab-button">Tokens: by Market Cap</button>
+                <button id="most-scanned" class="tab-button active" onclick="filterTokens('most-scanned')">Tokens: Most Scanned</button>
+                <button id="dangerous-threats" class="tab-button" onclick="filterTokens('dangerous-threats')">Tokens: Dangerous Threats</button>
+                <button id="market-cap" class="tab-button" onclick="filterTokens('market-cap')">Tokens: by Market Cap</button>
             </div>
             <div class="airdrop-container">
                 <div class="airdrop-container">
@@ -93,7 +104,7 @@
                                 <th>Website</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="token-list">
                             <?php
                                 include 'dbconnection.php';
 
@@ -178,9 +189,11 @@
             </div>
             </div>
         </main>
+        <script src="script.js"></script>
     </div>
     <script src="script.js"></script>
     <script>
+        
         function updateCustomLegend(chart, legendContainer) {
             const data = chart.data.datasets[0].data;
             legendContainer.innerHTML = `
@@ -273,5 +286,8 @@
             });
         }
     </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
