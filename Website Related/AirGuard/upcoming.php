@@ -173,14 +173,11 @@
                     </select>
                     <button type="submit" class="btn btn-primary ">Search</button>
                     <button class="btn btn-success" id="resetButton">Reset</button>
-                    <button type="submit" class="btn btn-primary">Search</button>
-                    <button type="button" class="btn btn-secondary" id="resetButton">Reset</button>
                 </form>
             </section>
             <div class="tabs">
                 <button id="most-scanned" class="tab-button" onclick="filterTokens('most-scanned')">Tokens: Most Scanned</button>
                 <button id="dangerous-threats" class="tab-button" onclick="filterTokens('dangerous-threats')">Tokens: Dangerous Threats</button>
-                <button id="requirements-need" class="tab-button" onclick="filterTokens('requirements-need')">Tokens: Requirements Need</button>
                 <button id="requirements-need" class="tab-button" onclick="filterTokens('requirements-need')">Tokens: Requirements Need</button>
             </div>
             <div class="airdrop-container">
@@ -194,6 +191,7 @@
                                 <th>Chain</th>
                                 <th>Risk Score</th>
                                 <th>Status</th>
+                                <th>Sentiment</th>
                                 <th>Requirements</th>
                                 <th>Whitepaper</th>
                                 <th>Social</th>
@@ -201,6 +199,7 @@
                                 <th></th>
                             </tr>
                             <tr>
+                                <th></th>
                                 <th></th>
                                 <th></th>
                                 <th></th>
