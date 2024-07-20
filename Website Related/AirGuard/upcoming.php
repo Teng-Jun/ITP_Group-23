@@ -152,6 +152,18 @@
             display: block;
             text-align: center;
         }
+        
+        thead th {
+            vertical-align: middle; /* Center vertically */
+            font-weight: bold;
+            align-items: center;
+            text-align: center;
+            text-transform: uppercase;
+            color: #666;
+            font-size: 12px;
+            position: relative;
+            cursor: pointer;
+        }  
     </style>
 </head>
 <body>
@@ -194,9 +206,7 @@
                                 <th>Sentiment</th>
                                 <th>Requirements</th>
                                 <th>Whitepaper</th>
-                                <th>Social</th>
-                                <th>Media</th>
-                                <th></th>
+                                <th colspan="3" class="social-media-header">Social Media</th>
                             </tr>
                             <tr>
                                 <th></th>

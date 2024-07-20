@@ -92,32 +92,22 @@ th, td {
     background-color: #f9f9f9; /* Optional: Sets a background color for better readability */
 }
 
-thead {
-    background-color: #f1f1f1; /* Optional: Sets a background color for the table header */
+thead th[colspan="3"].social-media-header {
+    font-weight: bold;
+    align-items: center;
+    text-align: center;
 }
 
-th {
+thead th {
+    vertical-align: middle; /* Center vertically */
     font-weight: bold;
+    align-items: center;
+    text-align: center;
     text-transform: uppercase;
     color: #666;
     font-size: 12px;
     position: relative;
     cursor: pointer;
-}
-
-th::after {
-    content: '▼';
-    font-size: 10px;
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #999;
-    display: none;
-}
-
-th.sortable:hover::after {
-    display: block;
 }
 
 td img {
