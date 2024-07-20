@@ -135,6 +135,18 @@
             height: 12px;
             margin-right: 5px;
         }
+        
+        .button-container {
+            margin-top: 20px; /* Add some space above the buttons */
+            text-align: center; /* Center the buttons */
+        }
+
+        .btn {
+            max-width: 30em; /* Limits the maximum width of the button */
+            max-height: 20em;
+            white-space: nowrap; /* Prevents the button text from wrapping */
+        }
+        
 
         #search form {
             display: block;
@@ -159,13 +171,16 @@
                         <option value="Airdrop Unconfirmed">Unconfirmed</option>
                         <option value="Airdrop Expired">Expired</option>
                     </select>
+                    <button type="submit" class="btn btn-primary ">Search</button>
+                    <button class="btn btn-success" id="resetButton">Reset</button>
                     <button type="submit" class="btn btn-primary">Search</button>
                     <button type="button" class="btn btn-secondary" id="resetButton">Reset</button>
                 </form>
             </section>
             <div class="tabs">
-                <button id="most-scanned" class="tab-button active" onclick="filterTokens('most-scanned')">Tokens: Most Scanned</button>
+                <button id="most-scanned" class="tab-button" onclick="filterTokens('most-scanned')">Tokens: Most Scanned</button>
                 <button id="dangerous-threats" class="tab-button" onclick="filterTokens('dangerous-threats')">Tokens: Dangerous Threats</button>
+                <button id="requirements-need" class="tab-button" onclick="filterTokens('requirements-need')">Tokens: Requirements Need</button>
                 <button id="requirements-need" class="tab-button" onclick="filterTokens('requirements-need')">Tokens: Requirements Need</button>
             </div>
             <div class="airdrop-container">
@@ -179,7 +194,6 @@
                                 <th>Chain</th>
                                 <th>Risk Score</th>
                                 <th>Status</th>
-                                <th>Sentiments</th>
                                 <th>Requirements</th>
                                 <th>Whitepaper</th>
                                 <th>Social</th>
@@ -187,7 +201,6 @@
                                 <th></th>
                             </tr>
                             <tr>
-                                <th></th>
                                 <th></th>
                                 <th></th>
                                 <th></th>
@@ -238,6 +251,8 @@
                                 $result = $stmt->get_result();
                                 
                                 $tokens = [];
+                                
+                                $tokens = [];
                                 if ($result->num_rows > 0) {
                                     $index = 1;
                                     while($row = $result->fetch_assoc()) {
@@ -270,6 +285,7 @@
                                         
                                         echo '<tr>';
                                         echo '<td>' . $index++ . '</td>';
+                                        echo '<td><a href="upcoming_details.php?id=' . htmlspecialchars($row['id']) . '" class="airdrop-item-link"><img src="' . htmlspecialchars($row['Thumbnail']) . '" alt="Token Logo" class="upcomingtoken-logo"> ' . htmlspecialchars($row['tle']) . '</a></td>';
                                         echo '<td><a href="upcoming_details.php?id=' . htmlspecialchars($row['id']) . '" class="airdrop-item-link"><img src="' . htmlspecialchars($row['Thumbnail']) . '" alt="Token Logo" class="upcomingtoken-logo"> ' . htmlspecialchars($row['tle']) . '</a></td>';
                                         echo '<td>' . htmlspecialchars($row['Platform']) . '</td>';
                                         echo '<td>' . htmlspecialchars($row['RiskScore']) . '</td>';

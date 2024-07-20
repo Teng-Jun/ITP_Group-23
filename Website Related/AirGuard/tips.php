@@ -25,8 +25,8 @@
              
             .text-box {
                 width: 60vw;
-                height: 10vh;
-                padding: 3em;
+                height: 15vh;
+                padding: 2em;
                 border: 1em transparent;
                 position: relative;
                 overflow: hidden;
@@ -60,6 +60,9 @@
                 justify-content: center;
                 text-align: center;
             }
+            .notice {
+                margin-top: 1em;
+            }
     </style>
     </head>
     <body>
@@ -71,9 +74,12 @@
                 <h2>Safety Tips for Airdrop Participants</h2>
                 <section id="safety">
                     <div class="container">
+                        <span class="notice">
+                        <p style="color: red"><b>Before collecting any Crypto Airdrop (especially free ones!) Here are a few reminders for you to take note!</b></p>
+                        </span>
                         <div class="text-box">
                             <span class="initial-text">Always Verify the Source</span>
-                            <p><span class="more-text">Make sure the airdrop is from a reputable source. Check official websites or trusted platforms before participating.</span></P>
+                            <p><span class="more-text">Make sure the airdrop is from a reputable source. Check official websites or trusted platforms (Reddit, Google, Crypto.io) before participating.</span></P>
                         </div>
                         <div class="text-box">
                             <span class="initial-text">Be Cautious with Private Keys</span>

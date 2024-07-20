@@ -82,17 +82,18 @@ h2{
 
 table {
     width: 100%;
-    border-collapse: collapse;
-}
-
-thead {
-    background-color: #f8f8f8;
+    border-collapse: collapse; /* Ensures there are no spaces between borders */
 }
 
 th, td {
-    padding: 10px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
+    padding: 10px; /* Adds padding inside table cells */
+    text-align: center;
+    border: none; /* Removes borders from table cells */
+    background-color: #f9f9f9; /* Optional: Sets a background color for better readability */
+}
+
+thead {
+    background-color: #f1f1f1; /* Optional: Sets a background color for the table header */
 }
 
 th {
@@ -128,6 +129,11 @@ td img {
 
 .symbol {
     margin-right: 20px;
+}
+
+.upcomingtoken-logo {
+    max-width: 50px; /* Limits the maximum width of the token logo */
+    height: auto; /* Maintains aspect ratio */
 }
 
 
