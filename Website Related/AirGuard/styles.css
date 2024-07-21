@@ -136,20 +136,20 @@ nav ul {
 nav ul li {
     display: inline-block;
     margin: 0.3rem;
-    background-color: #007BFF; /* Slightly different blue to stand out against the header */
-    color: white;
+    background-color: #007fff; /* Slightly different blue to stand out against the header */
+    color: black;
     padding: 0.8rem 1rem;
     border-radius: 5px;
     transition: font-weight 0.3s;
 }
 nav ul li a {
-    color: white;
+    color: black;
     text-decoration: none;
 }
 
 nav ul li:hover, nav ul li:active {
     font-weight: bold;
-    background-color: #0056b3; /* Darker blue for hover effect */
+    background-color: #0073cf; /* Darker blue for hover effect */
 }
 
 /* Footer styles */
