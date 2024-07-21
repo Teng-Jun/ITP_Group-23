@@ -133,11 +133,11 @@ sample_weights = compute_sample_weight(class_weight={0: weight_for_0, 1: weight_
 
 # Initialize and train the gradient boosting model
 gbm_model = GradientBoostingClassifier(random_state=42)
-gbm_model.fit(X_train_ada, y_train_ada, sample_weight=sample_weights)
+gbm_model.fit(X_train, y_train)
 
 # Initialize and train the random forest model
-rf_model = RandomForestClassifier(random_state=42, class_weight=class_weights)
-rf_model.fit(X_train_ada, y_train_ada)
+rf_model = RandomForestClassifier(random_state=42)
+rf_model.fit(X_train, y_train)
 
 # Predict probabilities on the test set
 gbm_probs = gbm_model.predict_proba(X_test)[:, 1]

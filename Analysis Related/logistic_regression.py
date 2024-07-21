@@ -92,12 +92,8 @@ lr_model = grid_lr.best_estimator_
 # class_weights = {0: weight_for_0, 1: weight_for_1}
 
 # Initialize and train the logistic regression model
-# lr_model = LogisticRegression()
-# lr_model.fit(X_train, y_train)
-
-# Predictions on the test set
-# The predict method in LogisticRegression (and other classifiers in scikit-learn) internally uses a default threshold of 0.5 to convert the model's output probabilities into class labels. When the predicted probability is greater than or equal to 0.5, the method assigns a class label of 1; otherwise, it assigns a class label of 0
-# lr_pred = lr_model.predict(X_test)
+lr_model = LogisticRegression()
+lr_model.fit(X_train, y_train)
 
 # Predictions on the test set
 lr_pred = lr_model.predict(X_test)

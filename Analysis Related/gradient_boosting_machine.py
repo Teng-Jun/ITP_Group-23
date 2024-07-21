@@ -1,12 +1,13 @@
 import pandas as pd
 from imblearn.over_sampling import SMOTE, ADASYN
 from sklearn.model_selection import train_test_split, GridSearchCV
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
-from imblearn.pipeline import Pipeline 
+from sklearn.utils.class_weight import compute_sample_weight
+from imblearn.pipeline import Pipeline
+from sklearn.metrics import make_scorer
 import joblib
-
 
 # Load the labeled data
 data_path = 'processed_airdrops_data_with_more_scam_labelled.csv'
@@ -24,47 +25,47 @@ X_scaled = scaler.fit_transform(X)
 # Split the data into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.3, random_state=42)
 
-# total_samples = 1842 + 1001
-# num_classes = 2
-# count_class_0 = 1842
-# count_class_1 = 1001
-
-# weight_for_0 = total_samples / (num_classes * count_class_0)
-# weight_for_1 = total_samples / (num_classes * count_class_1)
-
-# class_weights = {0: weight_for_0, 1: weight_for_1}
-
-# # Apply SMOTE to the training data
+# # #Applying SMOTE
 # smote = SMOTE(random_state=42)
 # X_train_smote, y_train_smote = smote.fit_resample(X_train, y_train)
 
+# # #Apply ADASYN to the training data
+# adasyn = ADASYN(random_state=42)
+# X_train_ada, y_train_ada = adasyn.fit_resample(X_train, y_train)
 
-# #Calculate class weights based on the imbalance
-# total_samples = len(y_train_smote)
+# sample_weights = compute_sample_weight(class_weight='balanced', y=y_train_ada)
+
+# weight_for_0 = 1  # weight for majority class
+# weight_for_1 = 1842 / 1001  # weight for minority class, more heavily weighted
+# sample_weights = compute_sample_weight(
+#     class_weight={0: weight_for_0, 1: weight_for_1},
+#     y=y_train
+# )
+
+# # Calculate class weights based on the new distribution after SMOTE
+# total_samples = len(y_train_smote)  # Total number of samples after SMOTE
 # num_classes = 2
-# count_class_0 = sum(y_train_smote == 0)
-# count_class_1 = sum(y_train_smote == 1)
+# count_class_0 = sum(y_train_smote == 0)  # Number of samples in majority class after SMOTE
+# count_class_1 = sum(y_train_smote == 1)  # Number of samples in minority class after SMOTE
+
+# # Using direct ratio for explicit weights
+# weight_for_0 = 1  # Normalized weight for majority class
+# weight_for_1 = count_class_0 / count_class_1  # Explicit weight for minority class based on their ratio
+
+# class_weights = {0: weight_for_0, 1: weight_for_1}
+# sample_weights = compute_sample_weight(class_weight={0: weight_for_0, 1: weight_for_1}, y=y_train_smote)
+
+# # Calculate class weights based on the new distribution after ADASYN
+# total_samples = len(y_train_ada)
+# num_classes = 2
+# count_class_0 = sum(y_train_ada == 0)
+# count_class_1 = sum(y_train_ada == 1)
 
 # weight_for_0 = total_samples / (num_classes * count_class_0)
 # weight_for_1 = total_samples / (num_classes * count_class_1)
 
 # class_weights = {0: weight_for_0, 1: weight_for_1}
-
-# Apply ADASYN to the training data
-adasyn = ADASYN(random_state=42)
-X_train_ada, y_train_ada = adasyn.fit_resample(X_train, y_train)
-
-
-# # Calculate class weights based on the new distribution after ADASYN
-total_samples = len(y_train_ada)
-num_classes = 2
-count_class_0 = sum(y_train_ada == 0)
-count_class_1 = sum(y_train_ada == 1)
-
-weight_for_0 = total_samples / (num_classes * count_class_0)
-weight_for_1 = total_samples / (num_classes * count_class_1)
-
-class_weights = {0: weight_for_0, 1: weight_for_1}
+# sample_weights = compute_sample_weight(class_weight={0: weight_for_0, 1: weight_for_1}, y=y_train_ada)
 
 # # Define the parameter grid
 # param_grid = {
@@ -77,14 +78,13 @@ class_weights = {0: weight_for_0, 1: weight_for_1}
 
 # # Setup GridSearchCV
 # grid = GridSearchCV(
-#     estimator=RandomForestClassifier(random_state=42, class_weight=class_weights),
+#     estimator=GradientBoostingClassifier(random_state=42),
 #     param_grid=param_grid,
 #     scoring=None,  # Can use multiple metrics or change this as needed
 #     cv=3,  # Number of folds in cross-validation
 #     verbose=2,
 #     n_jobs=-1  # Use all processors
 # )
-
 
 
 # # Define the parameter grid
@@ -98,7 +98,7 @@ class_weights = {0: weight_for_0, 1: weight_for_1}
 
 # pipeline = Pipeline([
 #     ('adasyn', ADASYN(random_state=42)),
-#     ('classifier', RandomForestClassifier(random_state=42, class_weight=class_weights))
+#     ('classifier', GradientBoostingClassifier(random_state=42))
 # ])
 
 # # Setup GridSearchCV
@@ -116,40 +116,37 @@ class_weights = {0: weight_for_0, 1: weight_for_1}
 # grid.fit(X_train, y_train)
 
 # # Get the best model
-# best_rf_model = grid.best_estimator_
+# gbm_model = grid.best_estimator_
+
+# # # Predictions on the test set using the best model
+# gbm_pred = gbm_model.predict(X_test)
 
 
+# Initialize and train the Random Forest classifier
+gbm_model = GradientBoostingClassifier(random_state=42)
+gbm_model.fit(X_train, y_train)
 
-# Initialize and train the Random Forest clsassifier
-rf_model = RandomForestClassifier(random_state=42, class_weight=class_weights)
-rf_model.fit(X_train_ada, y_train_ada)
 
 # Predictions on the test set
-rf_pred = rf_model.predict(X_test)
-
-# #Predictions on the test set using the best model
-# rf_pred = best_rf_model.predict(X_test)
+gbm_pred = gbm_model.predict(X_test)
 
 # Evaluate the model
-accuracy = accuracy_score(y_test, rf_pred)
-f1 = f1_score(y_test, rf_pred)
-precision = precision_score(y_test, rf_pred)
-recall = recall_score(y_test, rf_pred)
+accuracy = accuracy_score(y_test, gbm_pred)
+f1 = f1_score(y_test, gbm_pred)
+precision = precision_score(y_test, gbm_pred)
+recall = recall_score(y_test, gbm_pred)
 
 # Save the trained logistic regression model
-model_filename = 'random_forest_model.joblib'
-joblib.dump(rf_model, model_filename)
+model_filename = 'gradient_boosting_model.joblib'
+joblib.dump(gbm_model, model_filename)
 print(f"Model saved to {model_filename}")
 
 # Print evaluation results
-print("Random Forest Results:")
+print("Gradient Boosting Results:")
 print(f"Accuracy: {accuracy*100:.2f}%")
 print(f"F1-score: {f1:.2f}")
 print(f"Precision: {precision:.2f}")
 print(f"Recall: {recall:.2f}")
 
-
 # Optionally, predict probabilities for the ROC curve or other analysis
-# rf_probs = rf_model.predict_proba(X_test)[:, 1]
-
-
+# gbm_probs = gbm_model.predict_proba(X_test)[:, 1]

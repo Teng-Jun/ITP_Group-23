@@ -137,29 +137,29 @@ grid_rf = GridSearchCV(
 #     verbose=2
 # )
 
-# Fit the models
-grid_lr.fit(X_train, y_train)
-grid_rf.fit(X_train, y_train)
+# # Fit the models
+# grid_lr.fit(X_train, y_train)
+# grid_rf.fit(X_train, y_train)
 
-# Get the best models
-lr_model = grid_lr.best_estimator_
-rf_model = grid_rf.best_estimator_
+# # Get the best models
+# lr_model = grid_lr.best_estimator_
+# rf_model = grid_rf.best_estimator_
 
-# Assuming X_test is available
-lr_probs = lr_model.predict_proba(X_test)[:, 1]
-rf_probs = rf_model.predict_proba(X_test)[:, 1]
-
-# # Initialize and train the logistic regression model
-# lr_model = LogisticRegression(class_weight=class_weights)
-# lr_model.fit(X_train_ada, y_train_ada)
-
-# # Initialize and train the random forest model
-# rf_model = RandomForestClassifier(random_state=42, class_weight=class_weights)
-# rf_model.fit(X_train_ada, y_train_ada)
-
-# # Predict probabilities on the test set
+# # Assuming X_test is available
 # lr_probs = lr_model.predict_proba(X_test)[:, 1]
 # rf_probs = rf_model.predict_proba(X_test)[:, 1]
+
+# Initialize and train the logistic regression model
+lr_model = LogisticRegression()
+lr_model.fit(X_train, y_train)
+
+# Initialize and train the random forest model
+rf_model = RandomForestClassifier(random_state=42)
+rf_model.fit(X_train, y_train)
+
+# Predict probabilities on the test set
+lr_probs = lr_model.predict_proba(X_test)[:, 1]
+rf_probs = rf_model.predict_proba(X_test)[:, 1]
 
 
 # Combine the probabilities: Let's say we trust LR a bit less, we give it a weight of 0.4 and RF a weight of 0.6
