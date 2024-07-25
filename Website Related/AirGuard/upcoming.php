@@ -177,7 +177,7 @@
                                 $search = isset($_GET['search']) ? $_GET['search'] : '';
                                 $status = isset($_GET['status']) ? $_GET['status'] : '';
 
-                                $sql = "SELECT * FROM airdrops_data_speculative";
+                                $sql = "SELECT * FROM airdrops_data";
                                 $conditions = [];
                                 $params = [];
                                 $types = '';
@@ -226,7 +226,7 @@
                                         
                                         $tokens[] = [
                                             'id' => $row['id'],
-                                            'airdrop_name' => $row['tle'],
+                                            'airdrop_name' => $row['Title'],
                                             'Thumbnail' => $row['Thumbnail'],
                                             'Platform' => $row['Platform'],
                                             'RiskScore' => $row['RiskScore'],

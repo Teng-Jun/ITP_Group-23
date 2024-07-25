@@ -25,3 +25,19 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
+
+function toggleContent(uniqueId) {
+    const hiddenContent = document.getElementById(uniqueId);
+    if (hiddenContent) {
+        const btn = hiddenContent.previousElementSibling.querySelector('.expand-btn');
+        if (hiddenContent.style.display === "none" || hiddenContent.style.display === "") {
+            hiddenContent.style.display = "block";
+            btn.textContent = "-";
+        } else {
+            hiddenContent.style.display = "none";
+            btn.textContent = "+";
+        }
+    } else {
+        console.error('Element with ID ' + uniqueId + ' not found.');
+    }
+}
