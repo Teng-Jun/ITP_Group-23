@@ -86,10 +86,15 @@ table {
 }
 
 th, td {
-    padding: 10px; /* Adds padding inside table cells */
+    padding: 0.5em;
     text-align: center;
-    border: none; /* Removes borders from table cells */
+    border: solid 1px #ddd; /* Removes borders from table cells */
     background-color: #f9f9f9; /* Optional: Sets a background color for better readability */
+}
+
+td {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 thead th[colspan="3"].social-media-header {
