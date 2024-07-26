@@ -22,12 +22,11 @@
                         <input type="text" name="search" placeholder="Search for airdrops..." aria-label="Search Airdrops">
                         <select name="status">
                             <option value="">All Statuses</option>
-                            <option value="Airdrop Confirmed">Confirmed</option>
                             <option value="Airdrop Unconfirmed">Unconfirmed</option>
-                            <option value="Airdrop Expired">Expired</option>
+                            <option value="n/a">Not Applicable</option>
                         </select>
                         <button type="submit" class="btn btn-primary">Search</button>
-                        <button class="btn btn-success" id="resetButton">Reset</button>
+                        <button type="button" class="btn btn-success" id="resetButton">Reset</button>
                     </form>
                 </section>
                 <div class="tabs">
@@ -36,162 +35,163 @@
                     <button id="requirements-need" class="tab-button" onclick="filterTokens('requirements-need')">Tokens: Requirements Need</button>
                 </div>
                 <div class="airdrop-container">
-                    <div class="airdrop-container">
-                        <table>
-                            <thead>
-                                <h2>Tokens List</h2>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Asset</th>
-                                    <th>Chain</th>
-                                    <th>Risk Score</th>
-                                    <th>Status</th>
-                                    <th>Sentiment</th>
-                                    <th>Requirements</th>
-                                    <th>Whitepaper</th>
-                                    <th colspan="3" class="social-media-header">Social Media</th>
-                                </tr>
-                                <tr>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th>Facebook</th>
-                                    <th>Instagram</th>
-                                    <th>Website</th>
-                                </tr>
-                            </thead>
-                            <tbody id="token-list">
-                                <?php
-                                    include 'dbconnection.php';
+                    <table>
+                        <thead>
+                            <h2>Tokens List</h2>
+                            <tr>
+                                <th>#</th>
+                                <th>Asset</th>
+                                <th>Chain</th>
+                                <th>Risk Score</th>
+                                <th>Status</th>
+                                <th>Sentiment</th>
+                                <th>Requirements</th>
+                                <th>Whitepaper</th>
+                                <th colspan="3" class="social-media-header">Social Media</th>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th>Facebook</th>
+                                <th>Instagram</th>
+                                <th>Website</th>
+                            </tr>
+                        </thead>
+                        <tbody id="token-list">
+                            <?php
+                            include 'dbconnection.php';
 
-                                    $search = isset($_GET['search']) ? $_GET['search'] : '';
-                                    $status = isset($_GET['status']) ? $_GET['status'] : '';
+                            $search = isset($_GET['search']) ? $_GET['search'] : '';
+                            $status = isset($_GET['status']) ? $_GET['status'] : '';
 
-                                    $sql = "SELECT * FROM airdrops_data";
-                                    $conditions = [];
-                                    $params = [];
-                                    $types = '';
+                            $sql = "SELECT * FROM airdrops_data WHERE (Status = 'Airdrop Unconfirmed' OR Status = 'n/a')";
+                            $conditions = [];
+                            $params = [];
+                            $types = '';
 
-                                    if ($search !== '') {
-                                        $conditions[] = "LOWER(Title) LIKE LOWER(?)";
-                                        $params[] = '%' . strtolower($search) . '%';
-                                        $types .= 's';  // string
+                            if ($search !== '') {
+                                $conditions[] = "LOWER(Title) LIKE LOWER(?)";
+                                $params[] = '%' . strtolower($search) . '%';
+                                $types .= 's';  // string
+                            }
+
+                            if ($status !== '') {
+                                $conditions[] = "Status = ?";
+                                $params[] = $status;
+                                $types .= 's';  // string
+                            }
+
+                            if (!empty($conditions)) {
+                                $sql .= " AND " . join(" AND ", $conditions);
+                            }
+
+                            $stmt = $conn->prepare($sql);
+
+                            if ($stmt === false) {
+                                die('Prepare failed: ' . htmlspecialchars($conn->error));
+                            }
+
+                            if (!empty($params)) {
+                                $stmt->bind_param($types, ...$params);
+                            }
+
+                            $stmt->execute();
+                            $result = $stmt->get_result();
+
+                            $tokens = [];
+
+                            if ($result->num_rows > 0) {
+                                $index = 1;
+                                while ($row = $result->fetch_assoc()) {
+                                    $crosses = 0;
+                                    if (empty($row['Facebook'])) {
+                                        $crosses++;
+                                    }
+                                    if (empty($row['Instagram'])) {
+                                        $crosses++;
+                                    }
+                                    if (empty($row['Website'])) {
+                                        $crosses++;
                                     }
 
-                                    if ($status !== '') {
-                                        $conditions[] = "Status = ?";
-                                        $params[] = $status;
-                                        $types .= 's';  // string
-                                    }
+                                    $tokens[] = [
+                                        'id' => $row['id'],
+                                        'airdrop_name' => $row['Title'],
+                                        'Thumbnail' => $row['Thumbnail'],
+                                        'Platform' => $row['Platform'],
+                                        'RiskScore' => $row['RiskScore'],
+                                        'Status' => $row['Status'],
+                                        'Requirements' => $row['Requirements'],
+                                        'Whitepaper' => $row['Whitepaper'],
+                                        'Facebook' => $row['Facebook'],
+                                        'Instagram' => $row['Instagram'],
+                                        'Website' => $row['Website'],
+                                        'TotalValue' => $row['TotalValue'],
+                                        'crosses' => $crosses
+                                    ];
 
-                                    if (!empty($conditions)) {
-                                        $sql .= " WHERE " . join(" AND ", $conditions);
-                                    }
+                                    echo '<tr>';
+                                    echo '<td>' . $index++ . '</td>';
+                                    echo '<td><a href="upcoming_details.php?id=' . htmlspecialchars($row['id']) . '" class="airdrop-item-link"><img src="' . htmlspecialchars($row['Thumbnail']) . '" alt="Token Logo" class="upcomingtoken-logo"> ' . htmlspecialchars($row['Title']) . '</a></td>';
+                                    echo '<td>' . htmlspecialchars($row['Platform']) . '</td>';
+                                    echo '<td>' . htmlspecialchars($row['RiskScore']) . '</td>';
+                                    echo '<td class="' . ($row['Status'] == 'Airdrop Confirmed' ? 'status-confirmed' : ($row['Status'] == 'Airdrop Unconfirmed' ? 'status-pending' : 'status-expired')) . '">' . htmlspecialchars($row['Status']) . '</td>';
 
-                                    $stmt = $conn->prepare($sql);
+                                    echo '<td>';
+                                    echo '<div class="custom-legend">';
+                                    echo '<div class="custom-legend-item">';
+                                    echo '<div class="custom-legend-color" style="background-color: #36a2eb;"></div>';
+                                    echo 'Positive: ' . htmlspecialchars($row['positive_percentage']) . '%';
+                                    echo '</div>';
+                                    echo '<div class="custom-legend-item">';
+                                    echo '<div class="custom-legend-color" style="background-color: #ffcd56;"></div>';
+                                    echo 'Neutral: ' . htmlspecialchars($row['neutral_percentage']) . '%';
+                                    echo '</div>';
+                                    echo '<div class="custom-legend-item">';
+                                    echo '<div class="custom-legend-color" style="background-color: #ff6384;"></div>';
+                                    echo 'Negative: ' . htmlspecialchars($row['negative_percentage']) . '%';
+                                    echo '</div>';
+                                    echo '</div>';
+                                    echo '</td>';
 
-                                    if (!empty($params)) {
-                                        $stmt->bind_param($types, ...$params);
-                                    }
+                                    $requirementStatus = htmlspecialchars($row['Requirements']);
+                                    $requirementsymbol = ($requirementStatus != 'n/a') ? '✔' : '✘';
+                                    echo '<td><span class="requirementsymbol">' . $requirementsymbol . '</span>' . '</td>';
 
-                                    $stmt->execute();
-                                    $result = $stmt->get_result();
+                                    $whitepaperStatus = htmlspecialchars($row['Whitepaper']);
+                                    $whitepaperClass = ($whitepaperStatus != 'n/a') ? '✔' : '✘';
+                                    echo '<td><span class="whitepaperClass">' . $whitepaperClass . '</span>' . '</td>';
 
-                                    $tokens = [];
+                                    $facebookStatus = htmlspecialchars($row['Facebook']);
+                                    $facebookClass = ($facebookStatus != 'n/a') ? '✔' : '✘';
+                                    echo '<td><span class="facebookClass">' . $facebookClass . '</span>' . '</td>';
 
-                                    if ($result->num_rows > 0) {
-                                        $index = 1;
-                                        while ($row = $result->fetch_assoc()) {
-                                            $crosses = 0;
-                                            if (empty($row['Facebook'])) {
-                                                $crosses++;
-                                            }
-                                            if (empty($row['Instagram'])) {
-                                                $crosses++;
-                                            }
-                                            if (empty($row['Website'])) {
-                                                $crosses++;
-                                            }
+                                    $instagramStatus = htmlspecialchars($row['Instagram']);
+                                    $instagramClass = ($instagramStatus != 'n/a') ? '✔' : '✘';
+                                    echo '<td><span class="instagramClass">' . $instagramClass . '</span>' . '</td>';
 
-                                            $tokens[] = [
-                                                'id' => $row['id'],
-                                                'airdrop_name' => $row['Title'],
-                                                'Thumbnail' => $row['Thumbnail'],
-                                                'Platform' => $row['Platform'],
-                                                'RiskScore' => $row['RiskScore'],
-                                                'Status' => $row['Status'],
-                                                'Requirements' => $row['Requirements'],
-                                                'Whitepaper' => $row['Whitepaper'],
-                                                'Facebook' => $row['Facebook'],
-                                                'Instagram' => $row['Instagram'],
-                                                'Website' => $row['Website'],
-                                                'TotalValue' => $row['TotalValue'],
-                                                'crosses' => $crosses
-                                            ];
-
-                                            echo '<tr>';
-                                            echo '<td>' . $index++ . '</td>';
-                                            echo '<td><a href="upcoming_details.php?id=' . htmlspecialchars($row['id']) . '" class="airdrop-item-link"><img src="' . htmlspecialchars($row['Thumbnail']) . '" alt="Token Logo" class="upcomingtoken-logo"> ' . htmlspecialchars($row['Title']) . '</a></td>';
-                                            echo '<td>' . htmlspecialchars($row['Platform']) . '</td>';
-                                            echo '<td>' . htmlspecialchars($row['RiskScore']) . '</td>';
-                                            echo '<td class="' . ($row['Status'] == 'Airdrop Confirmed' ? 'status-confirmed' : ($row['Status'] == 'Airdrop Unconfirmed' ? 'status-pending' : 'status-expired')) . '">' . htmlspecialchars($row['Status']) . '</td>';
-
-                                            echo '<td>';
-                                            echo '<div class="custom-legend">';
-                                            echo '<div class="custom-legend-item">';
-                                            echo '<div class="custom-legend-color" style="background-color: #36a2eb;"></div>';
-                                            echo 'Positive: ' . htmlspecialchars($row['positive_percentage']) . '%';
-                                            echo '</div>';
-                                            echo '<div class="custom-legend-item">';
-                                            echo '<div class="custom-legend-color" style="background-color: #ffcd56;"></div>';
-                                            echo 'Neutral: ' . htmlspecialchars($row['neutral_percentage']) . '%';
-                                            echo '</div>';
-                                            echo '<div class="custom-legend-item">';
-                                            echo '<div class="custom-legend-color" style="background-color: #ff6384;"></div>';
-                                            echo 'Negative: ' . htmlspecialchars($row['negative_percentage']) . '%';
-                                            echo '</div>';
-                                            echo '</div>';
-                                            echo '</td>';
-
-                                            $requirementStatus = htmlspecialchars($row['Requirements']);
-                                            $requirementsymbol = ($requirementStatus != 'n/a') ? '✔' : '✘';
-                                            echo '<td><span class="requirementsymbol">' . $requirementsymbol . '</span>' . '</td>';
-
-                                            $whitepaperStatus = htmlspecialchars($row['Whitepaper']);
-                                            $whitepaperClass = ($whitepaperStatus != 'n/a') ? '✔' : '✘';
-                                            echo '<td><span class="whitepaperClass">' . $whitepaperClass . '</span>' . '</td>';
-
-                                            $facebookStatus = htmlspecialchars($row['Facebook']);
-                                            $facebookClass = ($facebookStatus != 'n/a') ? '✔' : '✘';
-                                            echo '<td><span class="facebookClass">' . $facebookClass . '</span>' . '</td>';
-
-                                            $instagramStatus = htmlspecialchars($row['Instagram']);
-                                            $instagramClass = ($instagramStatus != 'n/a') ? '✔' : '✘';
-                                            echo '<td><span class="instagramClass">' . $instagramClass . '</span>' . '</td>';
-
-                                            $websiteStatus = htmlspecialchars($row['Website']);
-                                            $websiteClass = ($websiteStatus != 'n/a') ? '✔' : '✘';
-                                            echo '<td><span class="websiteClass">' . $websiteClass . '</span>' . '</td>';
-                                            echo '</tr>';
-                                        }
-                                    } else {
-                                        echo '<tr><td colspan="11">No upcoming airdrops found</td></tr>';
-                                    }
-                                    $stmt->close();
-                                    $conn->close();
-                                ?>
-                            </tbody>
-                        </table>
-                    </div>
+                                    $websiteStatus = htmlspecialchars($row['Website']);
+                                    $websiteClass = ($websiteStatus != 'n/a') ? '✔' : '✘';
+                                    echo '<td><span class="websiteClass">' . $websiteClass . '</span>' . '</td>';
+                                    echo '</tr>';
+                                }
+                            } else {
+                                echo '<tr><td colspan="11">No upcoming airdrops found</td></tr>';
+                            }
+                            $stmt->close();
+                            $conn->close();
+                            ?>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </main>
-        <script src="script.js"></script>
     </div>
     <script src="script.js"></script>
     <script>
@@ -202,54 +202,32 @@
         function fetchSentimentData() {
             return fetch('data/sentiment_results.json')
                 .then(response => response.json())
-                .then(data => sentimentData = data)
+                .then(data => {
+                    sentimentData = data;
+                    console.log("Sentiment data fetched successfully", sentimentData);
+                    mergeData();
+                })
                 .catch(error => console.error('Error fetching sentiment data:', error));
         }
 
         // Function to merge sentiment data and token data
         function mergeData() {
-            return tokenData.map(token => {
+            tokenData = tokenData.map(token => {
                 const sentiment = sentimentData.find(s => s.airdrop_name === token.airdrop_name);
                 return {
                     ...token,
                     ...sentiment
                 };
             });
+            displayTokens(tokenData);
         }
 
-        // Function to filter and display tokens
-        function filterTokens(filter) {
-            // Remove active class from all buttons
-            const buttons = document.querySelectorAll('.tab-button');
-            buttons.forEach(button => button.classList.remove('active'));
-
-            // Add active class to the clicked button
-            document.getElementById(filter).classList.add('active');
-
-            // Get the token list container
+        // Function to display tokens
+        function displayTokens(tokens) {
             const tokenList = document.getElementById('token-list');
             tokenList.innerHTML = ''; // Clear current list
 
-            // Filter and display tokens based on the filters
-            const mergedData = mergeData();
-            let filteredTokens;
-
-            // Filter based on high negative sentiments, crosses and risk score (to be added later)
-            if (filter === 'dangerous-threats') {
-                filteredTokens = mergedData.filter(token =>
-                    (token.negative_percentage > 40 || token.crosses >= 3) && token.crosses < 5
-                );
-            } else if (filter === 'most-scanned') {
-                // Assuming other filters have different criteria, adjust as necessary
-                filteredTokens = mergedData; // Default to showing all tokens for demonstration
-            } else if (filter === 'requirements-need') {
-                filteredTokens = mergedData.filter(token => token.Requirements !== 'n/a');
-            } else {
-                // Handle other filters or default case
-                filteredTokens = mergedData;
-            }
-
-            filteredTokens.forEach((token, index) => {
+            tokens.forEach((token, index) => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${index + 1}</td>
@@ -285,8 +263,7 @@
 
         // Fetch data on page load
         document.addEventListener('DOMContentLoaded', () => {
-            fetchSentimentData()
-                .then(() => filterTokens('most-scanned'));
+            fetchSentimentData();
         });
     </script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

@@ -236,6 +236,10 @@ footer {
     color: #ffc107;
 }
 
+.status-confirmed {
+    color: #28a745;
+}
+
 .detail-item {
     text-align: center
 }
