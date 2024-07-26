@@ -200,7 +200,7 @@
 
         // Function to fetch sentiment data from JSON file
         function fetchSentimentData() {
-            return fetch('data/sentiment_results.json')
+            return fetch('data/sentiment_results2.json')
                 .then(response => response.json())
                 .then(data => {
                     sentimentData = data;
