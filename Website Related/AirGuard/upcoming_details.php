@@ -6,6 +6,7 @@
     <title>Airdrop Details - Airdrop Tracker</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="icon" type="image/png" href="image/airguard-favicon-color-32.png">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
@@ -36,6 +37,26 @@
             height: 20px;
             margin-right: 10px;
         }
+        .img {
+            justify-content: center;
+        }
+        .full-width-card {
+            width: 100%;
+        }
+        .card {
+            justify-content: center;
+            align-items: center;
+            margin-top: 2em;
+        }
+        .detail-logo {
+            width: 100vw;
+            height: 100vh;
+        }
+        .disabled {
+            pointer-events: none;
+            color: grey;
+            text-decoration: none; /* Optional: Remove underline from disabled links */
+        }
     </style>
 </head>
 <body>
@@ -52,7 +73,7 @@
                     include 'dbconnection.php';
 
                     $id = isset($_GET['id']) ? $_GET['id'] : '';
-                    $sql = "SELECT * FROM airdrops_data_speculative WHERE id = ?";
+                    $sql = "SELECT * FROM airdrops_data WHERE id = ?";
 
                     $stmt = $conn->prepare($sql);
                     $stmt->bind_param("i", $id); // Assuming 'id' is an integer
@@ -61,28 +82,126 @@
 
                     if ($result->num_rows > 0) {
                         $row = $result->fetch_assoc();
-                        $airdropName = htmlspecialchars($row['tle']);
-                        echo '<div class="detail-item">';
-                        echo '<img src="' . htmlspecialchars($row['Thumbnail']) . '" alt="Token Logo" class="detail-logo">';
-                        echo '<h3>' . $airdropName . '</h3>';
-                        echo '<p>Platform: ' . htmlspecialchars($row['Platform']) . '</p>';
-                        echo '<p>Status: ' . htmlspecialchars($row['Status']) . '</p>';
-                        echo '<p>Features: ' . htmlspecialchars($row['Features']) . '</p>';
-                        $guide = htmlspecialchars($row['Guide']);
-                        $guide = str_replace(['[', ']'], '', $guide); // Removes square brackets
-                        echo '<p>Guide: ' . $guide . '</p>';
-                        echo '<p>Total Value: ' . htmlspecialchars($row['Total_Value']) . '</p>';
-                        echo '<p>Requirements: ' . htmlspecialchars($row['Requirements']) . '</p>';
-                        echo '<p>Number of Previous Drops: ' . htmlspecialchars($row['Num_Of_Prev_Drops']) . '</p>';
-                        echo '<p><a href="' . htmlspecialchars($row['Website']) . '">Project Website</a></p>';
-                        echo '<p><a href="' . htmlspecialchars($row['Whitepaper']) . '">Whitepaper</a></p>';
-                        echo '<p>Facebook: ' . htmlspecialchars($row['Facebook']) . '</p>';
-                        echo '<p>Telegram Group: ' . htmlspecialchars($row['Telegram Group']) . '</p>';
+                        $airdropName = htmlspecialchars($row['Title']);
+                        echo '<div class="row">';
+                        echo '<div class="card full-width-card">';
+                        echo '<div class="card-body"><img src="' . htmlspecialchars($row['Thumbnail']) . '" alt="Token Logo" class="detail-logo"></div>';
                         echo '</div>';
-                        echo '<h3 style="text-align:center; margin-top: 20px;">Reddit Sentiment Analysis</h3>';
+                        echo '</div>';
+                        
+                        echo '<div class="row">';
+                        echo '<div class="card full-width-card">';
+                        echo '<div class="card-body">';
+                        echo '<p><strong>Airdrop Name:</strong> ' . $airdropName . '</p>';
+                        echo '</div>';
+                        echo '</div>';
+                        echo '</div>';
+                        
+                        echo '<div class="row">';
+                        echo '<div class="card full-width-card">';
+                        echo '<div class="card-body">';
+                        echo '<p><strong>Platform:</strong> ' . htmlspecialchars($row['Platform']) . '</p>';
+                        echo '</div>';
+                        echo '</div>';
+                        echo '</div>';
+                        
+                        echo '<div class="row">';
+                        echo '<div class="card full-width-card">';
+                        echo '<div class="card-body">';
+                        echo '<p><strong>Status:</strong> ' . htmlspecialchars($row['Status']) . '</p>';
+                        echo '</div>';
+                        echo '</div>';
+                        echo '</div>';
+                        
+                        echo '<div class="row">';
+                        echo '<div class="card full-width-card">';
+                        echo '<div class="card-body">';
+                        echo '<p><strong>Features:</strong> ' . htmlspecialchars($row['Features']) . '</p>';
+                        echo '</div>';
+                        echo '</div>';
+                        echo '</div>';
+
+                        $guide = htmlspecialchars($row['Guide']);
+                        $guideItems = explode(',', $guide); // Split the string by commas
+
+                        echo '<div class="row">';
+                        echo '<div class="card full-width-card">';
+                        echo '<div class="card-body">';
+                        echo '<p><strong>Guide:</strong></p>';
+                        echo '<ul>';
+                        foreach ($guideItems as $item) {
+                            echo '<li>' . trim($item, " '") . '</li>'; // Trim any leading/trailing whitespace or single quotes
+                        }
+                        echo '</ul>';
+                        echo '</div>';
+                        echo '</div>';
+                        echo '</div>';
+                        
+                        echo '<div class="row">';
+                        echo '<div class="card full-width-card">';
+                        echo '<div class="card-body">';
+                        echo '<p><strong>Total Value:</strong> ' . htmlspecialchars($row['Total_Value']) . '</p>';
+                        echo '</div>';
+                        echo '</div>';
+                        echo '</div>';
+                        
+                        echo '<div class="row">';
+                        echo '<div class="card full-width-card">';
+                        echo '<div class="card-body">';
+                        echo '<p><strong>Requirements:</strong> ' . htmlspecialchars($row['Requirements']) . '</p>';
+                        echo '</div>';
+                        echo '</div>';
+                        echo '</div>';
+                        
+                        echo '<div class="row">';
+                        echo '<div class="card full-width-card">';
+                        echo '<div class="card-body">';
+                        echo '<p><strong>Number of Previous Drops:</strong> ' . htmlspecialchars($row['Num_Of_Prev_Drops']) . '</p>';
+                        echo '</div>';
+                        echo '</div>';
+                        echo '</div>';
+                        
+                        echo '<div class="row">';
+                        echo '<div class="card full-width-card">';
+                        echo '<div class="card-body">';
+                        echo '<p>';
+                        echo !empty($row['Website']) ? 
+                            '<a href="' . htmlspecialchars($row['Website']) . '" target="_blank"><i class="fas fa-globe"></i> Project Website </a>' : 
+                            '<a class="disabled"><i class="fas fa-globe"></i> Project Website </a>';
+                        echo '</p>';
+
+                        echo '<p>';
+                        echo !empty($row['Whitepaper']) ? 
+                            '<a href="' . htmlspecialchars($row['Whitepaper']) . '" target="_blank"><i class="fas fa-file-alt"></i> Whitepaper </a>' : 
+                            '<a class="disabled"><i class="fas fa-file-alt"></i> Whitepaper </a>';
+                        echo '</p>';
+
+                        echo '<p>';
+                        echo !empty($row['Facebook']) ? 
+                            '<a href="' . htmlspecialchars($row['Facebook']) . '" target="_blank"><i class="fab fa-facebook-f"></i> Facebook </a>' : 
+                            '<a class="disabled"><i class="fab fa-facebook-f"></i> Facebook </a>';
+                        echo '</p>';
+
+                        echo '<p>';
+                        echo !empty($row['Telegram Group']) ? 
+                            '<a href="' . htmlspecialchars($row['Telegram Group']) . '" target="_blank"><i class="fab fa-telegram-plane"></i> Telegram Group </a>' : 
+                            '<a class="disabled"><i class="fab fa-telegram-plane"></i> Telegram Group< /a>';
+                        echo '</p>';
+                        echo '</div>';
+                        echo '</div>';
+                        echo '</div>';
+                        
+                        echo '<div class="row">';
+                        echo '<div class="card full-width-card">';
+                        echo '<div class="card-body">';
+                        echo '<h3 style="text-align:center; margin-top: 20px;"><strong>Reddit Sentiment Analysis<strong></h3>';
                         echo '<div class="chart-container"><canvas id="sentimentChart"></canvas></div>';
                         echo '<div class="no-data" style="display:none;">No data from Reddit forum.</div>';
                         echo '<div class="custom-legend" style="display:none;"></div>';
+                        echo '</div>';
+                        echo '</div>';
+                        echo '</div>';
+                        
                     } else {
                         echo "Airdrop details not found.";
                     }
