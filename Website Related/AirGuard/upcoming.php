@@ -120,12 +120,22 @@
                                         $crosses++;
                                     }
 
+                                    // Format the risk score
+                                    $riskScore = $row['Probability'];
+                                    if ($riskScore == 0) {
+                                        $riskScoreDisplay = '<0.01%';
+                                    } elseif ($riskScore == 100) {
+                                        $riskScoreDisplay = '>99.9%';
+                                    } else {
+                                        $riskScoreDisplay = $riskScore . '%';
+                                    }
+
                                     $tokens[] = [
                                         'id' => $row['id'],
                                         'airdrop_name' => $row['Title'],
                                         'Thumbnail' => $row['Thumbnail'],
                                         'Platform' => $row['Platform'],
-                                        'RiskScore' => $row['RiskScore'],
+                                        'RiskScore' => $riskScoreDisplay,
                                         'Status' => $row['Status'],
                                         'Requirements' => $row['Requirements'],
                                         'Whitepaper' => $row['Whitepaper'],
@@ -140,7 +150,7 @@
                                     echo '<td>' . $index++ . '</td>';
                                     echo '<td><a href="upcoming_details.php?id=' . htmlspecialchars($row['id']) . '" class="airdrop-item-link"><img src="' . htmlspecialchars($row['Thumbnail']) . '" alt="Token Logo" class="upcomingtoken-logo"> ' . htmlspecialchars($row['Title']) . '</a></td>';
                                     echo '<td>' . htmlspecialchars($row['Platform']) . '</td>';
-                                    echo '<td>' . htmlspecialchars($row['RiskScore']) . '</td>';
+                                    echo '<td>' . htmlspecialchars($riskScoreDisplay) . '</td>';
                                     echo '<td class="' . ($row['Status'] == 'Airdrop Confirmed' ? 'status-confirmed' : ($row['Status'] == 'Airdrop Unconfirmed' ? 'status-pending' : 'status-expired')) . '">' . htmlspecialchars($row['Status']) . '</td>';
 
                                     echo '<td>';
@@ -268,6 +278,6 @@
     </script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://stackpath.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
