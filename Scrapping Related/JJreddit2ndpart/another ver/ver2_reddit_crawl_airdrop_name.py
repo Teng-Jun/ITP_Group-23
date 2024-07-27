@@ -18,7 +18,7 @@ reddit = praw.Reddit(
 )
 
 # Load the list of airdrop names with no counts
-no_count_airdrops = pd.read_csv('no_count_airdrops.csv')['airdrop_name'].tolist()
+no_count_airdrops = pd.read_csv('airdrop_sentiment_zero_total.csv')['airdrop_name'].tolist()
 
 # Function to process comments and their replies
 def process_comments(comment, submission):
@@ -79,7 +79,7 @@ for airdrop_name in no_count_airdrops:
         break
         
     logging.info(f"Searching for: {search_query}")
-    submissions = search_reddit(search_query, limit=20)  # Increased limit to ensure more data
+    submissions = search_reddit(search_query, limit=30)  # Increased limit to ensure more data
         
     with ThreadPoolExecutor(max_workers=5) as executor:
         futures = []
@@ -102,7 +102,7 @@ for airdrop_name in no_count_airdrops:
 df = pd.DataFrame(submission_data)
 
 # Save to CSV
-csv_filename = 'new_reddit_airdrop_data_version2.csv'
+csv_filename = 'new_reddit_airdrop_data_version3.csv'
 df.to_csv(csv_filename, index=False)
 
 print(f"Data saved to {csv_filename}")
