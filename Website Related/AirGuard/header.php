@@ -1,4 +1,3 @@
-<!-- header.php -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,3 +30,27 @@
         </nav>
     </div>
 </header>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var navLinks = document.querySelectorAll('.nav-link');
+
+    navLinks.forEach(function (link) {
+        // Add event listener for click
+        link.addEventListener('click', function () {
+            navLinks.forEach(function (navLink) {
+                navLink.classList.remove('active');
+            });
+            link.classList.add('active');
+        });
+
+        // Set active class based on current URL
+        if (link.href === window.location.href) {
+            link.classList.add('active');
+        }
+    });
+});
+</script>
+
+</body>
+</html>
