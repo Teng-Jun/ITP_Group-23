@@ -40,7 +40,7 @@
                 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
                 $start_from = ($page - 1) * $results_per_page;
 
-                $sql = "SELECT * FROM learnandavoid WHERE name LIKE '%$search%' LIMIT $start_from, $results_per_page";
+                $sql = "SELECT id, name, image, reddit_url, Official_Website, Twitter, Facebook, Reddit, Instagram, Telegram, Discord FROM learnandavoid WHERE name LIKE '%$search%' LIMIT $start_from, $results_per_page";
                 $result = $conn->query($sql);
 
                 if ($result->num_rows > 0) {
@@ -51,10 +51,13 @@
                         echo '<h3>' . htmlspecialchars($row['name']) . '</h3>';
                         echo '<p>Reddit Discussion or Vetted Sites: &nbsp <a href="' . htmlspecialchars($row['reddit_url']) . '" target="_blank">' . htmlspecialchars($row['reddit_url']) . '</a></p>';
                         echo '<p>';
-                        echo !empty($row['Official_Website']) ? '<a href="' . htmlspecialchars($row['Official_Website']) . '" target="_blank"><i class="fas fa-globe"></i></a>' : '<a class="disabled"><i class="fas fa-globe"></i></a>';
-                        echo !empty($row['Twitter']) ? '<a href="' . htmlspecialchars($row['Twitter']) . '" target="_blank"><i class="fab fa-twitter"></i></a>' : '<a class="disabled"><i class="fab fa-twitter"></i></a>';
-                        echo !empty($row['Facebook']) ? '<a href="' . htmlspecialchars($row['Facebook']) . '" target="_blank"><i class="fab fa-facebook-f"></i></a>' : '<a class="disabled"><i class="fab fa-facebook-f"></i></a>';
-                        echo !empty($row['Reddit']) ? '<a href="' . htmlspecialchars($row['Reddit']) . '" target="_blank"><i class="fab fa-reddit-alien"></i></a>' : '<a class="disabled"><i class="fab fa-reddit-alien"></i></a>';
+                        echo (!empty($row['Official_Website']) && strtolower($row['Official_Website']) !== 'nan') ? '<a href="' . htmlspecialchars($row['Official_Website']) . '" target="_blank"><i class="fas fa-globe"></i></a>' : '<a class="disabled"><i class="fas fa-globe"></i></a>';
+                        echo (!empty($row['Twitter']) && strtolower($row['Twitter']) !== 'nan') ? '<a href="' . htmlspecialchars($row['Twitter']) . '" target="_blank"><i class="fab fa-twitter"></i></a>' : '<a class="disabled"><i class="fab fa-twitter"></i></a>';
+                        echo (!empty($row['Facebook']) && strtolower($row['Facebook']) !== 'nan') ? '<a href="' . htmlspecialchars($row['Facebook']) . '" target="_blank"><i class="fab fa-facebook-f"></i></a>' : '<a class="disabled"><i class="fab fa-facebook-f"></i></a>';
+                        echo (!empty($row['Reddit']) && strtolower($row['Reddit']) !== 'nan') ? '<a href="' . htmlspecialchars($row['Reddit']) . '" target="_blank"><i class="fab fa-reddit-alien"></i></a>' : '<a class="disabled"><i class="fab fa-reddit-alien"></i></a>';
+                        echo (!empty($row['Instagram']) && strtolower($row['Instagram']) !== 'nan') ? '<a href="' . htmlspecialchars($row['Instagram']) . '" target="_blank"><i class="fab fa-instagram"></i></a>' : '<a class="disabled"><i class="fab fa-instagram"></i></a>';
+                        echo (!empty($row['Telegram']) && strtolower($row['Telegram']) !== 'nan') ? '<a href="' . htmlspecialchars($row['Telegram']) . '" target="_blank"><i class="fab fa-telegram"></i></a>' : '<a class="disabled"><i class="fab fa-telegram"></i></a>';
+                        echo (!empty($row['Discord']) && strtolower($row['Discord']) !== 'nan') ? '<a href="' . htmlspecialchars($row['Discord']) . '" target="_blank"><i class="fab fa-discord"></i></a>' : '<a class="disabled"><i class="fab fa-discord"></i></a>';
                         echo '</p>';
                         echo '</div>';
                         echo '</div>';
@@ -85,7 +88,7 @@
                             if ($i == $page) {
                                 echo "<a class='active' href='learn_avoid.php?page=" . $i . "&search=" . urlencode($search) . "'>" . $i . "</a>";
                             } else {
-                                echo "<a href='learn_avoid.php?page=" . $i . "&search=" . urlencode($search)     . "'>" . $i . "</a>";
+                                echo "<a href='learn_avoid.php?page=" . $i . "&search=" . urlencode($search) . "'>" . $i . "</a>";
                             }
                         }
                         echo "<a class='disabled'>...</a>";
@@ -129,3 +132,4 @@
     <script src="https://stackpath.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
+
