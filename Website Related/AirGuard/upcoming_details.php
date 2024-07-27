@@ -49,13 +49,61 @@
             margin-top: 2em;
         }
         .detail-logo {
-            width: 100vw;
-            height: 100vh;
+            width: 150px;
+            height: auto;
         }
         .disabled {
             pointer-events: none;
             color: grey;
             text-decoration: none; /* Optional: Remove underline from disabled links */
+        }
+        .overview-section {
+            background: #fff;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .metrics-box {
+            display: flex;
+            justify-content: space-between;
+            background: #fff;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .metrics-box div {
+            flex: 1;
+            text-align: center;
+        }
+        .overview-section p {
+            display: flex;
+            align-items: center;
+            margin: 5px 0;
+        }
+        .overview-section p i {
+            margin-right: 10px;
+        }
+        .overview-section a {
+            color: blue;
+        }
+        .row1 {
+            display: flex;
+            align-items: center;
+        }
+        .row1 .col-md-3 {
+            flex: 0 0 auto;
+        }
+        .row1 .col-md-9 {
+            flex: 1 1 auto;
+        }
+        .row1 .col-md-9 p {
+            margin-left: 20px;
+        }
+        .no-bullets {
+            list-style-type: none;
+            padding-left: 0;
         }
     </style>
 </head>
@@ -83,125 +131,74 @@
                     if ($result->num_rows > 0) {
                         $row = $result->fetch_assoc();
                         $airdropName = htmlspecialchars($row['Title']);
-                        echo '<div class="row">';
+                       
+                        echo '<div class="row1">';
                         echo '<div class="card full-width-card">';
-                        echo '<div class="card-body"><img src="' . htmlspecialchars($row['Thumbnail']) . '" alt="Token Logo" class="detail-logo"></div>';
+                        echo '<div class="card-body d-flex align-items-center">';
+                        echo '<div class="col-md-3"><img src="' . htmlspecialchars($row['Thumbnail']) . '" alt="Token Logo" class="detail-logo"></div>';
+                        echo '<div class="col-md-9"><p><strong>Features:</strong> ' . htmlspecialchars($row['Features']) . '</p></div>';
                         echo '</div>';
                         echo '</div>';
-                        
+                        echo '</div>';
+
+                        echo '<div class="overview-section">';
+                        echo '<h3>Overview</h3>';
                         echo '<div class="row">';
-                        echo '<div class="card full-width-card">';
-                        echo '<div class="card-body">';
-                        echo '<p><strong>Airdrop Name:</strong> ' . $airdropName . '</p>';
+                        echo '<div class="col-md-6">';
+                        echo '<p><i class="fas fa-globe"></i> Website: ' . ($row['Website'] != 'n/a' ? '<a href="' . htmlspecialchars($row['Website']) . '" target="_blank"><i class="fas fa-globe"></i></a>' : 'n/a') . '</p>';
+                        echo '<p><i class="fas fa-tags"></i> Ticker: ' . htmlspecialchars($row['Ticker']) . '</p>';
+                        echo '<p><i class="fas fa-database"></i> Total Supply: ' . htmlspecialchars($row['Total_Supply']) . '</p>';
+                        echo '<p><i class="fas fa-file-alt"></i> Whitepaper: ' . ($row['Whitepaper'] != 'n/a' ? '<a href="' . htmlspecialchars($row['Whitepaper']) . '" target="_blank">Download Whitepaper</a>' : 'n/a') . '</p>';
+                        echo '<p><i class="fab fa-twitter"></i> Twitter: ' . ($row['Twitter'] != 'n/a' ? '<a href="' . htmlspecialchars($row['Twitter']) . '" target="_blank"><i class="fab fa-twitter"></i></a>' : 'n/a') . '</p>';
+                        echo '<p><i class="fab fa-facebook"></i> Facebook: ' . ($row['Facebook'] != 'n/a' ? '<a href="' . htmlspecialchars($row['Facebook']) . '" target="_blank"><i class="fab fa-facebook"></i></a>' : 'n/a') . '</p>';
+                        echo '</div>';
+                        echo '<div class="col-md-6">';
+                        echo '<p><i class="fas fa-paper-plane"></i> Telegram Group: ' . ($row['Telegram Group'] != 'n/a' ? '<a href="' . htmlspecialchars($row['Telegram Group']) . '" target="_blank"><i class="fas fa-paper-plane"></i></a>' : 'n/a') . '</p>';
+                        echo '<p><i class="fas fa-paper-plane"></i> Telegram Channel: ' . ($row['Telegram Channel'] != 'n/a' ? '<a href="' . htmlspecialchars($row['Telegram Channel']) . '" target="_blank"><i class="fas fa-paper-plane"></i></a>' : 'n/a') . '</p>';
+                        echo '<p><i class="fab fa-discord"></i> Discord Chat: ' . ($row['Discord'] != 'n/a' ? '<a href="' . htmlspecialchars($row['Discord']) . '" target="_blank"><i class="fab fa-discord"></i></a>' : 'n/a') . '</p>';
+                        echo '<p><i class="fab fa-medium"></i> Blog: ' . ($row['Medium'] != 'n/a' ? '<a href="' . htmlspecialchars($row['Medium']) . '" target="_blank"><i class="fab fa-medium"></i></a>' : 'n/a') . '</p>';
+                        echo '<p><i class="fab fa-github"></i> GitHub Repository: ' . ($row['GitHub'] != 'n/a' ? '<a href="' . htmlspecialchars($row['GitHub']) . '" target="_blank"><i class="fab fa-github"></i></a>' : 'n/a') . '</p>';
                         echo '</div>';
                         echo '</div>';
                         echo '</div>';
-                        
-                        echo '<div class="row">';
-                        echo '<div class="card full-width-card">';
-                        echo '<div class="card-body">';
-                        echo '<p><strong>Platform:</strong> ' . htmlspecialchars($row['Platform']) . '</p>';
-                        echo '</div>';
-                        echo '</div>';
-                        echo '</div>';
-                        
-                        echo '<div class="row">';
-                        echo '<div class="card full-width-card">';
-                        echo '<div class="card-body">';
-                        echo '<p><strong>Status:</strong> ' . htmlspecialchars($row['Status']) . '</p>';
-                        echo '</div>';
-                        echo '</div>';
-                        echo '</div>';
-                        
-                        echo '<div class="row">';
-                        echo '<div class="card full-width-card">';
-                        echo '<div class="card-body">';
-                        echo '<p><strong>Features:</strong> ' . htmlspecialchars($row['Features']) . '</p>';
-                        echo '</div>';
-                        echo '</div>';
+
+                        echo '<div class="metrics-box">';
+                        echo '<div><strong>Total Value</strong><p>' . htmlspecialchars($row['Total_Value']) . '</p></div>';
+                        echo '<div><strong>Requirements</strong><p>' . htmlspecialchars($row['Requirements']) . '</p></div>';
+                        echo '<div><strong>Number of Previous Drops</strong><p>' . htmlspecialchars($row['Num_Of_Prev_Drops']) . '</p></div>';
                         echo '</div>';
 
                         $guide = htmlspecialchars($row['Guide']);
-                        $guideItems = explode(',', $guide); // Split the string by commas
+                        $guide = trim($guide, "[]'"); // Remove the square brackets and single quotes
 
-                        echo '<div class="row">';
+                        // Split the guide text by period followed by a single quote and then a space to ensure sentences are kept together
+                        $guideItems = preg_split("/(?<=\.)'/", $guide);
+
+                        echo '<div class="row3">';
                         echo '<div class="card full-width-card">';
                         echo '<div class="card-body">';
                         echo '<p><strong>Guide:</strong></p>';
-                        echo '<ul>';
+                        echo '<div>'; // Change to div to remove bullet points
                         foreach ($guideItems as $item) {
-                            echo '<li>' . trim($item, " '") . '</li>'; // Trim any leading/trailing whitespace or single quotes
+                            $cleanedItem = trim($item, "' ,"); // Remove leading/trailing single quote, comma and whitespace
+                            echo '<p>' . trim($cleanedItem) . '</p>'; // Trim any leading/trailing whitespace and change to paragraph
                         }
-                        echo '</ul>';
                         echo '</div>';
                         echo '</div>';
                         echo '</div>';
-                        
-                        echo '<div class="row">';
-                        echo '<div class="card full-width-card">';
-                        echo '<div class="card-body">';
-                        echo '<p><strong>Total Value:</strong> ' . htmlspecialchars($row['Total_Value']) . '</p>';
                         echo '</div>';
-                        echo '</div>';
-                        echo '</div>';
-                        
-                        echo '<div class="row">';
-                        echo '<div class="card full-width-card">';
-                        echo '<div class="card-body">';
-                        echo '<p><strong>Requirements:</strong> ' . htmlspecialchars($row['Requirements']) . '</p>';
-                        echo '</div>';
-                        echo '</div>';
-                        echo '</div>';
-                        
-                        echo '<div class="row">';
-                        echo '<div class="card full-width-card">';
-                        echo '<div class="card-body">';
-                        echo '<p><strong>Number of Previous Drops:</strong> ' . htmlspecialchars($row['Num_Of_Prev_Drops']) . '</p>';
-                        echo '</div>';
-                        echo '</div>';
-                        echo '</div>';
-                        
-                        echo '<div class="row">';
-                        echo '<div class="card full-width-card">';
-                        echo '<div class="card-body">';
-                        echo '<p>';
-                        echo !empty($row['Website']) && $row['Website'] !== 'n/a' ? 
-                            '<a href="' . htmlspecialchars($row['Website']) . '" target="_blank"><i class="fas fa-globe"></i> Project Website </a>' : 
-                            '<span class="disabled"><i class="fas fa-globe"></i> Project Website </span>';
-                        echo '</p>';
 
-                        echo '<p>';
-                        echo !empty($row['Whitepaper']) && $row['Whitepaper'] !== 'n/a' ? 
-                            '<a href="' . htmlspecialchars($row['Whitepaper']) . '" target="_blank"><i class="fas fa-file-alt"></i> Whitepaper </a>' : 
-                            '<span class="disabled"><i class="fas fa-file-alt"></i> Whitepaper </span>';
-                        echo '</p>';
-
-                        echo '<p>';
-                        echo !empty($row['Facebook']) && $row['Facebook'] !== 'n/a' ? 
-                            '<a href="' . htmlspecialchars($row['Facebook']) . '" target="_blank"><i class="fab fa-facebook-f"></i> Facebook </a>' : 
-                            '<span class="disabled"><i class="fab fa-facebook-f"></i> Facebook </span>';
-                        echo '</p>';
-
-                        echo '<p>';
-                        echo !empty($row['Telegram Group']) && $row['Telegram Group'] !== 'n/a' ? 
-                            '<a href="' . htmlspecialchars($row['Telegram Group']) . '" target="_blank"><i class="fab fa-telegram-plane"></i> Telegram Group </a>' : 
-                            '<span class="disabled"><i class="fab fa-telegram-plane"></i> Telegram Group </span>';
-                        echo '</p>';
-                        echo '</div>';
-                        echo '</div>';
-                        echo '</div>';
-                        
-                        echo '<div class="row">';
+                        echo '<div class="row4">';
                         echo '<div class="card full-width-card">';
                         echo '<div class="card-body">';
-                        echo '<h3 style="text-align:center; margin-top: 20px;"><strong>Reddit Sentiment Analysis<strong></h3>';
+                        echo '<h3 style="text-align:center; margin-top: 20px;"><strong>Reddit Sentiment Analysis</strong></h3>';
                         echo '<div class="chart-container"><canvas id="sentimentChart"></canvas></div>';
                         echo '<div class="no-data" style="display:none;">No data from Reddit forum.</div>';
                         echo '<div class="custom-legend" style="display:none;"></div>';
                         echo '</div>';
                         echo '</div>';
                         echo '</div>';
-                        
+
                     } else {
                         echo "Airdrop details not found.";
                     }
