@@ -30,13 +30,13 @@ header {
     min-height: 20vh;
 }
 
- header p {
+header p {
     color: #B0C4DE;
     font-size: 1.2rem;
     margin-top: -5px;
 }
 
-h2{
+h2 {
     text-align: center;
     color: #333;
     padding-top: 1em;
@@ -131,13 +131,13 @@ td img {
     height: auto; /* Maintains aspect ratio */
 }
 
-
 /* Navigation styles */
 nav ul {
     list-style-type: none;
     padding: 0;
     text-align: center;
 }
+
 nav ul li {
     display: inline-block;
     margin: 0.3rem;
@@ -147,6 +147,7 @@ nav ul li {
     border-radius: 5px;
     transition: font-weight 0.3s;
 }
+
 nav ul li a {
     color: black;
     text-decoration: none;
@@ -174,6 +175,7 @@ footer {
     justify-content: space-around;
     padding: 0.5em;
 }
+
 .airdrop-item {
     background-color: #fff; /* Darker background for each item */
     border: 1px solid #ddd; /* Lighter border for visibility */
@@ -185,6 +187,7 @@ footer {
     max-height: 150px;
     box-shadow: 0 0 1em rgba(0,0,0,0.1);
 }
+
 .airdrop-item.expanded {
     max-height: 500px;
 }
@@ -195,6 +198,7 @@ footer {
     display: block;
     margin: 0 auto 1em;
 }
+
 .airdrop-info h3 {
     margin-top: 0;
     color: #333; /* Light gray text for better visibility */
@@ -232,6 +236,7 @@ footer {
 .status-safe {
     color: #28a745;
 }
+
 .status-pending {
     color: #ffc107;
 }
@@ -241,7 +246,7 @@ footer {
 }
 
 .detail-item {
-    text-align: center
+    text-align: center;
 }
 
 .detail-logo {
@@ -262,21 +267,21 @@ footer {
 }
 
 .container {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px;
-        justify-content: center;
-    }
-    
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
 /* Wrapper styles */
-.wrapper {
+/*.wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
     margin: 0 auto;
     padding: 1em;
     width: 100%;
-}
+}*/
 
 main {
     display: flex;
@@ -330,11 +335,13 @@ main {
     justify-content: center;
     margin-top: 10px;
 }
+
 .custom-legend-item {
     display: flex;
     align-items: center;
     margin-right: 10px;
 }
+
 .custom-legend-color {
     width: 12px;
     height: 12px;
@@ -367,7 +374,54 @@ thead th {
     font-size: 12px;
     position: relative;
     cursor: pointer;
-}  
+}
+
 td, th {
     width: auto;
+}
+
+/* Additional styles */
+.airdrop-item-link {
+    display: flex;
+    align-items: center;
+}
+
+.airdrop-item-link img {
+    margin-right: 10px;
+}
+
+.custom-legend {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.custom-legend-item {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.custom-legend-color {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+}
+
+.airdrop-container table {
+    width: 100%;
+    min-width: 800px; /* Adjust this value as necessary */
+    table-layout: auto; /* Ensures table maintains its width */
+}
+
+.airdrop-container th, .airdrop-container td {
+    text-align: center; /* Center align text in table headers and cells */
+}
+        
+.airdrop-container thead th {       
+    font-weight: bold;      
+    text-transform: uppercase;      
+    color: #666;       
+    font-size: 12px;     
+    cursor: pointer;    
 }

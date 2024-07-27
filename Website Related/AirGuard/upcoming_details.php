@@ -65,7 +65,7 @@
     </div>
     <div class="wrapper">
         <main>
-            <a href="upcoming.php" class="back-button">Back to Upcoming Airdrops</a>
+            <button onclick="history.back()" class="btn btn-primary back-button">Back</button>
             <h2>Airdrop Details</h2>
             <div class="container">
                 <div class="airdrop-details">
@@ -165,27 +165,27 @@
                         echo '<div class="card full-width-card">';
                         echo '<div class="card-body">';
                         echo '<p>';
-                        echo !empty($row['Website']) ? 
+                        echo !empty($row['Website']) && $row['Website'] !== 'n/a' ? 
                             '<a href="' . htmlspecialchars($row['Website']) . '" target="_blank"><i class="fas fa-globe"></i> Project Website </a>' : 
-                            '<a class="disabled"><i class="fas fa-globe"></i> Project Website </a>';
+                            '<span class="disabled"><i class="fas fa-globe"></i> Project Website </span>';
                         echo '</p>';
 
                         echo '<p>';
-                        echo !empty($row['Whitepaper']) ? 
+                        echo !empty($row['Whitepaper']) && $row['Whitepaper'] !== 'n/a' ? 
                             '<a href="' . htmlspecialchars($row['Whitepaper']) . '" target="_blank"><i class="fas fa-file-alt"></i> Whitepaper </a>' : 
-                            '<a class="disabled"><i class="fas fa-file-alt"></i> Whitepaper </a>';
+                            '<span class="disabled"><i class="fas fa-file-alt"></i> Whitepaper </span>';
                         echo '</p>';
 
                         echo '<p>';
-                        echo !empty($row['Facebook']) ? 
+                        echo !empty($row['Facebook']) && $row['Facebook'] !== 'n/a' ? 
                             '<a href="' . htmlspecialchars($row['Facebook']) . '" target="_blank"><i class="fab fa-facebook-f"></i> Facebook </a>' : 
-                            '<a class="disabled"><i class="fab fa-facebook-f"></i> Facebook </a>';
+                            '<span class="disabled"><i class="fab fa-facebook-f"></i> Facebook </span>';
                         echo '</p>';
 
                         echo '<p>';
-                        echo !empty($row['Telegram Group']) ? 
+                        echo !empty($row['Telegram Group']) && $row['Telegram Group'] !== 'n/a' ? 
                             '<a href="' . htmlspecialchars($row['Telegram Group']) . '" target="_blank"><i class="fab fa-telegram-plane"></i> Telegram Group </a>' : 
-                            '<a class="disabled"><i class="fab fa-telegram-plane"></i> Telegram Group< /a>';
+                            '<span class="disabled"><i class="fab fa-telegram-plane"></i> Telegram Group </span>';
                         echo '</p>';
                         echo '</div>';
                         echo '</div>';
@@ -308,6 +308,6 @@
     </script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://stackpath.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

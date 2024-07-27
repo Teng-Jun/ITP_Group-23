@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="icon" type="image/png" href="image/airguard-favicon-color-32.png">
+    
 </head>
 <body>
     <div class="header-container">
@@ -25,15 +26,16 @@
                             <option value="Airdrop Unconfirmed">Unconfirmed</option>
                             <option value="n/a">Not Applicable</option>
                         </select>
+                        <select name="risk_score">
+                            <option value="">All Risk Scores</option>
+                            <option value="low">Low (< 1%)</option>
+                            <option value="medium">Medium (1% - 50%)</option>
+                            <option value="high">High (> 50%)</option>
+                        </select>
                         <button type="submit" class="btn btn-primary">Search</button>
                         <button type="button" class="btn btn-success" id="resetButton">Reset</button>
                     </form>
                 </section>
-                <div class="tabs">
-                    <button id="most-scanned" class="tab-button" onclick="filterTokens('most-scanned')">Tokens: Most Scanned</button>
-                    <button id="dangerous-threats" class="tab-button" onclick="filterTokens('dangerous-threats')">Tokens: Dangerous Threats</button>
-                    <button id="requirements-need" class="tab-button" onclick="filterTokens('requirements-need')">Tokens: Requirements Need</button>
-                </div>
                 <div class="airdrop-container">
                     <table>
                         <thead>
@@ -45,22 +47,6 @@
                                 <th>Risk Score</th>
                                 <th>Status</th>
                                 <th>Sentiment</th>
-                                <th>Requirements</th>
-                                <th>Whitepaper</th>
-                                <th colspan="3" class="social-media-header">Social Media</th>
-                            </tr>
-                            <tr>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th>Facebook</th>
-                                <th>Instagram</th>
-                                <th>Website</th>
                             </tr>
                         </thead>
                         <tbody id="token-list">
@@ -69,6 +55,7 @@
 
                             $search = isset($_GET['search']) ? $_GET['search'] : '';
                             $status = isset($_GET['status']) ? $_GET['status'] : '';
+                            $risk_score = isset($_GET['risk_score']) ? $_GET['risk_score'] : '';
 
                             $sql = "SELECT * FROM airdrops_data WHERE (Status = 'Airdrop Unconfirmed' OR Status = 'n/a')";
                             $conditions = [];
@@ -85,6 +72,16 @@
                                 $conditions[] = "Status = ?";
                                 $params[] = $status;
                                 $types .= 's';  // string
+                            }
+
+                            if ($risk_score !== '') {
+                                if ($risk_score == 'low') {
+                                    $conditions[] = "Probability < 1";
+                                } elseif ($risk_score == 'medium') {
+                                    $conditions[] = "Probability >= 1 AND Probability <= 50";
+                                } elseif ($risk_score == 'high') {
+                                    $conditions[] = "Probability > 50";
+                                }
                             }
 
                             if (!empty($conditions)) {
@@ -109,17 +106,6 @@
                             if ($result->num_rows > 0) {
                                 $index = 1;
                                 while ($row = $result->fetch_assoc()) {
-                                    $crosses = 0;
-                                    if (empty($row['Facebook'])) {
-                                        $crosses++;
-                                    }
-                                    if (empty($row['Instagram'])) {
-                                        $crosses++;
-                                    }
-                                    if (empty($row['Website'])) {
-                                        $crosses++;
-                                    }
-
                                     // Format the risk score
                                     $riskScore = $row['Probability'];
                                     if ($riskScore == 0) {
@@ -137,13 +123,9 @@
                                         'Platform' => $row['Platform'],
                                         'RiskScore' => $riskScoreDisplay,
                                         'Status' => $row['Status'],
-                                        'Requirements' => $row['Requirements'],
-                                        'Whitepaper' => $row['Whitepaper'],
-                                        'Facebook' => $row['Facebook'],
-                                        'Instagram' => $row['Instagram'],
-                                        'Website' => $row['Website'],
-                                        'TotalValue' => $row['TotalValue'],
-                                        'crosses' => $crosses
+                                        'positive_percentage' => $row['positive_percentage'],
+                                        'neutral_percentage' => $row['neutral_percentage'],
+                                        'negative_percentage' => $row['negative_percentage']
                                     ];
 
                                     echo '<tr>';
@@ -152,7 +134,6 @@
                                     echo '<td>' . htmlspecialchars($row['Platform']) . '</td>';
                                     echo '<td>' . htmlspecialchars($riskScoreDisplay) . '</td>';
                                     echo '<td class="' . ($row['Status'] == 'Airdrop Confirmed' ? 'status-confirmed' : ($row['Status'] == 'Airdrop Unconfirmed' ? 'status-pending' : 'status-expired')) . '">' . htmlspecialchars($row['Status']) . '</td>';
-
                                     echo '<td>';
                                     echo '<div class="custom-legend">';
                                     echo '<div class="custom-legend-item">';
@@ -169,30 +150,10 @@
                                     echo '</div>';
                                     echo '</div>';
                                     echo '</td>';
-
-                                    $requirementStatus = htmlspecialchars($row['Requirements']);
-                                    $requirementsymbol = ($requirementStatus != 'n/a') ? '✔' : '✘';
-                                    echo '<td><span class="requirementsymbol">' . $requirementsymbol . '</span>' . '</td>';
-
-                                    $whitepaperStatus = htmlspecialchars($row['Whitepaper']);
-                                    $whitepaperClass = ($whitepaperStatus != 'n/a') ? '✔' : '✘';
-                                    echo '<td><span class="whitepaperClass">' . $whitepaperClass . '</span>' . '</td>';
-
-                                    $facebookStatus = htmlspecialchars($row['Facebook']);
-                                    $facebookClass = ($facebookStatus != 'n/a') ? '✔' : '✘';
-                                    echo '<td><span class="facebookClass">' . $facebookClass . '</span>' . '</td>';
-
-                                    $instagramStatus = htmlspecialchars($row['Instagram']);
-                                    $instagramClass = ($instagramStatus != 'n/a') ? '✔' : '✘';
-                                    echo '<td><span class="instagramClass">' . $instagramClass . '</span>' . '</td>';
-
-                                    $websiteStatus = htmlspecialchars($row['Website']);
-                                    $websiteClass = ($websiteStatus != 'n/a') ? '✔' : '✘';
-                                    echo '<td><span class="websiteClass">' . $websiteClass . '</span>' . '</td>';
                                     echo '</tr>';
                                 }
                             } else {
-                                echo '<tr><td colspan="11">No upcoming airdrops found</td></tr>';
+                                echo '<tr><td colspan="6">No upcoming airdrops found</td></tr>';
                             }
                             $stmt->close();
                             $conn->close();
@@ -261,11 +222,6 @@
                             </div>
                         </div>
                     </td>
-                    <td><span class="requirementsymbol">${token.Requirements !== 'n/a' ? '✔' : '✘'}</span></td>
-                    <td><span class="whitepaperClass">${token.Whitepaper !== 'n/a' ? '✔' : '✘'}</span></td>
-                    <td><span class="facebookClass">${token.Facebook !== 'n/a' ? '✔' : '✘'}</span></td>
-                    <td><span class="instagramClass">${token.Instagram !== 'n/a' ? '✔' : '✘'}</span></td>
-                    <td><span class="websiteClass">${token.Website !== 'n/a' ? '✔' : '✘'}</span></td>
                 `;
                 tokenList.appendChild(row);
             });
