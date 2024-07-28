@@ -27,7 +27,7 @@ X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.3, 
 # total_samples = 1842 + 1001
 # num_classes = 2
 # count_class_0 = 1842
-# count_class_1 = 1001
+# count_class_1 = 1001cd 
 
 # weight_for_0 = total_samples / (num_classes * count_class_0)
 # weight_for_1 = total_samples / (num_classes * count_class_1)
@@ -50,40 +50,40 @@ X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.3, 
 
 # class_weights = {0: weight_for_0, 1: weight_for_1}
 
-# Apply ADASYN to the training data
-adasyn = ADASYN(random_state=42)
-X_train_ada, y_train_ada = adasyn.fit_resample(X_train, y_train)
+# # Apply ADASYN to the training data
+# adasyn = ADASYN(random_state=42)
+# X_train_ada, y_train_ada = adasyn.fit_resample(X_train, y_train)
 
 
-# # Calculate class weights based on the new distribution after ADASYN
-total_samples = len(y_train_ada)
-num_classes = 2
-count_class_0 = sum(y_train_ada == 0)
-count_class_1 = sum(y_train_ada == 1)
+# # # Calculate class weights based on the new distribution after ADASYN
+# total_samples = len(y_train_ada)
+# num_classes = 2
+# count_class_0 = sum(y_train_ada == 0)
+# count_class_1 = sum(y_train_ada == 1)
 
-weight_for_0 = total_samples / (num_classes * count_class_0)
-weight_for_1 = total_samples / (num_classes * count_class_1)
+# weight_for_0 = total_samples / (num_classes * count_class_0)
+# weight_for_1 = total_samples / (num_classes * count_class_1)
 
-class_weights = {0: weight_for_0, 1: weight_for_1}
+# class_weights = {0: weight_for_0, 1: weight_for_1}
 
-# # Define the parameter grid
-# param_grid = {
-#     'n_estimators': [100, 200, 300],
-#     'max_features': ['auto', 'sqrt', 'log2'],
-#     'max_depth': [None, 10, 20, 30],
-#     'min_samples_split': [2, 5, 10],
-#     'min_samples_leaf': [1, 2, 4]
-# }
+# Define the parameter grid
+param_grid = {
+    'n_estimators': [100, 200, 300],
+    'max_features': ['auto', 'sqrt', 'log2'],
+    'max_depth': [None, 10, 20, 30],
+    'min_samples_split': [2, 5, 10],
+    'min_samples_leaf': [1, 2, 4]
+}
 
-# # Setup GridSearchCV
-# grid = GridSearchCV(
-#     estimator=RandomForestClassifier(random_state=42, class_weight=class_weights),
-#     param_grid=param_grid,
-#     scoring=None,  # Can use multiple metrics or change this as needed
-#     cv=3,  # Number of folds in cross-validation
-#     verbose=2,
-#     n_jobs=-1  # Use all processors
-# )
+# Setup GridSearchCV
+grid = GridSearchCV(
+    estimator=RandomForestClassifier(random_state=42),
+    param_grid=param_grid,
+    scoring=None,  # Can use multiple metrics or change this as needed
+    cv=3,  # Number of folds in cross-validation
+    verbose=2,
+    n_jobs=-1  # Use all processors
+)
 
 
 
@@ -112,22 +112,22 @@ class_weights = {0: weight_for_0, 1: weight_for_1}
 # )
 
 
-# # Fit GridSearchCV
-# grid.fit(X_train, y_train)
+# Fit GridSearchCV
+grid.fit(X_train, y_train)
 
-# # Get the best model
-# rf_model = grid.best_estimator_
+# Get the best model
+rf_model = grid.best_estimator_
 
-# #Predictions on the test set using the best model
-# rf_pred = rf_model.predict(X_test)
-
-
-# Initialize and train the Random Forest clsassifier
-rf_model = RandomForestClassifier(random_state=42)
-rf_model.fit(X_train, y_train)
-
-# Predictions on the test set
+#Predictions on the test set using the best model
 rf_pred = rf_model.predict(X_test)
+
+
+# # Initialize and train the Random Forest clsassifier
+# rf_model = RandomForestClassifier(random_state=42)
+# rf_model.fit(X_train, y_train)
+
+# # Predictions on the test set
+# rf_pred = rf_model.predict(X_test)
 
 # Evaluate the model
 accuracy = accuracy_score(y_test, rf_pred)
@@ -146,9 +146,3 @@ print(f"Accuracy: {accuracy*100:.2f}%")
 print(f"F1-score: {f1:.2f}")
 print(f"Precision: {precision:.2f}")
 print(f"Recall: {recall:.2f}")
-
-
-# Optionally, predict probabilities for the ROC curve or other analysis
-# rf_probs = rf_model.predict_proba(X_test)[:, 1]
-
-

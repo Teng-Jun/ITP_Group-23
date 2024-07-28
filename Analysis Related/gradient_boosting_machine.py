@@ -33,7 +33,7 @@ X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.3, 
 # adasyn = ADASYN(random_state=42)
 # X_train_ada, y_train_ada = adasyn.fit_resample(X_train, y_train)
 
-# sample_weights = compute_sample_weight(class_weight='balanced', y=y_train_ada)
+sample_weights = compute_sample_weight(class_weight='balanced', y=y_train)
 
 # weight_for_0 = 1  # weight for majority class
 # weight_for_1 = 1842 / 1001  # weight for minority class, more heavily weighted
@@ -124,7 +124,7 @@ X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.3, 
 
 # Initialize and train the Random Forest classifier
 gbm_model = GradientBoostingClassifier(random_state=42)
-gbm_model.fit(X_train, y_train)
+gbm_model.fit(X_train, y_train, sample_weight=sample_weights)
 
 
 # Predictions on the test set

@@ -2,7 +2,7 @@ import csv
 
 # Load and process the dataset
 input_file_path = 'airdrops_data_latest.csv'
-output_file_path = 'processed_airdrops_data.csv'
+output_file_path = 'processed_airdrops_data_final.csv'
 
 with open(input_file_path, mode='r', encoding='utf-8-sig') as infile, \
      open(output_file_path, mode='w', newline='', encoding='utf-8-sig') as outfile:

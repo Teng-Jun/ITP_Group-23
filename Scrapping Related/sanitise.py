@@ -13,8 +13,11 @@ with open(file_path, mode='r', newline='', encoding='utf-8-sig') as file:
     
     # Process each row in the CSV
     for row in reader:
+        # Convert 'Platform' to lowercase
+        row['Platform'] = row['Platform'].lower()
+
         # Check and replace 'Exchanges' and 'Requirements' fields if they are empty
-        for field in ['Exchanges', 'Requirements']:
+        for field in ['Status', 'Requirements', 'Ticker', 'Total_Supply', 'Facebook', 'Telegram Group', 'Telegram Channel', 'Medium', 'CoinGecko', 'GitHub', 'Coinmarketcap', 'Reddit', 'Exchanges', 'Youtube']:
             if not row[field].strip():
                 row[field] = 'n/a'
 

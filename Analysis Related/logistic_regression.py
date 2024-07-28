@@ -18,7 +18,7 @@ import joblib
 # class_weights = {0: weight_for_0, 1: weight_for_1}
 
 # Load the labeled data
-data_path = 'processed_airdrops_data_with_more_scam_labelled.csv'
+data_path = 'processed_airdrops_data_with_scam_labelled.csv'
 data = pd.read_csv(data_path, encoding='ISO-8859-1')
 
 'Requirement_Count', 'Guide_Length'
@@ -30,10 +30,9 @@ y = data['is_scam'].astype(int)
 scaler = StandardScaler()
 X_scaled = scaler.fit_transform(X)
 
-scaler_filename = 'scaler.joblib'
-joblib.dump(scaler, scaler_filename)
-print(f"Scaler saved to {scaler_filename}")
-
+# scaler_filename = 'scaler.joblib'
+# joblib.dump(scaler, scaler_filename)
+# print(f"Scaler saved to {scaler_filename}")
 
 # Split the data into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.3, random_state=42)
@@ -46,28 +45,28 @@ X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.3, 
 # adasyn = ADASYN(random_state=42)
 # X_train_ada, y_train_ada = adasyn.fit_resample(X_train, y_train)
 
-# Define the parameter grid for Logistic Regression
-param_grid_lr = {
-    'C': [0.001, 0.01, 0.1, 1, 10],  # Regularization strength
-    'solver': ['liblinear', 'saga'],  # Optimization algorithms
-    'penalty': ['l1', 'l2']  # Norms for penalization
-}
+# # Define the parameter grid for Logistic Regression
+# param_grid_lr = {
+#     'C': [0.001, 0.01, 0.1, 1, 10],  # Regularization strength
+#     'solver': ['liblinear', 'saga'],  # Optimization algorithms
+#     'penalty': ['l1', 'l2']  # Norms for penalization
+# }
 
-# Initialize GridSearchCV
-grid_lr = GridSearchCV(
-    LogisticRegression(max_iter=1000),
-    param_grid_lr,
-    scoring=None,  # You can also use a custom scorer dictionary or multiple scorers
-    cv=5,
-    verbose=1,
-    n_jobs=-1  # Use all available cores
-)
+# # Initialize GridSearchCV
+# grid_lr = GridSearchCV(
+#     LogisticRegression(max_iter=1000),
+#     param_grid_lr,
+#     scoring=None,  # You can also use a custom scorer dictionary or multiple scorers
+#     cv=5,
+#     verbose=1,
+#     n_jobs=-1  # Use all available cores
+# )
 
-# Fit GridSearchCV on the training data
-grid_lr.fit(X_train, y_train)
+# # Fit GridSearchCV on the training data
+# grid_lr.fit(X_train, y_train)
 
-# Extract the best model
-lr_model = grid_lr.best_estimator_
+# # Extract the best model
+# lr_model = grid_lr.best_estimator_
 
 # Calculate class weights based on the imbalance
 # total_samples = len(y_train_smote)
@@ -110,10 +109,10 @@ print(f"Model accuracy: {accuracy*100:.2f}%")
 print(f"Model F1-score: {f1:.2f}")
 print(f"Model Precision: {precision:.2f}")
 print(f"Model Recall: {recall:.2f}")
-print("Best parameters found by GridSearchCV:", grid_lr.best_params_)
+# print("Best parameters found by GridSearchCV:", grid_lr.best_params_)
 
 # Save the trained logistic regression model
-model_filename = 'logistic_regression_model_best_parameter.joblib'
+model_filename = 'logistic_regression_model.joblib'
 # joblib.dump(lr_model, model_filename)
 joblib.dump(lr_model, model_filename)
 print(f"Model saved to {model_filename}")

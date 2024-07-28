@@ -28,15 +28,15 @@ def hide_onesignal_prompt(driver):
 
 def scrape_with_selenium():
     driver = setup_driver()
-    driver.get("https://airdrops.io/speculative/")
-    #driver.get("https://airdrops.io/latest/")
+    # driver.get("https://airdrops.io/speculative/")
+    driver.get("https://airdrops.io/latest/")
     hide_onesignal_prompt(driver)
     all_data = []
 
     try:
         WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.TAG_NAME, "article")))
 
-        for _ in range(18):  # Ensure you're clicking 'Show More' as many times as you need
+        for _ in range(112):  # Ensure you're clicking 'Show More' as many times as you need
             try:
                 show_more_button = WebDriverWait(driver, 10).until(
                     EC.element_to_be_clickable((By.CSS_SELECTOR, "div.showmore > span"))
@@ -107,6 +107,8 @@ def scrape_with_selenium():
                 platform_element = airdrop_info.find_element(By.XPATH, './/li[contains(text(), "Platform:")]')
                 platform = platform_element.text.split(': ')[1] if ':' in platform_element.text else platform_element.text
             except NoSuchElementException:
+                platform = "n/a"
+            except IndexError:
                 platform = "n/a"
 
             # Extracting the Requirements
@@ -238,7 +240,7 @@ def scrape_with_selenium():
 
     return all_data
 
-def merge_and_update_data(new_data, filename='airdrops_data_speculative.csv'):
+def merge_and_update_data(new_data, filename='airdrops_data_latest.csv'):
     new_df = pd.DataFrame(new_data)
     if exists(filename):
         existing_df = pd.read_csv(filename)
