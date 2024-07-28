@@ -270,6 +270,7 @@ footer {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
+    padding: 20px;
     justify-content: center;
 }
 
@@ -447,11 +448,11 @@ td, th {
 
 /* Enhancements for aboutus.php */
 .about-section {
-    padding: 60px 0;
+    padding: 20px;
 }
 
 .about-section h2 {
-    color: #007BFF;
+    color: black;
     margin-bottom: 40px;
     text-align: center;
 }
@@ -523,6 +524,7 @@ td, th {
 /* Enhancements for tips.php */
 .tips-container {
     text-align: center;
+    padding: 20px;
 }
 
 .tips-text-box {
@@ -565,7 +567,7 @@ td, th {
 }
 
 .tips-notice {
-    margin-top: 1em;
+    margin-top: 30em;
 }
 
 .chart-container {

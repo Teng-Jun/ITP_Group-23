@@ -67,6 +67,9 @@
             <div class="text-center mb-5">
                 <h2 class="display-4">Welcome to AirGuard!</h2>
             </div>
+            <p class="learn_avoid-disclaimer">
+                Disclaimer: Users must exercise due diligence to determine the reliability of free airdrops or Web3 project tokens. We are not responsible for any actions taken by users in the event they fall for airdrop token scams, as the decision to participate in such campaigns ultimately belongs to the users themselves.
+            </p>
             <div class="container">
                 <section id="about">
                     <div class="card mb-4">
