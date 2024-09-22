@@ -2,8 +2,8 @@ import csv
 import re
 
 # File paths
-input_file_path = 'processed_airdrops_data_final.csv'
-output_file_path = 'processed_airdrops_data_final_labelled.csv'
+input_file_path = 'processed_airdrops_data_latest_ITP1_updated_with_temp.csv'
+output_file_path = 'processed_airdrops_data_latest_ITP1_updated_with_temp_labelled.csv'
 
 # Define a function to sanitize the title
 def sanitize_title(title):
@@ -22,13 +22,13 @@ with open(input_file_path, mode='r', newline='', encoding='utf-8-sig') as infile
     writer.writerow(headers)
     
     # Write the rest of the data, adding the new column based on the row index
-    for index, row in enumerate(reader, start=1):
+    for index, row in enumerate(reader, start=2):
         # Sanitize the title column
         row[title_index] = sanitize_title(row[title_index])
         # Label the row as 'scam' or 'not a scam'
-        if index <= 1988:
+        if index <= 1843:
             row.append('0')  # Label as 'not a scam'
-        elif index >= 1989:
+        elif index >= 1844:
             row.append('1')  # Label as 'scam'
         writer.writerow(row)
 

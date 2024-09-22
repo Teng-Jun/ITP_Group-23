@@ -9,7 +9,7 @@ import joblib
 
 
 # Load the labeled data
-data_path = 'processed_airdrops_data_with_more_scam_labelled.csv'
+data_path = 'processed_airdrops_data_latest_ITP1_updated_with_temp_labelled.csv'
 data = pd.read_csv(data_path, encoding='ISO-8859-1')
 'Requirement_Count', 'Guide_Length'
 # Split the data into features and target
@@ -66,24 +66,24 @@ X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.3, 
 
 # class_weights = {0: weight_for_0, 1: weight_for_1}
 
-# Define the parameter grid
-param_grid = {
-    'n_estimators': [100, 200, 300],
-    'max_features': ['auto', 'sqrt', 'log2'],
-    'max_depth': [None, 10, 20, 30],
-    'min_samples_split': [2, 5, 10],
-    'min_samples_leaf': [1, 2, 4]
-}
+# # Define the parameter grid
+# param_grid = {
+#     'n_estimators': [100, 200, 300],
+#     'max_features': ['auto', 'sqrt', 'log2'],
+#     'max_depth': [None, 10, 20, 30],
+#     'min_samples_split': [2, 5, 10],
+#     'min_samples_leaf': [1, 2, 4]
+# }
 
-# Setup GridSearchCV
-grid = GridSearchCV(
-    estimator=RandomForestClassifier(random_state=42),
-    param_grid=param_grid,
-    scoring=None,  # Can use multiple metrics or change this as needed
-    cv=3,  # Number of folds in cross-validation
-    verbose=2,
-    n_jobs=-1  # Use all processors
-)
+# # Setup GridSearchCV
+# grid = GridSearchCV(
+#     estimator=RandomForestClassifier(random_state=42),
+#     param_grid=param_grid,
+#     scoring=None,  # Can use multiple metrics or change this as needed
+#     cv=3,  # Number of folds in cross-validation
+#     verbose=2,
+#     n_jobs=-1  # Use all processors
+# )
 
 
 
@@ -112,22 +112,22 @@ grid = GridSearchCV(
 # )
 
 
-# Fit GridSearchCV
-grid.fit(X_train, y_train)
+# # Fit GridSearchCV
+# grid.fit(X_train, y_train)
 
-# Get the best model
-rf_model = grid.best_estimator_
+# # Get the best model
+# rf_model = grid.best_estimator_
 
-#Predictions on the test set using the best model
-rf_pred = rf_model.predict(X_test)
-
-
-# # Initialize and train the Random Forest clsassifier
-# rf_model = RandomForestClassifier(random_state=42)
-# rf_model.fit(X_train, y_train)
-
-# # Predictions on the test set
+# #Predictions on the test set using the best model
 # rf_pred = rf_model.predict(X_test)
+
+
+# Initialize and train the Random Forest clsassifier
+rf_model = RandomForestClassifier(random_state=42)
+rf_model.fit(X_train, y_train)
+
+# Predictions on the test set
+rf_pred = rf_model.predict(X_test)
 
 # Evaluate the model
 accuracy = accuracy_score(y_test, rf_pred)
@@ -136,7 +136,7 @@ precision = precision_score(y_test, rf_pred)
 recall = recall_score(y_test, rf_pred)
 
 # Save the trained logistic regression model
-model_filename = 'random_forest_model.joblib'
+model_filename = 'random_forest_model_6_features.joblib'
 joblib.dump(rf_model, model_filename)
 print(f"Model saved to {model_filename}")
 

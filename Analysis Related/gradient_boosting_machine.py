@@ -10,7 +10,7 @@ from sklearn.metrics import make_scorer
 import joblib
 
 # Load the labeled data
-data_path = 'processed_airdrops_data_with_more_scam_labelled.csv'
+data_path = 'processed_airdrops_data_latest_ITP1_updated_with_temp_labelled.csv'
 data = pd.read_csv(data_path, encoding='ISO-8859-1')
 'Requirement_Count', 'Guide_Length'
 # Split the data into features and target
@@ -33,7 +33,7 @@ X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.3, 
 # adasyn = ADASYN(random_state=42)
 # X_train_ada, y_train_ada = adasyn.fit_resample(X_train, y_train)
 
-sample_weights = compute_sample_weight(class_weight='balanced', y=y_train)
+# sample_weights = compute_sample_weight(class_weight='balanced', y=y_train)
 
 # weight_for_0 = 1  # weight for majority class
 # weight_for_1 = 1842 / 1001  # weight for minority class, more heavily weighted
@@ -124,7 +124,7 @@ sample_weights = compute_sample_weight(class_weight='balanced', y=y_train)
 
 # Initialize and train the Random Forest classifier
 gbm_model = GradientBoostingClassifier(random_state=42)
-gbm_model.fit(X_train, y_train, sample_weight=sample_weights)
+gbm_model.fit(X_train, y_train)
 
 
 # Predictions on the test set
@@ -137,7 +137,7 @@ precision = precision_score(y_test, gbm_pred)
 recall = recall_score(y_test, gbm_pred)
 
 # Save the trained logistic regression model
-model_filename = 'gradient_boosting_model.joblib'
+model_filename = 'gradient_boosting_model_6_features.joblib'
 joblib.dump(gbm_model, model_filename)
 print(f"Model saved to {model_filename}")
 

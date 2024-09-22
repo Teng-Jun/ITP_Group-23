@@ -18,7 +18,7 @@ import joblib
 # class_weights = {0: weight_for_0, 1: weight_for_1}
 
 # Load the labeled data
-data_path = 'processed_airdrops_data_with_scam_labelled.csv'
+data_path = 'processed_airdrops_data_latest_ITP1_updated_with_temp_labelled.csv'
 data = pd.read_csv(data_path, encoding='ISO-8859-1')
 
 'Requirement_Count', 'Guide_Length'
@@ -30,7 +30,7 @@ y = data['is_scam'].astype(int)
 scaler = StandardScaler()
 X_scaled = scaler.fit_transform(X)
 
-# scaler_filename = 'scaler.joblib'
+# scaler_filename = 'scaler_6_features.joblib'
 # joblib.dump(scaler, scaler_filename)
 # print(f"Scaler saved to {scaler_filename}")
 
@@ -112,7 +112,7 @@ print(f"Model Recall: {recall:.2f}")
 # print("Best parameters found by GridSearchCV:", grid_lr.best_params_)
 
 # Save the trained logistic regression model
-model_filename = 'logistic_regression_model.joblib'
+model_filename = 'logistic_regression_model_6_features.joblib'
 # joblib.dump(lr_model, model_filename)
 joblib.dump(lr_model, model_filename)
 print(f"Model saved to {model_filename}")
@@ -123,7 +123,7 @@ print(f"Model saved to {model_filename}")
 # data['scam_possibility'] = data['scam_possibility'].round(2)
 
 # # Save the updated dataframe to a new file
-# output_path = 'processed_airdrops_data_with_more_scam_labelled_probabilities.csv'
+# output_path = 'processed_airdrops_data_latest_ITP1_updated_with_temp_labelled_probabilities_lr.csv'
 # data.to_csv(output_path, index=False)
 # print(f"Updated data with scam possibility saved to {output_path}.")
 

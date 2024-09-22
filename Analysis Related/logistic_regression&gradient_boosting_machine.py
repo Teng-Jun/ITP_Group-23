@@ -11,7 +11,7 @@ from imblearn.pipeline import Pipeline
 
 
 # Load the labeled data
-data_path = 'processed_airdrops_data_with_more_scam_labelled.csv'
+data_path = 'processed_airdrops_data_latest_ITP1_updated_with_temp_labelled.csv'
 data = pd.read_csv(data_path, encoding='ISO-8859-1')
 
 'Requirement_Count', 'Guide_Length'
@@ -30,9 +30,9 @@ X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.3, 
 # smote = SMOTE(random_state=42)
 # X_train_smote, y_train_smote = smote.fit_resample(X_train, y_train)
 
-# Apply ADASYN to the training data
-adasyn = ADASYN(random_state=42)
-X_train_ada, y_train_ada = adasyn.fit_resample(X_train, y_train)
+# # Apply ADASYN to the training data
+# adasyn = ADASYN(random_state=42)
+# X_train_ada, y_train_ada = adasyn.fit_resample(X_train, y_train)
 
 # sample_weights = compute_sample_weight(class_weight='balanced', y=y_train_ada)
 
@@ -64,17 +64,17 @@ X_train_ada, y_train_ada = adasyn.fit_resample(X_train, y_train)
 # class_weights = {0: weight_for_0, 1: weight_for_1}
 # sample_weights = compute_sample_weight(class_weight={0: weight_for_0, 1: weight_for_1}, y=y_train_smote)
 
-# Calculate class weights based on the new distribution after ADASYN
-total_samples = len(y_train_ada)
-num_classes = 2
-count_class_0 = sum(y_train_ada == 0)
-count_class_1 = sum(y_train_ada == 1)
+# # Calculate class weights based on the new distribution after ADASYN
+# total_samples = len(y_train_ada)
+# num_classes = 2
+# count_class_0 = sum(y_train_ada == 0)
+# count_class_1 = sum(y_train_ada == 1)
 
-weight_for_0 = total_samples / (num_classes * count_class_0)
-weight_for_1 = total_samples / (num_classes * count_class_1)
+# weight_for_0 = total_samples / (num_classes * count_class_0)
+# weight_for_1 = total_samples / (num_classes * count_class_1)
 
-class_weights = {0: weight_for_0, 1: weight_for_1}
-sample_weights = compute_sample_weight(class_weight={0: weight_for_0, 1: weight_for_1}, y=y_train_ada)
+# class_weights = {0: weight_for_0, 1: weight_for_1}
+# sample_weights = compute_sample_weight(class_weight={0: weight_for_0, 1: weight_for_1}, y=y_train_ada)
 
 # param_grid_lr = {
 #     'C': [0.01, 0.1, 1, 10, 100],
@@ -144,17 +144,18 @@ combined_probs = (0.5 * lr_probs + 0.5 * gbm_probs)
 combined_pred = [1 if prob > 0.5 else 0 for prob in combined_probs]
 
 # Save the trained logistic regression model
-model_filename = 'logistic_regression_model.joblib'
+model_filename = 'logistic_regression_model_6_features.joblib'
 joblib.dump(lr_model, model_filename)
 print(f"Model saved to {model_filename}")
 
 # Save the trained gradient boosting model
-model_filename = 'gradient_boosting_model.joblib'
+model_filename = 'gradient_boosting_model_6_features.joblib'
 joblib.dump(gbm_model, model_filename)
 print(f"Model saved to {model_filename}")
 
 
 # Print the scores
+print("Logistic Regression & Gradient Boosting Machine")
 print(f"Accuracy: {accuracy_score(y_test, combined_pred)*100:.2f}%")
 print(f"F1-score: {f1_score(y_test, combined_pred):.2f}")
 print(f"Precision: {precision_score(y_test, combined_pred):.2f}")

@@ -1,7 +1,7 @@
 import csv
 
 # Define the path to your CSV file
-file_path = 'airdrops_data_latest.csv'
+file_path = 'airdrops_data_latest_ITP1_updated_with_temp.csv'
 
 # Temporary list to hold rows as they are processed
 updated_rows = []
@@ -30,6 +30,10 @@ with open(file_path, mode='r', newline='', encoding='utf-8-sig') as file:
             else:
                 # Join the parts back together with '|', only between items
                 row['Requirements'] = ' | '.join(parts)
+                # Remove the degree symbol from the 'temp' field, if it exists
+        
+        if 'Temp' in row:
+            row['Temp'] = row['Temp'].replace('°', '')
 
         updated_rows.append(row)
 
