@@ -803,3 +803,7 @@ td, th {
 .learn_avoid-search-bar button:hover {
     background-color: #0056b3;
 }
+
+.center-text {
+    text-align: center;
+}
