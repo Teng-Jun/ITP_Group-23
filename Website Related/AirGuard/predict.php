@@ -80,7 +80,7 @@
             };
 
             // Send JSON instead of form-data
-            fetch('http://4.145.97.58/predict', {
+            fetch('http://13.76.25.253/predict', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
