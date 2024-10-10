@@ -36,7 +36,7 @@ def scrape_with_selenium():
     try:
         WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.TAG_NAME, "article")))
 
-        for _ in range(112):  # Ensure you're clicking 'Show More' as many times as you need
+        for _ in range(119):  # Ensure you're clicking 'Show More' as many times as you need
             try:
                 show_more_button = WebDriverWait(driver, 10).until(
                     EC.element_to_be_clickable((By.CSS_SELECTOR, "div.showmore > span"))
@@ -110,6 +110,11 @@ def scrape_with_selenium():
                 platform = "n/a"
             except IndexError:
                 platform = "n/a"
+
+            try:
+                temp = driver.find_element(By.CLASS_NAME, 'airdrop-rating-temp-single').text
+            except NoSuchElementException:
+                temp = "n/a"
 
             # Extracting the Requirements
             requirements = []
@@ -230,6 +235,7 @@ def scrape_with_selenium():
                 "Total_Supply": total_supply,
                 "Whitepaper": whitepaper_link,
                 "Thumbnail": thumbnail_url,
+                "Temp": temp,
                 **social_links,
                 "Exchanges": exchanges,
                 "Youtube": youtube

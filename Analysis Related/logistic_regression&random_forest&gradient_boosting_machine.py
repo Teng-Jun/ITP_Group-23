@@ -10,7 +10,7 @@ import joblib
 from imblearn.pipeline import Pipeline 
 
 # Load the labeled data
-data_path = 'processed_airdrops_data_with_more_scam_labelled.csv'
+data_path = 'processed_airdrops_data_latest_ITP1_updated_with_temp_labelled.csv'
 data = pd.read_csv(data_path, encoding='ISO-8859-1')
 'Requirement_Count', 'Guide_Length'
 # Split the data into features and target
@@ -24,9 +24,9 @@ X_scaled = scaler.fit_transform(X)
 # Split the data into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.3, random_state=42)
 
-# Applying SMOTE
-smote = SMOTE(random_state=42)
-X_train_smote, y_train_smote = smote.fit_resample(X_train, y_train)
+# # Applying SMOTE
+# smote = SMOTE(random_state=42)
+# X_train_smote, y_train_smote = smote.fit_resample(X_train, y_train)
 
 # # Apply ADASYN to the training data
 # adasyn = ADASYN(random_state=42)
@@ -173,21 +173,22 @@ combined_probs = (0.3 * lr_probs + 0.4 * rf_probs + 0.3 * gbm_probs)
 combined_pred = [1 if prob > 0.5 else 0 for prob in combined_probs]
 
 # Save the trained logistic regression model
-model_filename = 'logistic_regression_model.joblib'
+model_filename = 'logistic_regression_model_6_features.joblib'
 joblib.dump(lr_model, model_filename)
 print(f"Model saved to {model_filename}")
 
 # Save the trained random forest model
-model_filename = 'random_forest_model.joblib'
+model_filename = 'random_forest_model_6_features.joblib'
 joblib.dump(rf_model, model_filename)
 print(f"Model saved to {model_filename}")
 
 # Save the trained gradient boosting model
-model_filename = 'gradient_boosting_model.joblib'
+model_filename = 'gradient_boosting_model_6_features.joblib'
 joblib.dump(gbm_model, model_filename)
 print(f"Model saved to {model_filename}")
 
 # Print the scores
+print("Logistic Regression & Random Forest & Gradient Boosting Machine")
 print(f"Accuracy: {accuracy_score(y_test, combined_pred)*100:.2f}%")
 print(f"F1-score: {f1_score(y_test, combined_pred):.2f}")
 print(f"Precision: {precision_score(y_test, combined_pred):.2f}")

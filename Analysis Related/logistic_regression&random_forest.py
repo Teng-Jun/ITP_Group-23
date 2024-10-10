@@ -9,7 +9,7 @@ import joblib
 from imblearn.pipeline import Pipeline 
 
 # Load the labeled data
-data_path = 'processed_airdrops_data_with_more_scam_labelled.csv'
+data_path = 'processed_airdrops_data_latest_ITP1_updated_with_temp_labelled.csv'
 data = pd.read_csv(data_path, encoding='ISO-8859-1')
 
 'Requirement_Count', 'Guide_Length'
@@ -64,36 +64,36 @@ X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.3, 
 
 # class_weights = {0: weight_for_0, 1: weight_for_1}
 
-#Define parameter grids
-param_grid_lr = {
-    'C': [0.001, 0.01, 0.1, 1, 10],
-    'solver': ['liblinear', 'saga']  # solvers suitable for small datasets
-}
+# #Define parameter grids
+# param_grid_lr = {
+#     'C': [0.001, 0.01, 0.1, 1, 10],
+#     'solver': ['liblinear', 'saga']  # solvers suitable for small datasets
+# }
 
-param_grid_rf = {
-    'n_estimators': [100, 200, 300],
-    'max_depth': [None, 10, 20, 30],
-    'min_samples_split': [2, 5, 10],
-    'min_samples_leaf': [1, 2, 4]
-}
+# param_grid_rf = {
+#     'n_estimators': [100, 200, 300],
+#     'max_depth': [None, 10, 20, 30],
+#     'min_samples_split': [2, 5, 10],
+#     'min_samples_leaf': [1, 2, 4]
+# }
 
-# Setup GridSearchCV for Logistic Regression
-grid_lr = GridSearchCV(
-    LogisticRegression(random_state=42),
-    param_grid=param_grid_lr,
-    scoring=None,
-    cv=3,
-    verbose=2
-)
+# # Setup GridSearchCV for Logistic Regression
+# grid_lr = GridSearchCV(
+#     LogisticRegression(random_state=42),
+#     param_grid=param_grid_lr,
+#     scoring=None,
+#     cv=3,
+#     verbose=2
+# )
 
-# Setup GridSearchCV for Random Forest
-grid_rf = GridSearchCV(
-    RandomForestClassifier(random_state=42),
-    param_grid=param_grid_rf,
-    scoring=None,
-    cv=3,
-    verbose=2
-)
+# # Setup GridSearchCV for Random Forest
+# grid_rf = GridSearchCV(
+#     RandomForestClassifier(random_state=42),
+#     param_grid=param_grid_rf,
+#     scoring=None,
+#     cv=3,
+#     verbose=2
+# )
 
 # # Define parameter grids
 # param_grid_lr = {
@@ -137,29 +137,29 @@ grid_rf = GridSearchCV(
 #     verbose=2
 # )
 
-# Fit the models
-grid_lr.fit(X_train, y_train)
-grid_rf.fit(X_train, y_train)
+# # Fit the models
+# grid_lr.fit(X_train, y_train)
+# grid_rf.fit(X_train, y_train)
 
-# Get the best models
-lr_model = grid_lr.best_estimator_
-rf_model = grid_rf.best_estimator_
+# # Get the best models
+# lr_model = grid_lr.best_estimator_
+# rf_model = grid_rf.best_estimator_
 
-# Assuming X_test is available
-lr_probs = lr_model.predict_proba(X_test)[:, 1]
-rf_probs = rf_model.predict_proba(X_test)[:, 1]
-
-# # Initialize and train the logistic regression model
-# lr_model = LogisticRegression()
-# lr_model.fit(X_train, y_train)
-
-# # Initialize and train the random forest model
-# rf_model = RandomForestClassifier(random_state=42)
-# rf_model.fit(X_train, y_train)
-
-# # Predict probabilities on the test set
+# # Assuming X_test is available
 # lr_probs = lr_model.predict_proba(X_test)[:, 1]
 # rf_probs = rf_model.predict_proba(X_test)[:, 1]
+
+# Initialize and train the logistic regression model
+lr_model = LogisticRegression()
+lr_model.fit(X_train, y_train)
+
+# Initialize and train the random forest model
+rf_model = RandomForestClassifier(random_state=42)
+rf_model.fit(X_train, y_train)
+
+# Predict probabilities on the test set
+lr_probs = lr_model.predict_proba(X_test)[:, 1]
+rf_probs = rf_model.predict_proba(X_test)[:, 1]
 
 
 # Combine the probabilities: Let's say we trust LR a bit less, we give it a weight of 0.4 and RF a weight of 0.6
@@ -168,16 +168,17 @@ combined_probs = (0.4 * lr_probs + 0.6 * rf_probs)
 combined_pred = [1 if prob > 0.5 else 0 for prob in combined_probs]
 
 # Save the trained logistic regression model
-model_filename = 'logistic_regression_model.joblib'
+model_filename = 'logistic_regression_model_6_features.joblib'
 joblib.dump(lr_model, model_filename)
 print(f"Model saved to {model_filename}")
 
 # Save the trained logistic regression model
-model_filename = 'random_forest_model.joblib'
+model_filename = 'random_forest_model_6_features.joblib'
 joblib.dump(rf_model, model_filename)
 print(f"Model saved to {model_filename}")
 
 # Print the scores
+print("Logistic Regression & Random Forest")
 print(f"Accuracy: {accuracy_score(y_test, combined_pred)*100:.2f}%")
 print(f"F1-score: {f1_score(y_test, combined_pred):.2f}")
 print(f"Precision: {precision_score(y_test, combined_pred):.2f}")
