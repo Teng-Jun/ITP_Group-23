@@ -4,7 +4,7 @@ from mysql.connector import Error
 def test_database_connection():
     try:
         connection = mysql.connector.connect(
-            host='4.145.97.58',
+            host='13.76.25.253',
             user='phpmyadmin',
             password='xji],x4~hSTBCqd',
             database='itp'

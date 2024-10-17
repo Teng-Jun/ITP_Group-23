@@ -6,9 +6,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException, TimeoutException, ElementClickInterceptedException
 import time
 import pandas as pd
-import mysql.connector
 from os.path import exists
-from db_config import DB_CONFIG
 
 def setup_driver():
     options = Options()
@@ -27,22 +25,8 @@ def hide_onesignal_prompt(driver):
     except Exception as e:
         print(f"Error hiding OneSignal prompt: {str(e)}")
 
-def fetch_existing_titles():
-    """Fetch existing titles from the MySQL database to avoid duplicates."""
-    connection = mysql.connector.connect(**DB_CONFIG)
-    
-    cursor = connection.cursor()
-    cursor.execute("SELECT Title FROM airdrops_data")
-    existing_titles = {row[0] for row in cursor.fetchall()}  # Use a set for fast lookup
-    
-    cursor.close()
-    connection.close()
-    
-    return existing_titles
-
-def scrape_with_selenium(existing_titles):
+def scrape_with_selenium():
     driver = setup_driver()
-    # driver.get("https://airdrops.io/speculative/")
     driver.get("https://airdrops.io/latest/")
     hide_onesignal_prompt(driver)
     all_data = []
@@ -50,7 +34,7 @@ def scrape_with_selenium(existing_titles):
     try:
         WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.TAG_NAME, "article")))
 
-        for _ in range(1):  # Ensure you're clicking 'Show More' as many times as you need
+        for _ in range(120):  # Ensure you're clicking 'Show More' as many times as you need
             try:
                 show_more_button = WebDriverWait(driver, 10).until(
                     EC.element_to_be_clickable((By.CSS_SELECTOR, "div.showmore > span"))
@@ -99,9 +83,13 @@ def scrape_with_selenium(existing_titles):
                 title = "n/a"
 
             try:   
-                features = driver.find_element(By.CSS_SELECTOR, 'span.drop-features p').text 
+                # Select all <p> elements inside the span with class 'drop-features'
+                feature_elements = driver.find_elements(By.CSS_SELECTOR, 'span.drop-features p, span.drop-features p.whitespace-pre-wrap')                 # Join the text content of all <p> elements
+                features = ' '.join([element.text for element in feature_elements if element.text.strip()])                
+                print(f"Scraped features: {features}")
             except NoSuchElementException:
                 features = "n/a"
+                print("Features not found.")
 
             try:
                 guide_elements = driver.find_elements(By.CSS_SELECTOR, 'div.airdrop-guide li')
@@ -124,6 +112,11 @@ def scrape_with_selenium(existing_titles):
                 platform = "n/a"
             except IndexError:
                 platform = "n/a"
+            
+            try:
+                temp = driver.find_element(By.CLASS_NAME, 'airdrop-rating-temp-single').text
+            except NoSuchElementException:
+                temp = "n/a"
 
             # Extracting the Requirements
             requirements = []
@@ -244,6 +237,7 @@ def scrape_with_selenium(existing_titles):
                 "Total_Supply": total_supply,
                 "Whitepaper": whitepaper_link,
                 "Thumbnail": thumbnail_url,
+                "Temp": temp,
                 **social_links,
                 "Exchanges": exchanges,
                 "Youtube": youtube
@@ -266,8 +260,8 @@ def merge_and_update_data(new_data, filename='airdrops_data_latest.csv'):
 
 
 def main():
-    existing_titles = fetch_existing_titles()  # Get existing titles from the database
-    scraped_data = scrape_with_selenium(existing_titles)  # Only scrape new/updated entries
+    # existing_titles = fetch_existing_titles()  # Get existing titles from the database
+    scraped_data = scrape_with_selenium()  # Only scrape new/updated entries
     merge_and_update_data(scraped_data)  # Save to CSV file
 
 if __name__ == "__main__":
