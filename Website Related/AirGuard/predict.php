@@ -7,24 +7,33 @@
 </head>
 <body>
     <h1>Airdrop Scam Prediction</h1>
-    <form id="airdropForm" method="POST">
+
+    <!-- Input for the Airdrop URL -->
+    <form id="urlForm">
+        <label for="airdrop_url">Airdrop URL:</label>
+        <input type="url" id="airdrop_url" name="airdrop_url" required placeholder="Enter the Airdrop URL"><br><br>
+        <button type="submit">Fetch Airdrop Data</button>
+    </form>
+
+    <!-- Prediction Form (this gets populated automatically after fetching URL data) -->
+    <form id="airdropForm" method="POST" style="display:none;">
         <label for="airdrop_name">Airdrop Name:</label>
-        <input type="text" id="airdrop_name" name="airdrop_name" required><br><br>
+        <input type="text" id="airdrop_name" name="airdrop_name" required readonly><br><br>
 
         <label for="num_of_prev_drops">Number of Previous Airdrops:</label>
-        <input type="number" id="num_of_prev_drops" name="num_of_prev_drops" required><br><br>
+        <input type="number" id="num_of_prev_drops" name="num_of_prev_drops" required readonly><br><br>
 
         <label for="presence_of_whitepaper">Presence of Whitepaper (1 if yes, 0 if no):</label>
-        <input type="number" id="presence_of_whitepaper" name="presence_of_whitepaper" min="0" max="1" required><br><br>
+        <input type="number" id="presence_of_whitepaper" name="presence_of_whitepaper" min="0" max="1" required readonly><br><br>
 
         <label for="requirement_count">Requirement Count:</label>
-        <input type="number" id="requirement_count" name="requirement_count" required><br><br>
+        <input type="number" id="requirement_count" name="requirement_count" required readonly><br><br>
 
         <label for="guide_length">Guide Length:</label>
-        <input type="number" id="guide_length" name="guide_length" required><br><br>
+        <input type="number" id="guide_length" name="guide_length" required readonly><br><br>
 
         <label for="social_media_count">Social Media Count:</label>
-        <input type="number" id="social_media_count" name="social_media_count" required><br><br>
+        <input type="number" id="social_media_count" name="social_media_count" required readonly><br><br>
 
         <button type="submit">Predict</button>
     </form>
@@ -65,6 +74,44 @@
             loadPastPredictions();
         }
 
+        // Handle Airdrop URL Submission to fetch data
+        document.getElementById('urlForm').onsubmit = function (event) {
+            event.preventDefault();
+
+            const airdropUrl = document.getElementById('airdrop_url').value;
+
+            // Send URL to Flask server for scraping
+            fetch('http://13.76.25.253/predict', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ url: airdropUrl })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    document.getElementById('result').innerText = "Error: " + data.error;
+                } else {
+                    // Populate the form fields automatically with scraped data
+                    document.getElementById('airdrop_name').value = data.title;
+                    document.getElementById('num_of_prev_drops').value = data.num_of_prev_drops;
+                    document.getElementById('presence_of_whitepaper').value = data.presence_of_whitepaper;
+                    document.getElementById('requirement_count').value = data.requirement_count;
+                    document.getElementById('guide_length').value = data.guide_length;
+                    document.getElementById('social_media_count').value = data.social_media_count;
+
+                    // Show the prediction form
+                    document.getElementById('airdropForm').style.display = 'block';
+                }
+            })
+            .catch(error => {
+                console.error("There was a problem with the fetch operation:", error);
+                document.getElementById('result').innerText = "An error occurred. Please check the server logs.";
+            });
+        };
+
+        // Handle form submission to get the prediction
         document.getElementById('airdropForm').onsubmit = function (event) {
             event.preventDefault();
 
@@ -79,7 +126,7 @@
                 social_media_count: document.getElementById('social_media_count').value
             };
 
-            // Send JSON instead of form-data
+            // Send JSON instead of form-data for prediction
             fetch('http://13.76.25.253/predict', {
                 method: 'POST',
                 headers: {
