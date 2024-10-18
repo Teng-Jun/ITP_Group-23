@@ -25,7 +25,7 @@
                     <li class="nav-item"><a class="nav-link" href="upcoming.php">Upcoming Airdrops</a></li>
                     <li class="nav-item"><a class="nav-link" href="tips.php">Safety Tips</a></li>
                     <li class="nav-item"><a class="nav-link" href="learn_avoid.php">Learn & Avoid Airdrop Scams</a></li>
-                    <li class="nav-item"><a class="nav-link" href="urlscanio.php">Scan a URL</a></li>
+                    <li class="nav-item"><a class="nav-link" href="urlscan.php">Scan a URL</a></li>
                 </ul>
             </div>
         </nav>

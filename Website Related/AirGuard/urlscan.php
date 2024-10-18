@@ -40,6 +40,9 @@ function retrieveScanResults($uuid, $apiKey) {
     return null;  // Return null if scan isn't ready
 }
 
+$results = null;
+$error = null;
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['url'])) {
     $urlToScan = $_POST['url'];
     $scanResult = submitUrlScan($urlToScan, $apiKey);
@@ -48,21 +51,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['url'])) {
         $uuid = $scanResult['uuid'];
         $results = retrieveScanResults($uuid, $apiKey);
 
-        // Convert scan time to local time
-        $scanTimeUTC = $results['task']['time'] ?? 'N/A';
-        if ($scanTimeUTC !== 'N/A') {
-            $date = new DateTime($scanTimeUTC, new DateTimeZone('UTC'));
-            $date->setTimezone(new DateTimeZone('Asia/Singapore'));  // Adjust to your timezone
-            $localScanTime = $date->format('Y-m-d H:i:s');
+        if ($results === null) {
+            $error = "Failed to retrieve scan results. Please try again.";
         } else {
-            $localScanTime = 'N/A';
-        }
+            // Convert scan time to local time
+            $scanTimeUTC = $results['task']['time'] ?? 'N/A';
+            if ($scanTimeUTC !== 'N/A') {
+                $date = new DateTime($scanTimeUTC, new DateTimeZone('UTC'));
+                $date->setTimezone(new DateTimeZone('Asia/Singapore'));  // Adjust to your timezone
+                $localScanTime = $date->format('Y-m-d H:i:s');
+            } else {
+                $localScanTime = 'N/A';
+            }
 
-        // Capitalize country name
-        $brandCountry = strtoupper($results['verdicts']['urlscan']['brands'][0]['country'][0] ?? 'N/A');
+            // Capitalize country name
+            $brandCountry = strtoupper($results['verdicts']['urlscan']['brands'][0]['country'][0] ?? 'N/A');
+        }
+    } else {
+        $error = "Failed to submit the scan. Please check the URL and try again.";
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -76,16 +86,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['url'])) {
     <style>
         .clean { color: green; }
         .unrated { color: orange; }
+        .progress-message { color: blue; font-weight: bold; }
         .malicious { color: red; }
     </style>
+    <script>
+        function showProgressMessage() {
+            document.getElementById('progressMessage').style.display = 'block';
+        }
+        function showErrorMessage(errorMessage) {
+            if (errorMessage) {
+                alert(errorMessage);
+            }
+        }
+    </script>
 </head>
 <body>
+    <body onload="showErrorMessage('<?= $error ?? '' ?>')">
     <div class="header-container">
         <?php include 'header.php'; ?>
     </div>
     <div class="container my-5">
         <h2>Scan a URL for Threats</h2>
-        <form id="apiForm" method="POST">
+        <form id="apiForm" method="POST" onsubmit="showProgressMessage()">
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="api">Choose API:</label>
@@ -100,7 +122,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['url'])) {
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
-
+        <!-- Progress Message -->
+        <div id="progressMessage" class="progress-message mt-4" style="display: none;">
+            Scanning in progress. Please wait...
+        </div>
         <div id="result" class="mt-4">
             <?php if (isset($results)): ?>
                 <h3>Scan Results</h3>
@@ -126,7 +151,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['url'])) {
                                 <?php if (!empty($results['verdicts']['overall']['malicious'])): ?>
                                     <li class="list-group-item malicious">This URL is Malicious</li>
                                 <?php else: ?>
-                                    <li class="list-group-item clean">This URL is Clean</li>
+                                    <li class="list-group-item clean">This URL is most likely clean</li>
                                 <?php endif; ?>
 
                                 <li class="list-group-item">
