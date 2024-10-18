@@ -218,5 +218,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['url'])) {
             <?php endif; ?>
         </div>
     </div>
+         <!-- Add the footer include here -->
+         <div class="footer-container">
+        <?php include 'footer.php'; ?>
+    </div>
 </body>
 </html>
