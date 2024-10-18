@@ -74,11 +74,11 @@ def analyze_sentiment(text, positive_words, neutral_words, negative_words):
 
 # Step 1: Scrape new airdrop data
 def scrape_new_airdrop_data():
-    latest_airdrops = load_csv_with_encoding('new_airdrops_data_latest.csv')
-    sentiment_results = load_csv_with_encoding('combined_airdrop_sentiment_results_2.csv')
-    no_count_airdrops = sentiment_results[sentiment_results['total'] == 0]['airdrop_name'].tolist()
+    latest_airdrops = load_csv_with_encoding('new_airdrops_data_latest.csv')    #latest csv airdrop
+    sentiment_results = load_csv_with_encoding('combined_airdrop_sentiment_results_2.csv') #old sentiment analysis airdrop csv
+    no_count_airdrops = sentiment_results[sentiment_results['total'] == 0]['airdrop_name'].tolist() #format to list those airdrop have no data
     new_airdrops = latest_airdrops[~latest_airdrops['Title'].isin(sentiment_results['airdrop_name'])]['Title'].tolist()
-    # Combine and limit to 20 items for demonstration purposes
+    # Combine and limit to 20 items similarly to the initial scrape of data
     airdrop_names_to_scrape = list(set(no_count_airdrops + new_airdrops))
     
     # Sort the list alphabetically for better progress tracking
