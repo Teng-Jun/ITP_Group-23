@@ -78,11 +78,11 @@ function getCheckPhishStatus($jobID) {
     $response = sendCurlRequest($apiEndpoint, ["Content-Type: application/json"], $postData);
 
     // Debug: Log raw response and HTTP code
-    if (!$response) {
-        echo "<pre>No response received from CheckPhish API.</pre>";
-    } else {
-        echo "<pre>Raw Response: " . htmlspecialchars(json_encode($response, JSON_PRETTY_PRINT)) . "</pre>";
-    }
+ #   if (!$response) {
+  #      echo "<pre>No response received from CheckPhish API.</pre>";
+   # } else {
+    #    echo "<pre>Raw Response: " . htmlspecialchars(json_encode($response, JSON_PRETTY_PRINT)) . "</pre>";
+    #}
 
     return $response;
 }
