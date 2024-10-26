@@ -1,0 +1,1 @@
+<div><?= $statusResult ?></div>
