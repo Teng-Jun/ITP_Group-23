@@ -12,13 +12,6 @@ function sendCurlRequest($url, $headers, $postData = null) {
     $response = curl_exec($ch);
     $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
 
-    // Debug: Log HTTP code and response
-    echo "<p>HTTP Code: $httpCode</p>";
-
-    if ($httpCode !== 200) {
-        echo "<p>Error: Received non-200 HTTP response.</p>";
-    }
-
     curl_close($ch);
 
     return json_decode($response, true);
