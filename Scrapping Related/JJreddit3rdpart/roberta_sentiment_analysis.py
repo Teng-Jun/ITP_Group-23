@@ -15,9 +15,9 @@ airdrops_df = pd.read_csv(os.path.join(DATA_PATH, 'new_airdrops_data_latest.csv'
 # Get a list of the first 800 airdrop names
 #airdrop_names = airdrops_df['Title'].tolist()[:800]  # Only first 800
 
-airdrop_names = airdrops_df['Title'].tolist()[800:1600]  # Next 800
+#airdrop_names = airdrops_df['Title'].tolist()[800:1600]  # Next 800
 
-#airdrop_names = airdrops_df['Title'].tolist()[1600:]  # Remaining airdrops
+airdrop_names = airdrops_df['Title'].tolist()[1600:]  # Remaining airdrops
 
 # Initialize the RoBERTa sentiment analysis pipeline
 model_name = "cardiffnlp/twitter-roberta-base-sentiment"
@@ -96,7 +96,7 @@ for airdrop, sentiments in sentiment_results.items():
         sentiments['is_scam'] = False
 
 # Save the sentiment analysis results to a CSV file
-output_file = 'roberta_airdrop_sentiment_results_part2.csv'  # Save as part 2
+output_file = 'roberta_airdrop_sentiment_results_part3.csv'  # Save as part 3
 with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
     fieldnames = [
         'airdrop_name', 'positive', 'neutral', 'negative', 'total', 'total_words',
@@ -121,4 +121,4 @@ with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
             'is_scam': sentiments['is_scam']
         })
 
-print(f"Sentiment analysis results with RoBERTa (Part 2) saved to {output_file}")
+print(f"Sentiment analysis results with RoBERTa (Part 3) saved to {output_file}")
