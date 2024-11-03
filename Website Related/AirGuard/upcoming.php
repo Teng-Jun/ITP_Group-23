@@ -164,6 +164,10 @@
             </div>
         </main>
     </div>
+         <!-- Add the footer include here -->
+         <div class="footer-container">
+        <?php include 'footer.php'; ?>
+    </div>
     <script src="script.js"></script>
     <script>
         let sentimentData = [];

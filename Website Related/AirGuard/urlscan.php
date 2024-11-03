@@ -1,48 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scan URL - Airdrop Tracker</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Include Chart.js here -->
-    <style>
-        .clean { color: green; }
-        .unrated { color: orange; }
-        .malicious { color: red; }
-    </style>
-</head>
-<body>
-    <div class="header-container">
-        <?php include 'header.php'; ?>
-    </div>
-    <div class="container my-5">
-        <h2>Scan a URL for Threats</h2>
-        <form id="apiForm">
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="api">Choose API:</label>
-                    <select id="api" name="api" class="form-control" required>
-                        <option value="virustotal">VirusTotal</option>
-                        <option value="ipqs">IPQS</option>
-                    </select>
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="url">Enter URL to Scan:</label>
-                    <input type="text" class="form-control" name="url" id="url" placeholder="example.com" required>
-                </div>
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
+<?php
+require __DIR__ . '/config/config.php';
+require __DIR__ . '/functions/virustotal.php';
+require __DIR__ . '/functions/checkphish.php';
+require __DIR__ . '/functions/ipqs.php';
 
-        <div id="result" class="mt-4 row">
-            <!-- The result section will now be divided into two columns -->
-            <div id="scanResults" class="col-md-6"></div> <!-- Scan results will be displayed here -->
-            <div id="chartContainer" class="col-md-6"></div> <!-- Chart will be displayed here -->
-        </div>
-    </div>
-    <!-- Link to the external JavaScript file -->
-    <script src="urlscript.js"></script>
-</body>
-</html>
+$statusResult = null;
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['url']) && isset($_POST['api'])) {
+    $url = filter_var($_POST['url'], FILTER_SANITIZE_URL);
+    $api = $_POST['api'];
+
+    switch ($api) {
+        case 'virustotal':
+            $statusResult = handleVirusTotalScan($url);
+            break;
+        case 'checkphish':
+            $statusResult = handleCheckPhishScan($url);
+            break;
+        case 'ipqs':
+            $statusResult = handleIpqsScan($url);
+            break;
+        default:
+            $statusResult = "<p>Invalid API selection.</p>";
+    }
+}
+
+include __DIR__ . '/views/header.php';
+?>
+    <h1>URL Scanner</h1>
+    <form method="POST" onsubmit="showProgressMessage(event)">
+        <label for="url">Enter a URL:</label>
+        <input type="text" name="url" id="url" required>
+        <label for="api">Select API:</label>
+        <select name="api" id="api" required>
+            <option value="virustotal">VirusTotal</option>
+            <option value="checkphish">CheckPhish</option>
+            <option value="ipqs">IPQualityScore (IPQS)</option>
+        </select>
+        <button type="submit">Scan</button>
+    </form>
+
+    <div id="progressMessage"></div>
+
+    <?php if ($statusResult): ?>
+        <div><?php include __DIR__ . '/views/results.php'; ?></div>
+    <?php endif; ?>
+
+<?php include __DIR__ . '/views/footer.php'; ?>

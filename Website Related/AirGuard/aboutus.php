@@ -48,6 +48,11 @@
             </div>
         </main>
     </div>
+    <!-- Add the footer include here -->
+    <div class="footer-container">
+        <?php include 'footer.php'; ?>
+    </div>
+
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
