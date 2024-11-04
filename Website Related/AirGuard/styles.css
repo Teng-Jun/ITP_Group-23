@@ -807,3 +807,9 @@ td, th {
 .center-text {
     text-align: center;
 }
+
+.urlscan_des {
+    text-align: center;
+    font-weight: bold;
+    font-size: 2em;
+}
