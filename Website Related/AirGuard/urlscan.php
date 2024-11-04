@@ -37,26 +37,44 @@ include __DIR__ . '/views/header.php';
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
         <link rel="icon" type="image/png" href="image/airguard-favicon-color-32.png">
-    </head>    
+    </head>
 
-
-    <h1>URL Scanner</h1>
-    <form method="POST" onsubmit="showProgressMessage(event)">
-        <label for="url">Enter a URL:</label>
-        <input type="text" name="url" id="url" required>
-        <label for="api">Select API:</label>
-        <select name="api" id="api" required>
-            <option value="virustotal">VirusTotal</option>
-            <option value="checkphish">CheckPhish</option>
-            <option value="ipqs">IPQualityScore (IPQS)</option>
-        </select>
-        <button type="submit">Scan</button>
-    </form>
-
-    <div id="progressMessage"></div>
+    <div class="header-container">
+            <?php include 'header.php'; ?>
+    </div>
+    <body>
+        <h1>URL Scanner</h1>
+        
+        <div class="wrapper">
+            <main>
+                <div class="form-container">
+                    <form method="POST" onsubmit="showProgressMessage(event)">
+                        <label for="url">Enter a URL:</label>
+                        <input type="text" name="url" id="url" required>
+                        <label for="api">Select API:</label>
+                        <select name="api" id="api" required>
+                            <option value="virustotal">VirusTotal</option>
+                            <option value="checkphish">CheckPhish</option>
+                            <option value="ipqs">IPQualityScore (IPQS)</option>
+                        </select>
+                        <button type="submit">Scan</button>
+                    </form>
+                </div>
+            </main>
+        </div>
+        <div class="footer-container">
+            <?php include 'footer.php'; ?>
+        </div>
+        
+        <div id="progressMessage"></div>
 
     <?php if ($statusResult): ?>
         <div><?php include __DIR__ . '/views/results.php'; ?></div>
     <?php endif; ?>
+        
+    </body>
+
+    
+    
 
 <?php include __DIR__ . '/views/footer.php'; ?>
