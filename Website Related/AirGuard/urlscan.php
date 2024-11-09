@@ -46,20 +46,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['url']) && isset($_POS
             <p class="learn_avoid-disclaimer">
                 Disclaimer: Users must exercise due diligence to determine the reliability of free airdrops or Web3 project tokens. We are not responsible for any actions taken by users in the event they fall for airdrop token scams, as the decision to participate in such campaigns ultimately belongs to the users themselves.
             </p>
-            <h1 style="color: red">URL Scanner</h1>
-            <p class="urlscan_des">Scan a URL if you are unsure of its authenticity!</p>
-            <div class="form-container">
-                <form method="POST" onsubmit="showProgressMessage(event)">
-                    <label for="url">Enter a URL:</label>
-                    <input type="text" name="url" id="url" required>
-                    <label for="api">Select API:</label>
-                    <select name="api" id="api" required>
-                        <option value="virustotal">VirusTotal</option>
-                        <option value="checkphish">CheckPhish</option>
-                        <option value="ipqs">IPQualityScore (IPQS)</option>
-                    </select>
-                    <button type="submit" class="btn btn-light">Scan</button>
-                </form>
+            <div class="URL-Description Header">
+                <h1 style="text-align: center">URL Scanner</h1>
+                <p class="urlscan_des">Scan a URL if you are unsure of its authenticity!</p>
+            </div>
+            <div class="center-container">
+                <div class="form-container">
+                    <form method="POST" onsubmit="showProgressMessage(event)" novalidate>
+                        <div class="form-group">
+                            <label for="url">Enter a URL:</label>
+                            <input type="text" class="form-control" name="url" id="url" required>
+                            <div class="invalid-feedback">
+                                Enter a URL!
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="api">Select API:</label>
+                            <select name="api" class="form-control" id="api" required>
+                                <option value="">API</option>
+                                <option value="virustotal">VirusTotal</option>
+                                <option value="checkphish">CheckPhish</option>
+                                <option value="ipqs">IPQualityScore (IPQS)</option>
+                            </select>
+                            <div class="invalid-feedback">
+                                Choose an valid API!
+                            </div>
+                        </div>
+                        <div class="button-container">
+                            <button type="submit" class="btn btn-primary" style="width: 5em;">Scan</button>   
+                        </div>    
+                    </form>
+                </div>
             </div>
         </main>
         <script src="script.js"></script>
@@ -76,3 +94,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['url']) && isset($_POS
     <?php endif; ?>
 </body>
 </html>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.querySelector("form");
+
+        form.addEventListener("submit", function (event) {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+
+            form.classList.add("was-validated");
+        });
+    });
+</script>
