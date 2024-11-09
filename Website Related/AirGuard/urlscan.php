@@ -1,10 +1,13 @@
 <?php
+session_start(); // Start the session at the beginning
+
 require __DIR__ . '/config/config.php';
 require __DIR__ . '/functions/virustotal.php';
 require __DIR__ . '/functions/checkphish.php';
 require __DIR__ . '/functions/ipqs.php';
 
 $statusResult = null;
+$scanData = null; // Ensure this variable is defined
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['url']) && isset($_POST['api'])) {
     $url = filter_var($_POST['url'], FILTER_SANITIZE_URL);
@@ -12,17 +15,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['url']) && isset($_POS
 
     switch ($api) {
         case 'virustotal':
-            $statusResult = handleVirusTotalScan($url);
+            $scanData = handleVirusTotalScan($url);
             break;
         case 'checkphish':
-            $statusResult = handleCheckPhishScan($url);
+            $scanData = handleCheckPhishScan($url);
             break;
         case 'ipqs':
-            $statusResult = handleIpqsScan($url);
+            $scanData = handleIpqsScan($url);
             break;
         default:
             $statusResult = "<p>Invalid API selection.</p>";
     }
+
+    // Store the scan data and URL in the session
+    $_SESSION['scanData'] = $scanData;
+    $_SESSION['url'] = $url;
+
+    // Redirect to the Scan Completed page
+    header("Location: urlcompleted.php");
+    exit;
 }
 ?>
 <!DOCTYPE html>
