@@ -34,6 +34,9 @@
 
         <label for="social_media_count">Social Media Count:</label>
         <input type="number" id="social_media_count" name="social_media_count" required readonly><br><br>
+        
+        <label for="temperature">Temperature:</label>
+        <input type="number" id="temperature" name="temperature" required readonly><br><br>
 
         <button type="submit">Predict</button>
     </form>
@@ -100,6 +103,7 @@
                     document.getElementById('requirement_count').value = data.requirement_count;
                     document.getElementById('guide_length').value = data.guide_length;
                     document.getElementById('social_media_count').value = data.social_media_count;
+                    document.getElementById('temperature').value = data.temperature;
 
                     // Show the prediction form
                     document.getElementById('airdropForm').style.display = 'block';
@@ -123,7 +127,8 @@
                 presence_of_whitepaper: document.getElementById('presence_of_whitepaper').value,
                 requirement_count: document.getElementById('requirement_count').value,
                 guide_length: document.getElementById('guide_length').value,
-                social_media_count: document.getElementById('social_media_count').value
+                social_media_count: document.getElementById('social_media_count').value,
+                temperature: document.getElementById('temperature').value
             };
 
             // Send JSON instead of form-data for prediction
