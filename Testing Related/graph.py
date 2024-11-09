@@ -4,14 +4,14 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix
 
 # Load the data
-file_path = 'testing_data_with_predictions_lr&rf&gbm.csv'
+file_path = 'testing_data_with_predictions_rf.csv'
 data = pd.read_csv(file_path)
 
 # Display the first few rows to understand the structure
 data.head()
 
 # Generate confusion matrix
-cm = confusion_matrix(data['is_scam'], data['Combined_Prediction'])
+cm = confusion_matrix(data['is_scam'], data['Prediction'])
 
 # Plot confusion matrix
 plt.figure(figsize=(8, 6))
