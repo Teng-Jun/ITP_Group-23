@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['url']) && isset($_POS
     <div class="wrapper">
         <main>
             <p class="learn_avoid-disclaimer">
-                Disclaimer: Users must exercise due diligence to determine the reliability of free airdrops or Web3 project tokens. We are not responsible for any actions taken by users in the event they fall for airdrop token scams, as the decision to participate in such campaigns ultimately belongs to the users themselves.
+                Disclaimer: Users must exercise due diligence to ensure that the Cryptocurrency Airdrop Project are authentic and true. We are not responsible for any actions taken by users in the event they fall for airdrop token scams, as the decision to participate in such campaigns ultimately belongs to the users themselves.
             </p>
             <div class="URL-Description Header">
                 <h1 style="text-align: center">URL Scanner</h1>
@@ -90,14 +90,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['url']) && isset($_POS
 
             <!-- Render the scan results below the form if scanData is available -->
             <?php if (!empty($scanData)): ?>
-                <div class="container mt-5">
-                    <h2>Scan Completed</h2>
-                    <p><strong>Scanned URL:</strong> <?php echo htmlspecialchars($url); ?></p>
-                    <p><strong>Status:</strong> <?php echo $scanData['status'] ?? 'N/A'; ?></p>
-                    <p><strong>Malicious Detections:</strong> <?php echo $scanData['malicious'] ?? 0; ?></p>
-                    <p><strong>Undetected:</strong> <?php echo $scanData['undetected'] ?? 0; ?></p>
-                    <p><strong>Harmless Detections:</strong> <?php echo $scanData['harmless'] ?? 0; ?></p>
+            <div class="container mt-5">
 
+                <?php if ($scanData['source'] === 'VirusTotal'): ?>
+                    <h2>VirusTotal URL Scan Results</h2>
+                    <p><strong>Scanned URL:</strong> <?php echo htmlspecialchars($scanData['url']); ?></p>
+                    <p><strong>Status:</strong> <?php echo htmlspecialchars($scanData['status']); ?></p>
+                    <p><strong>Malicious Detections:</strong> <?php echo htmlspecialchars($scanData['malicious']); ?></p>
+                    <p><strong>Undetected:</strong> <?php echo htmlspecialchars($scanData['undetected']); ?></p>
+                    <p><strong>Harmless Detections:</strong> <?php echo htmlspecialchars($scanData['harmless']); ?></p>
+                
+                <?php elseif ($scanData['source'] === 'CheckPhish'): ?>
+                    <h2>CheckPhish URL Scan Results</h2>
+                    <p><strong>Scanned URL:</strong> <?php echo htmlspecialchars($scanData['url']); ?></p>
+                    <p><strong>Status:</strong> <?php echo htmlspecialchars($scanData['status']); ?></p>
+                    <p><strong>Job ID:</strong> <?php echo htmlspecialchars($scanData['job_id']); ?></p>
+                    <p><strong>Disposition:</strong> <?php echo htmlspecialchars($scanData['disposition']); ?></p>
+                    <p><strong>Brand:</strong> <?php echo htmlspecialchars($scanData['brand']); ?></p>
+                    <p><strong>Resolved:</strong> <?php echo htmlspecialchars($scanData['resolved']); ?></p>
+
+                <?php elseif ($scanData['source'] === 'IPQS'): ?>
+                    <h2>IPQualityScore (IPQS) URL Scan Results</h2>
+                    <p><strong>Status:</strong> <?php echo htmlspecialchars($scanData['status']); ?></p>
+                    <p><strong>URL:</strong> <?php echo htmlspecialchars($scanData['url']); ?></p>
+                    <p><strong>Domain:</strong> <?php echo htmlspecialchars($scanData['domain']); ?></p>
+                    <p><strong>Risk Score:</strong> <?php echo htmlspecialchars($scanData['risk_score']); ?></p>
+                    <p><strong>Malware Detected:</strong> <?php echo htmlspecialchars($scanData['malware']); ?></p>
+                    <p><strong>Phishing Detected:</strong> <?php echo htmlspecialchars($scanData['phishing']); ?></p>
+                    <p><strong>Suspicious:</strong> <?php echo htmlspecialchars($scanData['suspicious']); ?></p>
+                    <p><strong>Spamming Detected:</strong> <?php echo htmlspecialchars($scanData['spamming']); ?></p>
+                    <p><strong>IP Address:</strong> <?php echo htmlspecialchars($scanData['ip_address']); ?></p>
+                <?php endif; ?>
+
+                <!-- Display scan results table if available -->
+                <?php if (!empty($scanData['results'])): ?>
                     <table class="table table-striped">
                         <thead>
                             <tr>
@@ -116,10 +142,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['url']) && isset($_POS
                             <?php endforeach; ?>
                         </tbody>
                     </table>
-
-                    <a href="index.php" class="btn btn-primary">Back to Scan</a>
-                </div>
-            <?php endif; ?>
+                <?php endif; ?>
+                <a href="index.php" class="btn btn-primary">Back to Scan</a>
+            </div>
+        <?php endif; ?>
         </main>
         <script src="script.js"></script>
     </div>

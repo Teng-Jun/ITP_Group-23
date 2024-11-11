@@ -51,7 +51,7 @@ function pollCheckPhishStatus($jobID) {
                 return "<p>Error: " . htmlspecialchars($statusResult['message'] ?? 'Unknown error') . "</p>";
             } elseif ($statusResult['status'] === 'PENDING') {
                 // Log each attempt for better debugging
-                echo "<p>Attempt $attempt: Scan is still pending. Retrying in $waitTime seconds...</p>";
+                error_log("Attempt $attempt: Scan is still pending. Retrying in $waitTime seconds...");
             }
         } else {
             return "<p>Failed to retrieve scan status. Please try again later.</p>";
@@ -78,37 +78,50 @@ function getCheckPhishStatus($jobID) {
     $response = sendCurlRequest($apiEndpoint, ["Content-Type: application/json"], $postData);
 
     // Debug: Log raw response and HTTP code
- #   if (!$response) {
-  #      echo "<pre>No response received from CheckPhish API.</pre>";
-   # } else {
-    #    echo "<pre>Raw Response: " . htmlspecialchars(json_encode($response, JSON_PRETTY_PRINT)) . "</pre>";
-    #}
+    if (!$response) {
+        error_log("No response received from CheckPhish API.");
+    } else {
+        error_log(htmlspecialchars(json_encode($response, JSON_PRETTY_PRINT)));
+    }
 
     return $response;
 }
 
-function renderCheckPhishResults($result) {
-    // Handle error field but display results if available
-    if (isset($result['error']) && $result['error']) {
-        echo "<p>Warning: The scan reported an issue, but here are the available results:</p>";
-    }
+//function renderCheckPhishResultssss($result) {
+//    // Handle error field but display results if available
+//    if (isset($result['error']) && $result['error']) {
+//        echo "<p>Warning: The scan reported an issue, but here are the available results:</p>";
+//    }
+//
+//    $html = "<h2>CheckPhish Scan Results</h2>";
+//    $html .= "<p><strong>Job ID:</strong> " . htmlspecialchars($result['job_id'] ?? 'N/A') . "</p>";
+//    $html .= "<p><strong>Status:</strong> " . htmlspecialchars($result['status'] ?? 'N/A') . "</p>";
+//    $html .= "<p><strong>URL:</strong> " . htmlspecialchars($result['url'] ?? 'N/A') . "</p>";
+//    $html .= "<p><strong>Disposition:</strong> " . htmlspecialchars($result['disposition'] ?? 'Unknown') . "</p>";
+//    $html .= "<p><strong>Brand:</strong> " . htmlspecialchars($result['brand'] ?? 'N/A') . "</p>";
+//    $html .= "<p><strong>Resolved:</strong> " . ($result['resolved'] ? 'Yes' : 'No') . "</p>";
+//
+//    if (isset($result['screenshot_path'])) {
+//        $html .= "<p><strong>Screenshot:</strong></p>";
+//        $html .= "<img src='" . htmlspecialchars($result['screenshot_path']) . "' alt='Screenshot' width='600'>";
+//        $html .= "<br><a href='" . htmlspecialchars($result['screenshot_path']) . "' download>Download Screenshot</a>";
+//    }
+//    
+//    // Remove Insights
+//    # $html .= "<p><strong>Insights:</strong> <a href='" . htmlspecialchars($result['insights']) . "' target='_blank'>View Insights</a></p>";
+//
+//    return $html;
+//}
 
-    $html = "<h2>CheckPhish Scan Results</h2>";
-    $html .= "<p><strong>Job ID:</strong> " . htmlspecialchars($result['job_id'] ?? 'N/A') . "</p>";
-    $html .= "<p><strong>Status:</strong> " . htmlspecialchars($result['status'] ?? 'N/A') . "</p>";
-    $html .= "<p><strong>URL:</strong> " . htmlspecialchars($result['url'] ?? 'N/A') . "</p>";
-    $html .= "<p><strong>Disposition:</strong> " . htmlspecialchars($result['disposition'] ?? 'Unknown') . "</p>";
-    $html .= "<p><strong>Brand:</strong> " . htmlspecialchars($result['brand'] ?? 'N/A') . "</p>";
-    $html .= "<p><strong>Resolved:</strong> " . ($result['resolved'] ? 'Yes' : 'No') . "</p>";
-
-    if (isset($result['screenshot_path'])) {
-        $html .= "<p><strong>Screenshot:</strong></p>";
-        $html .= "<img src='" . htmlspecialchars($result['screenshot_path']) . "' alt='Screenshot' width='600'>";
-        $html .= "<br><a href='" . htmlspecialchars($result['screenshot_path']) . "' download>Download Screenshot</a>";
-    }
-    
-    // Remove Insights
-    # $html .= "<p><strong>Insights:</strong> <a href='" . htmlspecialchars($result['insights']) . "' target='_blank'>View Insights</a></p>";
-
-    return $html;
+function renderCheckPhishResults($result) {  
+    return [
+        'source' => 'CheckPhish',
+        'job_id' => $result['job_id'] ?? 'N/A',
+        'status' => $result['status'] ?? 'N/A',
+        'url' => $result['url'] ?? 'N/A',
+        'disposition' => $result['disposition'] ?? 'Unknown',
+        'brand' => $result['brand'] ?? 'N/A',
+        'resolved' => isset($result['resolved']) ? ($result['resolved'] ? 'Yes' : 'No') : 'No',
+        'screenshot_path' => $result['screenshot_path'] ?? null,
+    ];
 }
