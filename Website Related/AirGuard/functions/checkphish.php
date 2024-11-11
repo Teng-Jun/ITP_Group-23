@@ -26,7 +26,7 @@ function initiateCheckPhishScan($url) {
     $response = sendCurlRequest($apiEndpoint, ["Content-Type: application/json"], $postData);
 
     // Debug: Log raw response
-    echo "<pre>Initiate Scan Response: " . htmlspecialchars(json_encode($response, JSON_PRETTY_PRINT)) . "</pre>";
+    # echo "<pre>Initiate Scan Response: " . htmlspecialchars(json_encode($response, JSON_PRETTY_PRINT)) . "</pre>";
 
     if (!$response || !isset($response['jobID'])) {
         die('<p>Error: Failed to initiate scan. Check API response or API key.</p>');
@@ -106,8 +106,9 @@ function renderCheckPhishResults($result) {
         $html .= "<img src='" . htmlspecialchars($result['screenshot_path']) . "' alt='Screenshot' width='600'>";
         $html .= "<br><a href='" . htmlspecialchars($result['screenshot_path']) . "' download>Download Screenshot</a>";
     }
-
-    $html .= "<p><strong>Insights:</strong> <a href='" . htmlspecialchars($result['insights']) . "' target='_blank'>View Insights</a></p>";
+    
+    // Remove Insights
+    # $html .= "<p><strong>Insights:</strong> <a href='" . htmlspecialchars($result['insights']) . "' target='_blank'>View Insights</a></p>";
 
     return $html;
 }
