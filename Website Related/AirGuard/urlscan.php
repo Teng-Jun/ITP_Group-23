@@ -27,15 +27,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['url']) && isset($_POS
             $statusResult = "<p>Invalid API selection.</p>";
     }
 
-    // Store the scan data and URL in the session
+    // Store the scanned URL and status result for display
     $_SESSION['scanData'] = $scanData;
     $_SESSION['url'] = $url;
-
-    // Redirect to the Scan Completed page
-    header("Location: urlcompleted.php");
-    exit;
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -81,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['url']) && isset($_POS
                                 <option value="ipqs">IPQualityScore (IPQS)</option>
                             </select>
                             <div class="invalid-feedback">
-                                Choose an valid API!
+                                Choose a valid API!
                             </div>
                         </div>
                         <div class="button-container">
@@ -90,6 +87,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['url']) && isset($_POS
                     </form>
                 </div>
             </div>
+
+            <!-- Render the scan results below the form if scanData is available -->
+            <?php if (!empty($scanData)): ?>
+                <div class="container mt-5">
+                    <h2>Scan Completed</h2>
+                    <p><strong>Scanned URL:</strong> <?php echo htmlspecialchars($url); ?></p>
+                    <p><strong>Status:</strong> <?php echo $scanData['status'] ?? 'N/A'; ?></p>
+                    <p><strong>Malicious Detections:</strong> <?php echo $scanData['malicious'] ?? 0; ?></p>
+                    <p><strong>Undetected:</strong> <?php echo $scanData['undetected'] ?? 0; ?></p>
+                    <p><strong>Harmless Detections:</strong> <?php echo $scanData['harmless'] ?? 0; ?></p>
+
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Engine</th>
+                                <th>Category</th>
+                                <th>Result</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($scanData['results'] as $result): ?>
+                                <tr>
+                                    <td><?php echo htmlspecialchars($result['engine']); ?></td>
+                                    <td><?php echo htmlspecialchars($result['category']); ?></td>
+                                    <td><?php echo htmlspecialchars($result['result']); ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+
+                    <a href="index.php" class="btn btn-primary">Back to Scan</a>
+                </div>
+            <?php endif; ?>
         </main>
         <script src="script.js"></script>
     </div>
@@ -97,14 +127,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['url']) && isset($_POS
     <div class="footer-container">
         <?php include 'footer.php'; ?>
     </div>
-
-    <div id="progressMessage"></div>
-
-    <?php if ($statusResult): ?>
-        <div><?php include __DIR__ . '/views/results.php'; ?></div>
-    <?php endif; ?>
 </body>
 </html>
+
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const form = document.querySelector("form");
