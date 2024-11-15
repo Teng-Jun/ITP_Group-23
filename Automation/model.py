@@ -153,10 +153,10 @@ def upload_to_mysql():
 def main():
     try:
         # Step 1: Add probability to real_data_with_predictions_RF.csv
-        # add_probability_to_csv()
+        add_probability_to_csv()
 
         # Step 2: Append the probability column to airdrops_data_latest.csv
-        # append_probability_to_airdrops()
+        append_probability_to_airdrops()
 
         # # Step 3: Upload the updated CSV to MySQL database
         upload_to_mysql()

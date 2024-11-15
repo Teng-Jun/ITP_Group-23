@@ -70,6 +70,7 @@
                         echo '<div><strong>Total Value</strong><p>' . htmlspecialchars($row['Total_Value']) . '</p></div>';
                         echo '<div><strong>Requirements</strong><p>' . htmlspecialchars($row['Requirements']) . '</p></div>';
                         echo '<div><strong>Number of Previous Drops</strong><p>' . htmlspecialchars($row['Num_Of_Prev_Drops']) . '</p></div>';
+                        echo '<div><strong>Temperature</strong><p>' . htmlspecialchars($row['Temp']) . '</p></div>';
                         echo '</div>';
 
                         $guide = htmlspecialchars($row['Guide']);

@@ -34,7 +34,7 @@ def scrape_with_selenium():
     try:
         WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.TAG_NAME, "article")))
 
-        for _ in range(120):  # Ensure you're clicking 'Show More' as many times as you need
+        for _ in range(121):  # Ensure you're clicking 'Show More' as many times as you need
             try:
                 show_more_button = WebDriverWait(driver, 10).until(
                     EC.element_to_be_clickable((By.CSS_SELECTOR, "div.showmore > span"))
@@ -86,7 +86,7 @@ def scrape_with_selenium():
                 # Select all <p> elements inside the span with class 'drop-features'
                 feature_elements = driver.find_elements(By.CSS_SELECTOR, 'span.drop-features p, span.drop-features p.whitespace-pre-wrap')                 # Join the text content of all <p> elements
                 features = ' '.join([element.text for element in feature_elements if element.text.strip()])                
-                print(f"Scraped features: {features}")
+                # print(f"Scraped features: {features}")
             except NoSuchElementException:
                 features = "n/a"
                 print("Features not found.")
