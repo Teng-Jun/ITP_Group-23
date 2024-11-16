@@ -1,0 +1,21 @@
+accuracy,precision,recall,f1,model,sampling_strategy
+0,0,0,0,BERT,smote
+0,0,0,0,BERT,adasyn
+0,0,0,0,BERT,undersampling
+0,0,0,0,BERT,combined
+0,0,0,0,Custom Dict,smote
+0,0,0,0,Custom Dict,adasyn
+0,0,0,0,Custom Dict,undersampling
+0,0,0,0,Custom Dict,combined
+0,0,0,0,RoBERTa,smote
+0,0,0,0,RoBERTa,adasyn
+0,0,0,0,RoBERTa,undersampling
+0,0,0,0,RoBERTa,combined
+0,0,0,0,TextBlob,smote
+0,0,0,0,TextBlob,adasyn
+0,0,0,0,TextBlob,undersampling
+0,0,0,0,TextBlob,combined
+0,0,0,0,VADER,smote
+0,0,0,0,VADER,adasyn
+0,0,0,0,VADER,undersampling
+0,0,0,0,VADER,combined
