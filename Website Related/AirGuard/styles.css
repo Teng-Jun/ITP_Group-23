@@ -274,16 +274,6 @@ footer {
     justify-content: center;
 }
 
-/* Wrapper styles */
-/*.wrapper {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 0 auto;
-    padding: 1em;
-    width: 100%;
-}*/
-
 main {
     display: flex;
     flex-direction: column;
