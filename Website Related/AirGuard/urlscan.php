@@ -56,36 +56,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['url']) && isset($_POS
             </p>
             <div class="URL-Description Header">
                 <h1 style="text-align: center">URL Scanner</h1>
-                <p class="urlscan_des">Scan a URL if you are unsure of its authenticity!</p>
+                <p class="urlscan_des" style="margin: 2vh">Scan a URL if you are unsure of its authenticity!</p>
             </div>
-            <div class="center-container">
-                <div class="form-container">
-                    <form method="POST" onsubmit="showProgressMessage(event)" novalidate>
-                        <div class="form-group">
-                            <label for="url">Enter a URL:</label>
-                            <input type="text" class="form-control" name="url" id="url" required>
-                            <div class="invalid-feedback">
-                                Enter a URL!
-                            </div>
+            <div class="form-container">
+                <form method="POST" onsubmit="showProgressMessage(event)" novalidate>
+                    <div class="form-group">
+                        <label style="text-align: center" for="url">Enter a URL:</label>
+                        <input style="text-align: center" type="text" class="form-control" name="url" id="url" required>
+                        <div class="invalid-feedback">
+                            Enter a URL!
                         </div>
+                    </div>
 
-                        <div class="form-group">
-                            <label for="api">Select API:</label>
-                            <select name="api" class="form-control" id="api" required>
-                                <option value="">API</option>
-                                <option value="virustotal">VirusTotal</option>
-                                <option value="checkphish">CheckPhish</option>
-                                <option value="ipqs">IPQualityScore (IPQS)</option>
-                            </select>
-                            <div class="invalid-feedback">
-                                Choose a valid API!
-                            </div>
+                    <div class="form-group">
+                        <label for="api">Select API:</label>
+                        <select name="api" class="form-control" id="api" required>
+                            <option value="">API</option>
+                            <option value="virustotal">VirusTotal</option>
+                            <option value="checkphish">CheckPhish</option>
+                            <option value="ipqs">IPQualityScore (IPQS)</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Choose a valid API!
                         </div>
-                        <div class="button-container">
-                            <button type="submit" class="btn btn-primary" style="width: 5em;">Scan</button>   
-                        </div>    
-                    </form>
-                </div>
+                    </div>
+                    <div class="button-container">
+                        <button type="submit" class="btn btn-primary" style="width: 5em;">Scan</button>   
+                    </div>    
+                </form>
             </div>
 
             <!-- Render the scan results below the form if scanData is available -->
