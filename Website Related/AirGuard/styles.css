@@ -813,3 +813,9 @@ td, th {
 .was-validated .form-control:invalid ~ .invalid-feedback {
     display: block;
 }
+
+.urlscan_des {
+    text-align: center;
+    color: #ff0000;
+    font-weight: bold;
+}

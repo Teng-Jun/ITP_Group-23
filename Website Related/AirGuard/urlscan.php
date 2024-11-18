@@ -96,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['url']) && isset($_POS
                     <p><strong>Status:</strong> <?php echo htmlspecialchars($scanData['status']); ?></p>
                     <p><strong>Malicious Detections:</strong> <?php echo htmlspecialchars($scanData['malicious']); ?></p>
                     <p><strong>Undetected:</strong> <?php echo htmlspecialchars($scanData['undetected']); ?></p>
-                    <p><strong>Harmless Detections:</strong> <?php echo htmlspecialchars($scanData['harmless']); ?></p>
+                    <p><strong>Harmless Detections:</strong> <?php echo htmlspecialchars($scanData['harmless']); ?></p>  
                 
                 <?php elseif ($scanData['source'] === 'CheckPhish'): ?>
                     <h2>CheckPhish URL Scan Results</h2>
@@ -106,6 +106,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['url']) && isset($_POS
                     <p><strong>Disposition:</strong> <?php echo htmlspecialchars($scanData['disposition']); ?></p>
                     <p><strong>Brand:</strong> <?php echo htmlspecialchars($scanData['brand']); ?></p>
                     <p><strong>Resolved:</strong> <?php echo htmlspecialchars($scanData['resolved']); ?></p>
+
+                    <?php if (!empty($scanData['screenshot_path'])): ?>
+                        <p><strong>Screenshot:</strong></p>
+                        <img src="<?php echo htmlspecialchars($scanData['screenshot_path']); ?>" alt="Screenshot" width="600">
+                        <br>
+                        <a href="<?php echo htmlspecialchars($scanData['screenshot_path']); ?>" download>Download Screenshot</a>
+                    <?php else: ?>
+                        <p>No screenshot available.</p>
+                    <?php endif; ?>
 
                 <?php elseif ($scanData['source'] === 'IPQS'): ?>
                     <h2>IPQualityScore (IPQS) URL Scan Results</h2>
