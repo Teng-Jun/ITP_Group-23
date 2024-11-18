@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['url']) && isset($_POS
             </p>
             <div class="URL-Description Header">
                 <h1 style="text-align: center">URL Scanner</h1>
-                <p class="urlscan_des" style="margin: 2vh">Scan a URL if you are unsure of its authenticity!</p>
+                <p class="learn_avoid-disclaimer">Scan a URL if you are unsure of its authenticity!</p>
             </div>
             <div class="form-container">
                 <form method="POST" onsubmit="showProgressMessage(event)" novalidate>
