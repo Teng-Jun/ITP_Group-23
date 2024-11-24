@@ -1,8 +1,8 @@
 import csv
 
 # Load and process the dataset
-input_file_path = 'airdrops_data_latest_ITP1_updated_with_temp.csv'
-output_file_path = 'processed_airdrops_data_latest_more_fake_data_6_features.csv'
+input_file_path = 'testing_airdrops_data.csv'
+output_file_path = 'processed_testing_airdrops_data.csv'
 
 with open(input_file_path, mode='r', encoding='utf-8-sig') as infile, \
      open(output_file_path, mode='w', newline='', encoding='utf-8-sig') as outfile:
@@ -26,9 +26,9 @@ with open(input_file_path, mode='r', encoding='utf-8-sig') as infile, \
 
         # Count active social media links
         social_media_columns = [
-            'Facebook', 'Telegram Group', 'Telegram Channel', 'Discord', 
+            'Website', 'Facebook', 'Telegram Group', 'Telegram Channel', 'Discord', 
             'Twitter', 'Medium', 'CoinGecko', 'GitHub', 'Coinmarketcap', 
-            'Reddit', 'Youtube'
+            'Reddit', 'Exchanges', 'Youtube'
         ]
         row['Social_Media_Count'] = sum(1 for field in social_media_columns if row[field] != 'n/a')
 

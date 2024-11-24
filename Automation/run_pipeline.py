@@ -26,7 +26,7 @@ if __name__ == "__main__":
     )
     logger = logging.getLogger()
 
-    scripts = ['scraper.py', 'sanitise.py', 'feature_transformation.py', 'labeling_data.py', 'model.py', 'cleanup_files.py']
-    
+    scripts = ['scraper.py', 'sanitise.py', 'feature_transformation.py']
+    # scripts = ['scraper.py', 'sanitise.py', 'feature_transformation.py', 'labeling_data.py', 'model.py', 'cleanup_files.py']
     for script in scripts:
         run_script(script, logger)

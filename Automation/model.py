@@ -8,17 +8,17 @@ import csv
 # Load model and scaler, make predictions, and save results with probability
 def add_probability_to_csv():
     # Load the saved Random Forest model
-    rf_model_filename = 'random_forest_model.joblib'
+    rf_model_filename = 'random_forest_model_ITP2.joblib'
     rf_model = joblib.load(rf_model_filename)
     print("Random Forest model loaded successfully.")
 
-    scaler_filename = 'scaler.joblib'
+    scaler_filename = 'scaler_ITP2.joblib'
     scaler = joblib.load(scaler_filename)  # Load the previously saved scaler
     print("Scaler loaded successfully.")
 
     # Load the data to be predicted
-    data_path = 'processed_airdrops_data_labelled.csv'
-    real_data = pd.read_csv(data_path, encoding='ISO-8859-1')
+    data_path = 'processed_airdrops_data.csv'
+    real_data = pd.read_csv(data_path, encoding='utf-8-sig')
     print("Real data loaded successfully.")
 
     # Assuming that real_data should be processed in the same way as your training data
@@ -86,10 +86,10 @@ def upload_to_mysql():
         sql = """
         INSERT INTO airdrops_data (
             Title, Features, Guide, Total_Value, Status, Platform, Requirements,
-            Num_Of_Prev_Drops, Website, Ticker, Total_Supply, Whitepaper, Thumbnail,
+            Num_Of_Prev_Drops, Website, Ticker, Total_Supply, Whitepaper, Thumbnail, Temp,
             Facebook, `Telegram Group`, `Telegram Channel`, Discord, Twitter, Medium,
             CoinGecko, GitHub, Coinmarketcap, Reddit, Exchanges, Youtube, Probability
-        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         ON DUPLICATE KEY UPDATE
             Features=VALUES(Features),
             Guide=VALUES(Guide),
@@ -103,6 +103,7 @@ def upload_to_mysql():
             Total_Supply=VALUES(Total_Supply),
             Whitepaper=VALUES(Whitepaper),
             Thumbnail=VALUES(Thumbnail),
+            Temp=VALUES(Temp),
             Facebook=VALUES(Facebook),
             `Telegram Group`=VALUES(`Telegram Group`),
             `Telegram Channel`=VALUES(`Telegram Channel`),
@@ -126,7 +127,7 @@ def upload_to_mysql():
                     cursor.execute(sql, (
                         row['Title'], row['Features'], row['Guide'], row['Total_Value'], row['Status'],
                         row['Platform'], row['Requirements'], int(row['Num_Of_Prev_Drops']), row['Website'], row['Ticker'],
-                        row['Total_Supply'], row['Whitepaper'], row['Thumbnail'], row['Facebook'], row['Telegram Group'],
+                        row['Total_Supply'], row['Whitepaper'], row['Thumbnail'], row['Temp'], row['Facebook'], row['Telegram Group'],
                         row['Telegram Channel'], row['Discord'], row['Twitter'], row['Medium'], row['CoinGecko'],
                         row['GitHub'], row['Coinmarketcap'], row['Reddit'], row['Exchanges'], row['Youtube'],
                         float(row['Probability'])  # Ensure Probability is a float

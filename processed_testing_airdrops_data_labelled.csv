@@ -43,7 +43,7 @@ Talent Protocol,0,0,0,8,5,0,0
 Form Network,0,0,0,10,4,1,0
 Onchain Heroes,0,0,0,6,3,0,0
 HyperSwap,0,0,0,9,3,2,0
-Base Dungeon,0,0,0,4,3,3,0
+Base Dungeon,0,0,0,4,2,2,0
 Treasure,0,1,0,5,4,-2,0
 YouHodler,0,1,0,5,6,0,0
 Blackbird,0,1,0,6,1,0,0
@@ -643,3 +643,4 @@ FakeAirdrop319,1,0,0,1,2,-9,1
 FakeAirdrop320,0,0,0,1,2,-5,1
 FakeAirdrop321,0,0,1,3,2,-3,1
 FakeAirdrop322,0,0,0,4,2,-4,1
+FakeAirdrop323,0,1,0,3,2,-2,1

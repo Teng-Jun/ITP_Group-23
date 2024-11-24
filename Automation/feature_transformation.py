@@ -10,7 +10,7 @@ def transform_features():
         
         reader = csv.DictReader(infile)
         # Define the new fieldnames to write in the output file
-        fieldnames = ['Title', 'Num_Of_Prev_Drops', 'Whitepaper', 'Requirement_Count', 'Guide_Length', 'Social_Media_Count']
+        fieldnames = ['Title', 'Num_Of_Prev_Drops', 'Whitepaper', 'Requirement_Count', 'Guide_Length', 'Social_Media_Count', 'Temp']
         writer = csv.DictWriter(outfile, fieldnames=fieldnames)
         writer.writeheader()
 
@@ -26,11 +26,15 @@ def transform_features():
 
             # Count active social media links
             social_media_columns = [
-                'Website', 'Facebook', 'Telegram Group', 'Telegram Channel', 'Discord', 
+                'Facebook', 'Telegram Group', 'Telegram Channel', 'Discord', 
                 'Twitter', 'Medium', 'CoinGecko', 'GitHub', 'Coinmarketcap', 
-                'Reddit', 'Exchanges', 'Youtube'
+                'Reddit',  'Youtube'
             ]
             row['Social_Media_Count'] = sum(1 for field in social_media_columns if row[field] != 'n/a')
+
+            # Retain the 'Temp' column without modifications
+            row['Temp'] = row['Temp']  # This keeps the original temp value as it is
+
 
             # Write only the necessary fields
             writer.writerow({field: row[field] for field in fieldnames})

@@ -70,7 +70,7 @@ print("Random Forest model loaded successfully.")
 # print("Catboost model loaded successfully")
 
 # Load the previously saved scaler
-scaler_filename = 'scaler.joblib'
+scaler_filename = 'scaler_ITP2.joblib'
 scaler = joblib.load(scaler_filename)
 print("Scaler loaded successfully.")
 
@@ -122,6 +122,6 @@ real_data['Probability'] = rf_probabilities.round(2)
 
 
 # Save or display the results
-output_path = 'testing_data_with_predictions_rf.csv'
+output_path = 'testing_data_with_predictions_rf_itp2.csv'
 real_data.to_csv(output_path, index=False)
 print(f"Predictions added and saved to {output_path}.")
