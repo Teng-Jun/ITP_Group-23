@@ -111,7 +111,6 @@
                                         'RiskScore' => $riskScoreDisplay,
                                         'Status' => $row['Status'],
                                         'positive_percentage' => $row['positive_percentage'],
-                                        'neutral_percentage' => $row['neutral_percentage'],
                                         'negative_percentage' => $row['negative_percentage']
                                     ];
 
@@ -126,10 +125,6 @@
                                     echo '<div class="custom-legend-item">';
                                     echo '<div class="custom-legend-color" style="background-color: #36a2eb;"></div>';
                                     echo 'Positive: ' . htmlspecialchars($row['positive_percentage']) . '%';
-                                    echo '</div>';
-                                    echo '<div class="custom-legend-item">';
-                                    echo '<div class="custom-legend-color" style="background-color: #ffcd56;"></div>';
-                                    echo 'Neutral: ' . htmlspecialchars($row['neutral_percentage']) . '%';
                                     echo '</div>';
                                     echo '<div class="custom-legend-item">';
                                     echo '<div class="custom-legend-color" style="background-color: #ff6384;"></div>';
@@ -202,10 +197,6 @@
                             <div class="custom-legend-item">
                                 <div class="custom-legend-color" style="background-color: #36a2eb;"></div>
                                 Positive: ${parseFloat(token.positive_percentage).toFixed(2)}%
-                            </div>
-                            <div class="custom-legend-item">
-                                <div class="custom-legend-color" style="background-color: #ffcd56;"></div>
-                                Neutral: ${parseFloat(token.neutral_percentage).toFixed(2)}%
                             </div>
                             <div class="custom-legend-item">
                                 <div class="custom-legend-color" style="background-color: #ff6384;"></div>
