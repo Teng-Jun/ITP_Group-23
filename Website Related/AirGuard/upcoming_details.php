@@ -123,7 +123,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const airdropName = <?php echo json_encode($airdropName); ?>;
-            fetch('data/sentiment_results_20241118_003834.json')
+            fetch('data/roberta_sentiment_results.json')
                 .then(response => response.json())
                 .then(data => {
                     const airdrop = data.find(item => item.airdrop_name === airdropName);
