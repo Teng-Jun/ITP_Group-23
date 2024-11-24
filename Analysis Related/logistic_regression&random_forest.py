@@ -9,7 +9,7 @@ import joblib
 from imblearn.pipeline import Pipeline 
 
 # Load the labeled data
-data_path = 'processed_airdrops_data_latest_ITP1_updated_with_temp_labelled.csv'
+data_path = 'processed_airdrops_data_latest_more_fake_data_6_features_labelled.csv'
 data = pd.read_csv(data_path, encoding='ISO-8859-1')
 
 'Requirement_Count', 'Guide_Length'
@@ -168,12 +168,12 @@ combined_probs = (0.4 * lr_probs + 0.6 * rf_probs)
 combined_pred = [1 if prob > 0.5 else 0 for prob in combined_probs]
 
 # Save the trained logistic regression model
-model_filename = 'logistic_regression_model_6_features.joblib'
+model_filename = 'logistic_regression_model_more_fake_data_6.joblib'
 joblib.dump(lr_model, model_filename)
 print(f"Model saved to {model_filename}")
 
 # Save the trained logistic regression model
-model_filename = 'random_forest_model_6_features.joblib'
+model_filename = 'random_forest_model_more_fake_data_6.joblib'
 joblib.dump(rf_model, model_filename)
 print(f"Model saved to {model_filename}")
 

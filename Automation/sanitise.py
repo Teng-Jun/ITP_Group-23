@@ -29,6 +29,9 @@ def sanitize_data():
                     row['Requirements'] = 'n/a'
                 else:
                     row['Requirements'] = ' | '.join(parts)
+            
+            if 'Temp' in row:
+                row['Temp'] = row['Temp'].replace('°', '')
 
             updated_rows.append(row)
 

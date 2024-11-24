@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix
 
 # Load the data
-file_path = 'testing_data_with_predictions_rf.csv'
+file_path = 'testing_data_with_predictions_rf_itp2.csv'
 data = pd.read_csv(file_path)
 
 # Display the first few rows to understand the structure

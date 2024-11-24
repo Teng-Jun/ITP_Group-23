@@ -20,6 +20,9 @@ y = data['is_scam'].astype(int)
 scaler = StandardScaler()
 X_scaled = scaler.fit_transform(X)
 # X_scaled = pd.DataFrame(X_scaled, columns=X.columns, index=X.index)
+scaler_filename = 'scaler_ITP2.joblib'
+joblib.dump(scaler, scaler_filename)
+print(f"Scaler saved to {scaler_filename}")
 
 # Split the data into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.3, random_state=42)
@@ -135,10 +138,10 @@ f1 = f1_score(y_test, rf_pred)
 precision = precision_score(y_test, rf_pred)
 recall = recall_score(y_test, rf_pred)
 
-# Save the trained logistic regression model
-model_filename = 'random_forest_model_ITP2.joblib'
-joblib.dump(rf_model, model_filename)
-print(f"Model saved to {model_filename}")
+# # Save the trained logistic regression model
+# model_filename = 'random_forest_model_ITP2.joblib'
+# joblib.dump(rf_model, model_filename)
+# print(f"Model saved to {model_filename}")
 
 # Print evaluation results
 print("Random Forest Results:")

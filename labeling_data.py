@@ -2,8 +2,8 @@ import csv
 import re
 
 # File paths
-input_file_path = 'processed_airdrops_data_latest_more_fake_data_6_features.csv'
-output_file_path = 'processed_airdrops_data_latest_more_fake_data_6_features_labelled.csv'
+input_file_path = 'processed_testing_airdrops_data.csv'
+output_file_path = 'processed_testing_airdrops_data_labelled.csv'
 
 # Define a function to sanitize the title
 def sanitize_title(title):
@@ -26,9 +26,9 @@ with open(input_file_path, mode='r', newline='', encoding='utf-8-sig') as infile
         # Sanitize the title column
         row[title_index] = sanitize_title(row[title_index])
         # Label the row as 'scam' or 'not a scam'
-        if index <= 1843:
+        if index <= 323:
             row.append('0')  # Label as 'not a scam'
-        elif index >= 1844:
+        elif index >= 324:
             row.append('1')  # Label as 'scam'
         writer.writerow(row)
 
