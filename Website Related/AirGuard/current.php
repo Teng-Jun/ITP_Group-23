@@ -18,22 +18,83 @@
             <h2>Current Airdrops</h2>
             <div class="container">
                 <section id="search">
-                    <form action="current.php" method="GET" align="center">
-                        <input type="text" name="search" placeholder="Search for airdrops..." aria-label="Search Airdrops">
-                        <select name="risk_score">
+                    <form action="current.php" method="GET" class="form-inline justify-content-center">
+                        <input type="text" name="search" class="form-control mr-2 mb-2" placeholder="Search for airdrops..." aria-label="Search Airdrops" value="<?php echo htmlspecialchars($search ?? ''); ?>">
+                        <select name="risk_score" class="form-control mr-2 mb-2">
                             <option value="">All Risk Scores</option>
-                            <option value="low">Low (&lt; 1%)</option>
-                            <option value="medium">Medium (1% - 50%)</option>
-                            <option value="high">High (&gt; 50%)</option>
+                            <option value="low" <?php if (isset($risk_score) && $risk_score == 'low') echo 'selected'; ?>>Low (&lt; 1%)</option>
+                            <option value="medium" <?php if (isset($risk_score) && $risk_score == 'medium') echo 'selected'; ?>>Medium (1% - 50%)</option>
+                            <option value="high" <?php if (isset($risk_score) && $risk_score == 'high') echo 'selected'; ?>>High (&gt; 50%)</option>
                         </select>
-                        <button type="submit" class="btn btn-primary">Search</button>
-                        <button type="button" class="btn btn-success" id="resetButton">Reset</button>
+                        <button type="submit" class="btn btn-primary mr-2 mb-2">Search</button>
+                        <button type="button" class="btn btn-success mb-2" id="resetButton">Reset</button>
                     </form>
                 </section>
+                
+                <?php
+                // Include database connection
+                include 'dbconnection.php';
+
+                // Retrieve and sanitize GET parameters
+                $search = isset($_GET['search']) ? trim($_GET['search']) : '';
+                $risk_score = isset($_GET['risk_score']) ? trim($_GET['risk_score']) : '';
+
+                // Base SQL query
+                $sql = "SELECT * FROM airdrops_data WHERE Status = 'Airdrop Confirmed'";
+                $conditions = [];
+                $params = [];
+                $types = '';
+
+                // Add search condition if applicable
+                if ($search !== '') {
+                    $conditions[] = "LOWER(Title) LIKE LOWER(?)";
+                    $params[] = '%' . strtolower($search) . '%';
+                    $types .= 's';  // string
+                }
+
+                // Add risk score conditions if applicable
+                if ($risk_score !== '') {
+                    // Assuming Probability is stored as a decimal (0-1)
+                    if ($risk_score == 'low') {
+                        $conditions[] = "Probability < 0.01"; // <1%
+                    } elseif ($risk_score == 'medium') {
+                        $conditions[] = "Probability >= 0.01 AND Probability <= 0.50"; // 1% - 50%
+                    } elseif ($risk_score == 'high') {
+                        $conditions[] = "Probability > 0.50"; // >50%
+                    }
+                }
+
+                // Append conditions to SQL query
+                if (!empty($conditions)) {
+                    $sql .= " AND " . implode(" AND ", $conditions);
+                }
+
+                // Prepare and execute the SQL statement
+                $stmt = $conn->prepare($sql);
+
+                if ($stmt === false) {
+                    die('Prepare failed: ' . htmlspecialchars($conn->error));
+                }
+
+                if (!empty($params)) {
+                    $stmt->bind_param($types, ...$params);
+                }
+
+                $stmt->execute();
+                $result = $stmt->get_result();
+
+                // Calculate total number of airdrops retrieved
+                $totalAirdrops = $result->num_rows;
+                ?>
+
+                <!-- Display total number of airdrops on the top right corner -->
+                <div class="d-flex justify-content-end mb-3">
+                    <p class="total-airdrops mb-0"><strong>Total Airdrops:</strong> <?php echo $totalAirdrops; ?></p>
+                </div>
+
                 <div class="airdrop-container">
-                    <table>
+                    <table class="table table-striped">
                         <thead>
-                            <h2>Tokens List</h2>
                             <tr>
                                 <th>#</th>
                                 <th>Asset</th>
@@ -45,62 +106,22 @@
                         </thead>
                         <tbody id="token-list">
                             <?php
-                            include 'dbconnection.php';
-
-                            $search = isset($_GET['search']) ? $_GET['search'] : '';
-                            $risk_score = isset($_GET['risk_score']) ? $_GET['risk_score'] : '';
-
-                            $sql = "SELECT * FROM airdrops_data WHERE Status = 'Airdrop confirmed'";
-                            $conditions = [];
-                            $params = [];
-                            $types = '';
-
-                            if ($search !== '') {
-                                $conditions[] = "LOWER(Title) LIKE LOWER(?)";
-                                $params[] = '%' . strtolower($search) . '%';
-                                $types .= 's';  // string
-                            }
-
-                            if ($risk_score !== '') {
-                                if ($risk_score == 'low') {
-                                    $conditions[] = "Probability < 1";
-                                } elseif ($risk_score == 'medium') {
-                                    $conditions[] = "Probability >= 1 AND Probability <= 50";
-                                } elseif ($risk_score == 'high') {
-                                    $conditions[] = "Probability > 50";
-                                }
-                            }
-
-                            if (!empty($conditions)) {
-                                $sql .= " AND " . join(" AND ", $conditions);
-                            }
-
-                            $stmt = $conn->prepare($sql);
-
-                            if ($stmt === false) {
-                                die('Prepare failed: ' . htmlspecialchars($conn->error));
-                            }
-
-                            if (!empty($params)) {
-                                $stmt->bind_param($types, ...$params);
-                            }
-
-                            $stmt->execute();
-                            $result = $stmt->get_result();
-
                             $tokens = [];
 
                             if ($result->num_rows > 0) {
                                 $index = 1;
                                 while ($row = $result->fetch_assoc()) {
+                                    // Multiply Probability by 100 to make it a percentage
+                                    $riskScore = $row['Probability'] * 100;
+
                                     // Format the risk score
-                                    $riskScore = $row['Probability'];
-                                    if ($riskScore == 0) {
+                                    if ($riskScore < 0.01) {
                                         $riskScoreDisplay = '<0.01%';
-                                    } elseif ($riskScore == 100) {
+                                    } elseif ($riskScore > 99.9) {
                                         $riskScoreDisplay = '>99.9%';
                                     } else {
-                                        $riskScoreDisplay = $riskScore . '%';
+                                        // Round to two decimal places for better readability
+                                        $riskScoreDisplay = number_format($riskScore, 2) . '%';
                                     }
 
                                     $tokens[] = [
@@ -146,8 +167,8 @@
             </div>
         </main>
     </div>
-         <!-- Add the footer include here -->
-         <div class="footer-container">
+    <!-- Add the footer include here -->
+    <div class="footer-container">
         <?php include 'footer.php'; ?>
     </div>
     <script src="script.js"></script>
@@ -212,6 +233,11 @@
         // Fetch data on page load
         document.addEventListener('DOMContentLoaded', () => {
             fetchSentimentData();
+        });
+
+        // Reset button functionality
+        document.getElementById('resetButton').addEventListener('click', () => {
+            window.location.href = 'current.php';
         });
     </script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
