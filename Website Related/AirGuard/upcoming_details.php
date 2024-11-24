@@ -131,14 +131,13 @@
                     const noDataContainer = document.querySelector('.no-data');
                     const legendContainer = document.querySelector('.custom-legend');
 
-                    if (airdrop && (airdrop.positive > 0 || airdrop.neutral > 0 || airdrop.negative > 0)) {
+                    if (airdrop && (airdrop.positive > 0 || airdrop.negative > 0)) {
                         chartContainer.style.display = 'block';
                         noDataContainer.style.display = 'none';
                         legendContainer.style.display = 'flex';
 
-                        const total = airdrop.positive + airdrop.neutral + airdrop.negative;
+                        const total = airdrop.positive + airdrop.negative;
                         const positivePercentage = ((airdrop.positive / total) * 100).toFixed(2);
-                        const neutralPercentage = ((airdrop.neutral / total) * 100).toFixed(2);
                         const negativePercentage = ((airdrop.negative / total) * 100).toFixed(2);
 
                         const ctx = document.getElementById('sentimentChart').getContext('2d');
@@ -150,10 +149,10 @@
                         chartContainer.chartInstance = new Chart(ctx, {
                             type: 'pie',
                             data: {
-                                labels: ['Positive', 'Neutral', 'Negative'],
+                                labels: ['Positive', 'Negative'],
                                 datasets: [{
-                                    data: [positivePercentage, neutralPercentage, negativePercentage],
-                                    backgroundColor: ['#36a2eb', '#ffcd56', '#ff6384']
+                                    data: [positivePercentage, negativePercentage],
+                                    backgroundColor: ['#36a2eb', '#ff6384']
                                 }]
                             },
                             options: {
@@ -181,7 +180,7 @@
                         });
 
                         // Custom legend
-                        updateCustomLegend(chartContainer.chartInstance, legendContainer, positivePercentage, neutralPercentage, negativePercentage);
+                        updateCustomLegend(chartContainer.chartInstance, legendContainer, positivePercentage, negativePercentage);
 
                     } else {
                         chartContainer.style.display = 'none';
@@ -195,15 +194,11 @@
                 });
         });
 
-        function updateCustomLegend(chart, legendContainer, positive, neutral, negative) {
+        function updateCustomLegend(chart, legendContainer, positive, negative) {
             legendContainer.innerHTML = `
                 <div class="custom-legend-item">
                     <div class="custom-legend-color" style="background-color: #36a2eb;"></div>
                     Positive: ${positive}%
-                </div>
-                <div class="custom-legend-item">
-                    <div class="custom-legend-color" style="background-color: #ffcd56;"></div>
-                    Neutral: ${neutral}%
                 </div>
                 <div class="custom-legend-item">
                     <div class="custom-legend-color" style="background-color: #ff6384;"></div>
