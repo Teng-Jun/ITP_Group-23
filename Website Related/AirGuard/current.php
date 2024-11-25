@@ -5,8 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Current Airdrops - Airdrop Tracker</title>
     <link rel="stylesheet" href="styles.css">
+    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Font Awesome for icons (if needed elsewhere) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Favicon -->
     <link rel="icon" type="image/png" href="image/airguard-favicon-color-32.png">
 </head>
 <body>
@@ -18,14 +21,19 @@
             <h2>Current Airdrops</h2>
             <div class="container">
                 <section id="search">
-                    <form action="current.php" method="GET" class="form-inline justify-content-center">
+                    <form action="current.php" method="GET" class="form-inline justify-content-center mb-4">
+                        <!-- Search Input -->
                         <input type="text" name="search" class="form-control mr-2 mb-2" placeholder="Search for airdrops..." aria-label="Search Airdrops" value="<?php echo htmlspecialchars($search ?? ''); ?>">
+                        
+                        <!-- Risk Score Dropdown -->
                         <select name="risk_score" class="form-control mr-2 mb-2">
                             <option value="">All Risk Scores</option>
                             <option value="low" <?php if (isset($risk_score) && $risk_score == 'low') echo 'selected'; ?>>Low (&lt; 1%)</option>
                             <option value="medium" <?php if (isset($risk_score) && $risk_score == 'medium') echo 'selected'; ?>>Medium (1% - 50%)</option>
                             <option value="high" <?php if (isset($risk_score) && $risk_score == 'high') echo 'selected'; ?>>High (&gt; 50%)</option>
                         </select>
+                        
+                        <!-- Search and Reset Buttons -->
                         <button type="submit" class="btn btn-primary mr-2 mb-2">Search</button>
                         <button type="button" class="btn btn-success mb-2" id="resetButton">Reset</button>
                     </form>
@@ -38,6 +46,12 @@
                 // Retrieve and sanitize GET parameters
                 $search = isset($_GET['search']) ? trim($_GET['search']) : '';
                 $risk_score = isset($_GET['risk_score']) ? trim($_GET['risk_score']) : '';
+                $sort = isset($_GET['sort']) ? trim($_GET['sort']) : ''; // No sort by default
+
+                // Validate sort parameter
+                if ($sort !== 'asc' && $sort !== 'desc') {
+                    $sort = ''; // Reset to default if invalid
+                }
 
                 // Base SQL query
                 $sql = "SELECT * FROM airdrops_data WHERE Status = 'Airdrop Confirmed'";
@@ -69,6 +83,14 @@
                     $sql .= " AND " . implode(" AND ", $conditions);
                 }
 
+                // Append ORDER BY clause based on sort parameter
+                if ($sort === 'asc') {
+                    $sql .= " ORDER BY Probability ASC";
+                } elseif ($sort === 'desc') {
+                    $sql .= " ORDER BY Probability DESC";
+                }
+                // Else, no specific order (default as stored in DB)
+
                 // Prepare and execute the SQL statement
                 $stmt = $conn->prepare($sql);
 
@@ -93,13 +115,31 @@
                 </div>
 
                 <div class="airdrop-container">
+                    <h2>Token List</h2>
                     <table class="table table-striped">
                         <thead>
                             <tr>
                                 <th>#</th>
                                 <th>Asset</th>
                                 <th>Chain</th>
-                                <th>Risk Score</th>
+                                <th>
+                                    Risk Score
+                                    <!-- Sort Button as Image -->
+                                    <a href="?<?php
+                                        // Build query string for sorting
+                                        $query = $_GET;
+                                        // Determine the next sort order
+                                        if ($sort === 'asc') {
+                                            $query['sort'] = 'desc';
+                                        } else {
+                                            $query['sort'] = 'asc';
+                                        }
+                                        echo htmlspecialchars(http_build_query($query));
+                                    ?>" class="sort-icon" title="Sort Risk Score">
+                                        <!-- Image for sort button -->
+                                        <img src="image/sorting.png" alt="Sort Risk Score" width="20" height="20">
+                                    </a>
+                                </th>
                                 <th>Status</th>
                                 <th>Sentiment</th>
                             </tr>
@@ -167,10 +207,12 @@
             </div>
         </main>
     </div>
-    <!-- Add the footer include here -->
+    <!-- Footer -->
     <div class="footer-container">
         <?php include 'footer.php'; ?>
     </div>
+
+    <!-- JavaScript Section -->
     <script src="script.js"></script>
     <script>
         let sentimentData = [];
@@ -240,8 +282,9 @@
             window.location.href = 'current.php';
         });
     </script>
+    <!-- Bootstrap JS and dependencies -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
