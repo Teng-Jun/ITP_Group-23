@@ -115,7 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
                 Users must exercise due diligence and understand that the APIs provided are tools to assist in analyzing URLs but should not be trusted 100%. Always verify information independently and use multiple sources to ensure authenticity. We are not responsible for any actions taken based on the results of these scans.
             </p>
             <div class="URL-Description Header">
-                <h1 class="text-center">Upcoming Airdrops</h1>
+                <h1 class="text-center">Scan a URL</h1>
                 <p class="learn_avoid-disclaimer text-center">Scan a URL if you are unsure of its authenticity!</p>
             </div>
             <div class="form-container">
@@ -201,7 +201,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
         <div class="spinner-border text-primary" role="status">
             <span class="sr-only">Processing...</span>
         </div>
-        <p>Processing your request. Please wait...</p>
+        <p>Processing your request. Please wait. This might take a while...</p>
     </div>
 
     <!-- JavaScript Section -->
