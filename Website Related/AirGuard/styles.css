@@ -280,7 +280,6 @@ footer {
     padding: 20px; /* Add padding around the container */
 }
 
-
 main {
     display: flex;
     flex-direction: column;
@@ -415,14 +414,7 @@ td, th {
 .airdrop-container th, .airdrop-container td {
     text-align: center; /* Center align text in table headers and cells */
 }
-        
-.airdrop-container thead th {       
-    font-weight: bold;      
-    text-transform: uppercase;      
-    color: #666;       
-    font-size: 12px;     
-    cursor: pointer;    
-}
+
 /* Default color for navbar text */
 .navbar-nav .nav-link {
     color: white !important; /* Default color */
@@ -518,101 +510,26 @@ td, th {
     margin-bottom: 30px;
 }
 
-/* Enhancements for tips.php */
-.tips-container {
-    text-align: center;
-    padding: 20px;
-}
+/* Removed redundant styles from tips.php */
 
-.tips-text-box {
-    width: 60vw;
-    height: 15vh;
-    padding: 2em;
-    border: 1em transparent;
-    position: relative;
-    overflow: hidden;
-    transition: all 0.5s ease-in-out;
-    margin: 0 auto 1em auto; /* Center and add margin between elements */
-}
+/* Removed the following styles as they are no longer needed:
+.tips-container
+.tips-text-box
+.tips-more-text
+.tips-initial-text
+.tips-notice
+.chart-container
+.no-data
+.img
+.full-width-card
+*/
 
-.tips-more-text {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: white;
-    transform: translateX(-100%);
-    transition: transform 0.5s ease-in-out;
-    padding: 1em;
-    background-color: #f5f5f5;
-    font-size: 1.2em;
-}
-
-.tips-text-box:hover .tips-more-text {
-    transform: translateX(0);
-    text-align: center;
-    justify-content: center;
-}
-
-.tips-initial-text {
-    font-size: 1.5em;
-    font-style: inherit;
-    padding: 1em 0;
-    justify-content: center;
-    text-align: center;
-}
-
-.tips-notice {
-    margin-top: 30em;
-}
-
-.chart-container {
-    width: 300px;
-    height: 300px;
-    margin: 0 auto;
-}
-.no-data {
-    color: red;
-    font-weight: bold;
-    text-align: center;
-}
-.custom-legend {
-    display: flex;
-    justify-content: center;
-    margin-top: 10px;
-}
-.custom-legend-item {
-    display: flex;
-    align-items: center;
-    margin-right: 20px;
-    font-size: 16px;
-}
-.custom-legend-color {
-    width: 20px;
-    height: 20px;
-    margin-right: 10px;
-}
-.img {
-    justify-content: center;
-}
-.full-width-card {
-    width: 100%;
-}
-.card {
-    justify-content: center;
-    align-items: center;
-    margin-top: 2em;
-}
-.detail-logo {
-    width: 150px;
-    height: auto;
-}
 .disabled {
     pointer-events: none;
     color: grey;
     text-decoration: none; /* Optional: Remove underline from disabled links */
 }
+
 .overview-section {
     background: #fff;
     padding: 20px;
@@ -620,6 +537,7 @@ td, th {
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
+
 .metrics-box {
     display: flex;
     justify-content: space-between;
@@ -629,34 +547,43 @@ td, th {
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
+
 .metrics-box div {
     flex: 1;
     text-align: center;
 }
+
 .overview-section p {
     display: flex;
     align-items: center;
     margin: 5px 0;
 }
+
 .overview-section p i {
     margin-right: 10px;
 }
+
 .overview-section a {
     color: blue;
 }
+
 .row1 {
     display: flex;
     align-items: center;
 }
+
 .row1 .col-md-3 {
     flex: 0 0 auto;
 }
+
 .row1 .col-md-9 {
     flex: 1 1 auto;
 }
+
 .row1 .col-md-9 p {
     margin-left: 20px;
 }
+
 .no-bullets {
     list-style-type: none;
     padding-left: 0;
@@ -825,7 +752,7 @@ td, th {
     text-align: center;
     color: #ff0000;
     font-weight: bold;
-    margin: 2vh
+    margin: 2vh;
 }
 
 #loader {
@@ -883,7 +810,6 @@ td, th {
     margin: 0 10px; /* Add consistent spacing between buttons */
 }
 
-
 .sort-icon {
     margin-left: 5px;
     cursor: pointer;
@@ -910,3 +836,80 @@ td, th {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
 }
 
+.tips-more-text {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    transform: translateX(-100%);
+    transition: transform 0.5s ease-in-out;
+    padding: 1em;
+    background-color: #f5f5f5;
+    font-size: 1.2em;
+}
+
+.tips-text-box:hover .tips-more-text {
+    transform: translateX(0);
+    text-align: center;
+    justify-content: center;
+}
+
+.tips-initial-text {
+    font-size: 1.5em;
+    font-style: inherit;
+    padding: 1em 0;
+    justify-content: center;
+    text-align: center;
+}
+
+.tips-notice {
+    margin-top: 30em;
+}
+
+.chart-container {
+    width: 300px;
+    height: 300px;
+    margin: 0 auto;
+}
+
+.no-data {
+    color: red;
+    font-weight: bold;
+    text-align: center;
+}
+
+.img {
+    justify-content: center;
+}
+
+.full-width-card {
+    width: 100%;
+}
+
+.card {
+    justify-content: center;
+    align-items: center;
+    margin-top: 2em;
+}
+
+.detail-logo {
+    width: 150px;
+    height: auto;
+}
+
+/* Since we're using Bootstrap's card components, additional custom styles are minimal */
+#safety-tips {
+    margin-top: 3em;
+}
+
+#safety-tips h2 {
+    color: #007BFF;
+    margin-bottom: 20px;
+}
+
+/* Optional: Customize the alert within the safety tips */
+#safety-tips .alert {
+    font-size: 1.1em;
+}
