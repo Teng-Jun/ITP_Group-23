@@ -116,7 +116,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['act
             </p>
             <div class="URL-Description Header">
                 <h1 class="text-center">Scan a URL</h1>
-                <p class="learn_avoid-disclaimer text-center">Scan a URL if you are unsure of its authenticity!</p>
+                <p class="text-center">Scan a URL if you are unsure of its authenticity!</p>
+                <p class="text-center"><strong>VirusTotal Pros:</strong> Comprehensive threat detection, Real-time updates, Trusted and widely recognized</p>
+                <p class="text-center"><strong>CheckPhish Pros:</strong> Specialized in detecting phishing threats, Accurate at identifying subtle phishing tactics, User-friendly API</p>
+                <p class="text-center"><strong>IPQualityScore Pros:</strong> Detailed risk scoring, Excels at detecting zero-hour threats, Granular insights into specific risk types</p>
             </div>
             <div class="form-container">
                 <form method="POST" onsubmit="showLoader(event);" novalidate>
