@@ -329,20 +329,30 @@ main {
 
 .custom-legend {
     display: flex;
-    justify-content: center;
-    margin-top: 10px;
+    justify-content: space-between; /* Evenly distribute Positive and Negative */
+    align-items: center;
+    flex-wrap: wrap; /* Allow wrapping on small screens */
+    gap: 15px; /* Consistent spacing between items */
+    width: 100%;
 }
 
 .custom-legend-item {
     display: flex;
     align-items: center;
-    margin-right: 10px;
+    gap: 5px;
+    flex: 1; /* Equal width for items */
 }
 
 .custom-legend-color {
     width: 12px;
     height: 12px;
-    margin-right: 5px;
+    border-radius: 50%;
+}
+
+.custom-legend-item span {
+    white-space: nowrap; /* Prevent text wrapping */
+    font-size: 14px;
+    font-weight: 500;
 }
 
 .button-container {
