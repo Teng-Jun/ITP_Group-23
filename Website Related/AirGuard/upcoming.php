@@ -168,6 +168,56 @@ if ($result->num_rows > 0) {
 }
 $stmt->close();
 $conn->close();
+
+// Function to merge sentiment data from JSON
+function mergeSentimentData(&$tokens, $jsonFilePath) {
+    if (!file_exists($jsonFilePath)) {
+        // Handle error if JSON file does not exist
+        error_log("Sentiment JSON file not found at path: $jsonFilePath");
+        return;
+    }
+
+    $jsonData = file_get_contents($jsonFilePath);
+    if ($jsonData === false) {
+        // Handle error if JSON file cannot be read
+        error_log("Failed to read sentiment JSON file at path: $jsonFilePath");
+        return;
+    }
+
+    $sentimentData = json_decode($jsonData, true);
+    if ($sentimentData === null) {
+        // Handle error if JSON is invalid
+        error_log("Invalid JSON format in sentiment file: $jsonFilePath");
+        return;
+    }
+
+    // Create an associative array for quick lookup
+    $sentimentLookup = [];
+    foreach ($sentimentData as $sentiment) {
+        // Assuming 'airdrop_name' is the key to match
+        if (isset($sentiment['airdrop_name'])) {
+            $sentimentLookup[$sentiment['airdrop_name']] = $sentiment;
+        }
+    }
+
+    // Merge sentiment data into tokens
+    foreach ($tokens as &$token) {
+        $name = $token['airdrop_name'];
+        if (isset($sentimentLookup[$name])) {
+            $token['positive_percentage'] = isset($sentimentLookup[$name]['positive_percentage']) ? $sentimentLookup[$name]['positive_percentage'] : 'N/A';
+            $token['negative_percentage'] = isset($sentimentLookup[$name]['negative_percentage']) ? $sentimentLookup[$name]['negative_percentage'] : 'N/A';
+        } else {
+            // If no sentiment data found, assign 'N/A'
+            $token['positive_percentage'] = 'N/A';
+            $token['negative_percentage'] = 'N/A';
+        }
+    }
+    unset($token); // Break the reference
+}
+
+// Merge sentiment data from JSON file
+$sentimentJsonPath = 'data/sentiment_results_20241118_003834.json'; // Adjust path as needed
+mergeSentimentData($tokens, $sentimentJsonPath);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -189,7 +239,7 @@ $conn->close();
     </div>
     <div class="wrapper">
         <main>
-            <h2>Upcoming Airdrops</h2>
+            <h2 class="text-center my-4">Upcoming Airdrops</h2>
             <div class="container">
                 <section id="search">
                     <form action="upcoming.php" method="GET" class="form-inline justify-content-center mb-4 w-100">
@@ -222,8 +272,8 @@ $conn->close();
                     </form>
                 </section>
                 
-                <div class="airdrop-container">
-                    <table class="table table-striped">
+                <div class="airdrop-container table-responsive">
+                    <table class="table table-striped table-bordered">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -242,7 +292,7 @@ $conn->close();
                                             $query['sort'] = 'asc';
                                         }
                                         echo htmlspecialchars(http_build_query($query));
-                                    ?>" class="sort-icon" title="Sort Risk Score">
+                                    ?>" class="sort-icon ml-2" title="Sort Risk Score">
                                         <!-- Image for sort button -->
                                         <img src="image/sorting.png" alt="Sort Risk Score" width="20" height="20">
                                     </a>
@@ -258,11 +308,11 @@ $conn->close();
                                 foreach ($tokens as $row) {
                                     echo '<tr>';
                                     echo '<td>' . $index++ . '</td>';
-                                    echo '<td><a href="upcoming_details.php?id=' . htmlspecialchars($row['id']) . '" class="airdrop-item-link"><img src="' . htmlspecialchars($row['Thumbnail']) . '" alt="Token Logo" class="upcomingtoken-logo"> ' . htmlspecialchars($row['airdrop_name']) . '</a></td>';
+                                    echo '<td><a href="upcoming_details.php?id=' . htmlspecialchars($row['id']) . '" class="airdrop-item-link"><img src="' . htmlspecialchars($row['Thumbnail']) . '" alt="Token Logo" class="upcomingtoken-logo mr-2"> ' . htmlspecialchars($row['airdrop_name']) . '</a></td>';
                                     echo '<td>' . htmlspecialchars($row['Platform']) . '</td>';
                                     echo '<td>' . htmlspecialchars($row['RiskScore']) . '</td>';
                                     echo '<td class="' . ($row['Status'] == 'Airdrop Confirmed' ? 'status-confirmed' : ($row['Status'] == 'Airdrop Unconfirmed' ? 'status-pending' : 'status-expired')) . '">' . htmlspecialchars($row['Status']) . '</td>';
-                                    echo '<td>';
+                                    echo '<td data-airdrop-name="' . htmlspecialchars($row['airdrop_name']) . '">';
                                     echo '<div class="custom-legend">';
                                     echo '<div class="custom-legend-item">';
                                     echo '<div class="custom-legend-color" style="background-color: #36a2eb;"></div>';
@@ -283,7 +333,7 @@ $conn->close();
                         </tbody>
                     </table>
                 </div>
-    
+
                 <!-- Pagination Controls -->
                 <?php if ($totalPages > 1): ?>
                     <nav aria-label="Page navigation example">
@@ -296,7 +346,7 @@ $conn->close();
                                     echo htmlspecialchars(http_build_query($query));
                                 ?>" tabindex="-1">Previous</a>
                             </li>
-    
+
                             <!-- Page Number Links -->
                             <?php
                             // Define the range of pages to show
@@ -311,7 +361,7 @@ $conn->close();
                                     ?>"><?php echo $i; ?></a>
                                 </li>
                             <?php endfor; ?>
-    
+
                             <!-- Next Page Link -->
                             <li class="page-item <?php if ($currentPage >= $totalPages) echo 'disabled'; ?>">
                                 <a class="page-link" href="?<?php
@@ -323,7 +373,7 @@ $conn->close();
                         </ul>
                     </nav>
                 <?php endif; ?>
-    
+
             </div>
         </main>
     </div>
@@ -335,8 +385,62 @@ $conn->close();
     <!-- JavaScript Section -->
     <script src="script.js"></script>
     <script>
-        // Removed the JavaScript that manipulates the table to prevent layout issues.
-        // Since PHP is handling the table rendering, additional JavaScript manipulation is unnecessary.
+        let sentimentData = [];
+        let tokenData = <?php echo json_encode($tokens); ?>;
+
+        // Function to fetch sentiment data from JSON file
+        function fetchSentimentData() {
+            return fetch('data/sentiment_results_20241118_003834.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    sentimentData = data;
+                    console.log("Sentiment data fetched successfully", sentimentData);
+                    mergeData();
+                })
+                .catch(error => console.error('Error fetching sentiment data:', error));
+        }
+
+        // Function to merge sentiment data and update the table
+        function mergeData() {
+            sentimentData.forEach(sentiment => {
+                const airdropName = sentiment.airdrop_name;
+                const positive = sentiment.positive_percentage !== undefined && !isNaN(sentiment.positive_percentage) ? sentiment.positive_percentage.toFixed(2) : 'N/A';
+                const negative = sentiment.negative_percentage !== undefined && !isNaN(sentiment.negative_percentage) ? sentiment.negative_percentage.toFixed(2) : 'N/A';
+
+                // Select the sentiment <td> based on data-airdrop-name
+                const sentimentCell = document.querySelector(`td[data-airdrop-name="${escapeSelector(airdropName)}"] .custom-legend-item:first-child`);
+                const negativeCell = document.querySelector(`td[data-airdrop-name="${escapeSelector(airdropName)}"] .custom-legend-item:last-child`);
+
+                if (sentimentCell) {
+                    sentimentCell.innerHTML = `
+                        <div class="custom-legend-color" style="background-color: #36a2eb;"></div>
+                        Positive: ${positive}%
+                    `;
+                }
+
+                if (negativeCell) {
+                    negativeCell.innerHTML = `
+                        <div class="custom-legend-color" style="background-color: #ff6384;"></div>
+                        Negative: ${negative}%
+                    `;
+                }
+            });
+        }
+
+        // Utility function to escape special characters in selectors
+        function escapeSelector(selector) {
+            return selector.replace(/["\\]/g, '\\$&');
+        }
+
+        // Fetch data on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchSentimentData();
+        });
 
         // Reset button functionality
         document.getElementById('resetButton').addEventListener('click', () => {
